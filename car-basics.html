@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Car electronics basics · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="car-basics.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 2 &middot; Foundations</div>
+<h1>Car electronics basics</h1>
+<p class="lead">You test screens, but the screens only show what the rest of the car tells them. This chapter explains how a car's computers talk to each other, in the simplest possible way.</p>
+<div class="meta-row"><span class="pill easy">Beginner &rarr; Intermediate</span><span class="pill">Reading time: 40 min</span><span class="pill hot">Often asked: CAN, ECU, HIL, signals</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>ECU: the small computers inside a car</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>A modern car is not one computer. It is <b>50 to 100 small computers</b>, each doing one job. Each one is called an <b>ECU</b> (Electronic Control Unit). One controls the engine, one the brakes, one the airbag, one the screens, and so on.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>ECU</th><th>What it does</th><th>Why you care as an HMI tester</th></tr>
+<tr><td>Instrument cluster (IPC)</td><td>Runs the display behind the steering wheel</td><td>You test it: speed, telltales, warnings</td></tr>
+<tr><td>Head unit (IVI)</td><td>Runs the centre screen: media, phone, navigation, settings</td><td>You test it</td></tr>
+<tr><td>Body control module (BCM)</td><td>Lights, doors, wipers, often the outside temperature</td><td>Sends many signals the screens display (door open, lights on)</td></tr>
+<tr><td>Engine / motor control (ECM)</td><td>Controls the engine or electric motor</td><td>Sends RPM, engine warnings</td></tr>
+<tr><td>ABS / ESC</td><td>Brakes and stability control</td><td>Sends wheel speed; its faults become red/amber telltales</td></tr>
+<tr><td>Airbag (SRS)</td><td>Airbags and seatbelt sensors</td><td>Seatbelt warning, airbag telltale</td></tr>
+<tr><td>Gateway</td><td>Passes messages between different networks, like a router</td><td>If it filters a message, the screen never gets it</td></tr>
+<tr><td>Telematics (TCU)</td><td>Mobile internet, emergency call, online services</td><td>Connectivity icons, online features</td></tr>
+<tr><td>ADAS ECU (camera/radar)</td><td>Driver assistance: lane keeping, adaptive cruise</td><td>Its warnings appear on the cluster and HUD</td></tr>
+<tr><td>BMS (in electric cars)</td><td>Battery management</td><td>Battery %, range, charging screens</td></tr>
+</table></div>
+
+<h2>How ECUs talk: the car's networks</h2>
+<p>ECUs are connected by wires that form <b>networks</b>, also called <b>buses</b>. Different jobs need different speeds, so a car has several kinds.</p>
+<div class="table-wrap"><table>
+<tr><th>Network</th><th>Speed (rough)</th><th>Used for</th><th>Easy way to remember</th></tr>
+<tr><td><b>CAN</b> (Controller Area Network)</td><td>up to 1 Mbit/s, often 500 kbit/s</td><td>Most normal messages: speed, gear, temperature, warnings</td><td>The main road of the car</td></tr>
+<tr><td><b>CAN FD</b> (Flexible Data-rate)</td><td>2&ndash;5 Mbit/s data phase</td><td>Same as CAN but more data per message (up to 64 bytes)</td><td>A wider main road</td></tr>
+<tr><td><b>LIN</b> (Local Interconnect Network)</td><td>up to 20 kbit/s</td><td>Simple, cheap parts: window switches, steering-wheel buttons, mirrors</td><td>A small side street</td></tr>
+<tr><td><b>FlexRay</b></td><td>10 Mbit/s</td><td>Timing-critical systems (older premium cars)</td><td>A railway with a strict timetable</td></tr>
+<tr><td><b>Automotive Ethernet</b></td><td>100 Mbit/s &ndash; 1 Gbit/s+</td><td>Cameras, displays, big data, software updates, diagnostics (DoIP)</td><td>The motorway</td></tr>
+</table></div>
+
+<h2>CAN in detail (the most important network)</h2>
+<div class="callout idea"><span class="label">Simple idea: CAN is a group chat</span>
+<p>Imagine a WhatsApp group where every ECU is a member. Every message is seen by everyone. Each ECU only reads the messages it needs and ignores the rest. Messages don't have a sender name; they have a <b>number</b>, the <b>message ID</b>. Everyone knows "message 0x3A5 is the temperature message".</p>
+</div>
+
+<h3>What is inside one CAN message (frame)</h3>
+<figure class="diagram">
+<svg viewBox="0 0 760 150" role="img" aria-label="Simplified CAN frame: ID, length, data bytes, checksum">
+  <text class="t" x="20" y="26" font-size="15" font-weight="700">A CAN frame, simplified</text>
+  <rect class="box-accent" x="20" y="44" width="150" height="54" rx="8"/><text class="t" x="95" y="68" text-anchor="middle" font-weight="700" font-size="14">ID</text><text class="t2" x="95" y="87" text-anchor="middle" font-size="12">which message (0x3A5)</text>
+  <rect class="box" x="180" y="44" width="110" height="54" rx="8"/><text class="t" x="235" y="68" text-anchor="middle" font-weight="700" font-size="14">Length</text><text class="t2" x="235" y="87" text-anchor="middle" font-size="12">0&ndash;8 bytes</text>
+  <rect class="box-good" x="300" y="44" width="330" height="54" rx="8"/><text class="t" x="465" y="68" text-anchor="middle" font-weight="700" font-size="14">Data: up to 8 bytes</text><text class="t2" x="465" y="87" text-anchor="middle" font-size="12">the signals live here: 5A 00 00 00 00 00 00 00</text>
+  <rect class="box" x="640" y="44" width="100" height="54" rx="8"/><text class="t" x="690" y="68" text-anchor="middle" font-weight="700" font-size="14">CRC</text><text class="t2" x="690" y="87" text-anchor="middle" font-size="12">error check</text>
+  <text class="t2" x="20" y="128" font-size="12.5">Real frames also have start/end bits and an acknowledge bit. You never need to handle them by hand; the tools do it.</text>
+</svg>
+<figcaption>The part you care about is the ID (which message) and the data (the values).</figcaption>
+</figure>
+
+<ul>
+  <li><b>ID</b>: 11 bits (standard) or 29 bits (extended). Written in <b>hex</b>, e.g. <code>0x3A5</code>. The ID is also the <b>priority</b>: if two ECUs talk at the same time, the <b>lower ID wins</b> and goes first. That's why brake messages have low IDs.</li>
+  <li><b>Data</b>: up to 8 bytes in classic CAN (64 in CAN FD). Several <b>signals</b> are packed into these bytes.</li>
+  <li><b>Cycle time</b>: most messages repeat at a fixed rhythm, e.g. every 100 ms. Some messages are sent only when something happens (event messages, e.g. a button press).</li>
+  <li><b>Two wires</b>: CAN-High and CAN-Low. The bus needs a 120&nbsp;&Omega; resistor at each end (bench tip: a missing resistor = strange errors).</li>
+</ul>
+
+<h3>Hex numbers in 60 seconds</h3>
+<p>Car tools show numbers in <b>hexadecimal</b> ("hex"), a way of counting with 16 digits: 0&ndash;9 and then A=10, B=11, C=12, D=13, E=14, F=15. The prefix <code>0x</code> means "this is hex".</p>
+<div class="table-wrap"><table>
+<tr><th>Hex</th><th>How to calculate</th><th>Normal number</th></tr>
+<tr><td><code>0x0A</code></td><td>0&times;16 + 10</td><td>10</td></tr>
+<tr><td><code>0x5A</code></td><td>5&times;16 + 10</td><td>90</td></tr>
+<tr><td><code>0xC8</code></td><td>12&times;16 + 8</td><td>200</td></tr>
+<tr><td><code>0xFF</code></td><td>15&times;16 + 15</td><td>255 (the biggest value of one byte)</td></tr>
+<tr><td><code>0x1388</code></td><td>two bytes: 19&times;256 + 136</td><td>5000</td></tr>
+</table></div>
+<p class="muted small">You never need to do this in your head at work; tools convert it. But knowing the idea helps you read traces and explain values in bug reports.</p>
+
+<h2>Signals and the DBC file</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>The data bytes are just numbers. The <b>DBC file</b> is the dictionary that says what they mean: "byte 0 of message 0x3A5 is the outside temperature; multiply by 0.5, subtract 40, the unit is &deg;C". One value like this is a <b>signal</b>.</p>
+</div>
+<p>For every signal, the DBC defines:</p>
+<div class="table-wrap"><table>
+<tr><th>Field</th><th>Meaning</th><th>Example (Outside_Temp)</th></tr>
+<tr><td>Name</td><td>Signal name</td><td>Outside_Temp</td></tr>
+<tr><td>Message / ID</td><td>Which message it is in</td><td>Ambient_Info, 0x3A5</td></tr>
+<tr><td>Start bit, length</td><td>Where in the data bytes, how many bits</td><td>bit 0, 8 bits (= byte 0)</td></tr>
+<tr><td>Byte order</td><td>Intel (little-endian) or Motorola (big-endian)</td><td>Intel</td></tr>
+<tr><td>Factor (scale)</td><td>Multiply the raw number by this</td><td>0.5</td></tr>
+<tr><td>Offset</td><td>Then add this</td><td>&minus;40</td></tr>
+<tr><td>Min / Max</td><td>Valid range</td><td>&minus;40 &hellip; 85 &deg;C</td></tr>
+<tr><td>Unit</td><td>Unit of the real value</td><td>&deg;C</td></tr>
+<tr><td>Value table</td><td>Special raw values with names</td><td>0xFF = "SNA" (Signal Not Available)</td></tr>
+<tr><td>Receivers</td><td>Which ECUs read it</td><td>Cluster, HeadUnit, Climate</td></tr>
+</table></div>
+
+<h3>The only formula you need</h3>
+<pre><code>real value = raw value &times; factor + offset
+raw value  = (real value &minus; offset) &divide; factor</code></pre>
+<div class="callout example"><span class="label">Real example</span>
+<p>Trace shows data byte 0 = <code>0x5A</code> = 90. Real temperature = 90 &times; 0.5 + (&minus;40) = <b>5.0 &deg;C</b>. This is how you prove in a bug report "the signal really was 5.0 &deg;C".</p>
+<p>Another: speed raw <code>0x1388</code> = 5000, factor 0.01, offset 0 &rarr; <b>50.00 km/h</b>.</p>
+</div>
+
+<div class="tool" id="decoder">
+  <h3>Try it: CAN signal decoder</h3>
+  <p class="small muted">Type a raw hex value, the factor and the offset from the DBC. Or use a preset.</p>
+  <div class="toolbar">
+    <button class="btn secondary" data-preset="5A,0.5,-40,°C">Temperature 0x5A</button>
+    <button class="btn secondary" data-preset="1388,0.01,0,km/h">Speed 0x1388</button>
+    <button class="btn secondary" data-preset="C8,0.5,0,%">Fuel 0xC8</button>
+    <button class="btn secondary" data-preset="FF,0.5,-40,°C">Temperature 0xFF (SNA!)</button>
+  </div>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
+    <div><label for="dRaw">Raw value (hex)</label><br><input id="dRaw" type="text" value="5A" style="width:100%"></div>
+    <div><label for="dFac">Factor</label><br><input id="dFac" type="number" step="any" value="0.5" style="width:100%"></div>
+    <div><label for="dOff">Offset</label><br><input id="dOff" type="number" step="any" value="-40" style="width:100%"></div>
+    <div><label for="dUnit">Unit</label><br><input id="dUnit" type="text" value="°C" style="width:100%"></div>
+  </div>
+  <div class="readout"><span>Raw in decimal: <b id="dDec">90</b></span><span>&rarr;</span><span class="val" id="dPhys">5.0 °C</span></div>
+  <div class="hint" id="dHint">90 &times; 0.5 + (&minus;40) = 5.0</div>
+</div>
+
+<h3>Three signal situations you must always test</h3>
+<div class="table-wrap"><table>
+<tr><th>Situation</th><th>What it means</th><th>What the screen should do (typical)</th></tr>
+<tr><td><b>Valid value</b></td><td>A normal number inside the allowed range</td><td>Show it correctly</td></tr>
+<tr><td><b>SNA / invalid</b></td><td>"Signal Not Available": the sender says "my sensor is broken or I have no value yet" (often all bits set, like 0xFF)</td><td>Show dashes (&ldquo;--&rdquo;) or a fault warning. <b>Never</b> show a fake number like 87.5 &deg;C (that is 0xFF decoded blindly)</td></tr>
+<tr><td><b>Timeout</b></td><td>The message stops arriving (cable cut, sender ECU dead or asleep)</td><td>After the defined time (e.g. 5 missed cycles), treat it as a fault. Never freeze on the last value.</td></tr>
+</table></div>
+<div class="callout warn"><span class="label">Advanced (good to mention)</span>
+<p>Safety-relevant messages often carry an <b>alive counter</b> (a number that increases 0,1,2&hellip;15 with each message) and a <b>checksum/CRC</b>. This is called <b>E2E protection</b> (end-to-end). If the counter stops or the checksum is wrong, the receiver must ignore the message and show a fault. Testers inject wrong counters on purpose to test this.</p>
+</div>
+
+<h2>From the sensor to the screen</h2>
+<p>Let's follow the outside temperature on its journey. At every step something can go wrong. That's why, when a screen shows a wrong value, you check the <b>trace</b> (what was on the bus) to find out where the problem is.</p>
+<figure class="diagram">
+<svg viewBox="0 0 760 210" role="img" aria-label="Signal path from sensor to screen">
+  <defs><marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-2)"/></marker></defs>
+  <text class="t" x="20" y="26" font-size="15" font-weight="700">A value travels through 5 stops before you see it</text>
+  <rect class="box" x="20" y="56" width="120" height="60" rx="8"/><text class="t" x="80" y="82" text-anchor="middle" font-weight="700" font-size="13">Sensor</text><text class="t2" x="80" y="100" text-anchor="middle" font-size="11.5">measures 5 &deg;C</text>
+  <rect class="box" x="170" y="56" width="120" height="60" rx="8"/><text class="t" x="230" y="82" text-anchor="middle" font-weight="700" font-size="13">Body ECU</text><text class="t2" x="230" y="100" text-anchor="middle" font-size="11.5">packs it: 0x5A</text>
+  <rect class="box-accent" x="320" y="56" width="120" height="60" rx="8"/><text class="t" x="380" y="82" text-anchor="middle" font-weight="700" font-size="13">CAN bus</text><text class="t2" x="380" y="100" text-anchor="middle" font-size="11.5">msg 0x3A5</text>
+  <rect class="box" x="470" y="56" width="120" height="60" rx="8"/><text class="t" x="530" y="82" text-anchor="middle" font-weight="700" font-size="13">Cluster ECU</text><text class="t2" x="530" y="100" text-anchor="middle" font-size="11.5">HMI logic decides</text>
+  <rect class="box-good" x="620" y="56" width="120" height="60" rx="8"/><text class="t" x="680" y="82" text-anchor="middle" font-weight="700" font-size="13">Screen</text><text class="t2" x="680" y="100" text-anchor="middle" font-size="11.5">shows snowflake</text>
+  <path class="line" d="M140 86H168" marker-end="url(#arr1)"/><path class="line" d="M290 86H318" marker-end="url(#arr1)"/><path class="line" d="M440 86H468" marker-end="url(#arr1)"/><path class="line" d="M590 86H618" marker-end="url(#arr1)"/>
+  <text class="t2" x="80" y="145" text-anchor="middle" font-size="11.5">broken sensor</text>
+  <text class="t2" x="230" y="145" text-anchor="middle" font-size="11.5">wrong packing</text>
+  <text class="t2" x="380" y="145" text-anchor="middle" font-size="11.5">message missing</text>
+  <text class="t2" x="530" y="145" text-anchor="middle" font-size="11.5">wrong threshold</text>
+  <text class="t2" x="680" y="145" text-anchor="middle" font-size="11.5">wrong icon/colour</text>
+  <text class="t" x="20" y="190" font-size="12.5">Bottom row = what can go wrong at each stop. On a test bench, the PC replaces the sensor and body ECU and sends 0x3A5 itself.</text>
+</svg>
+<figcaption>Where did it go wrong? The trace tells you if the bus value was right. If it was, the bug is in the HMI (cluster/head unit).</figcaption>
+</figure>
+
+<div class="callout say"><span class="label">Say this in the interview</span>
+<p class="say-quote">"When the screen shows a wrong value, I first check the CAN trace. If the correct value arrives on the bus but the screen is wrong, the problem is in the HMI software. If the value on the bus is already wrong, the problem is in the sending ECU, and I assign the ticket to that component."</p>
+</div>
+
+<h2>Power and ignition: KL30, KL15 and power modes</h2>
+<p>Many bugs appear when the car is switched on, off, or wakes up. So you must understand power.</p>
+<div class="table-wrap"><table>
+<tr><th>Term</th><th>Meaning</th><th>Easy way to remember</th></tr>
+<tr><td><b>KL30</b></td><td>Permanent battery power (+12 V), always on even when the car is parked</td><td>"30 is always there"</td></tr>
+<tr><td><b>KL15</b></td><td>Ignition power: on only when the ignition is on</td><td>"15 = key turned"</td></tr>
+<tr><td><b>KL31</b></td><td>Ground (0 V, minus)</td><td>The return wire</td></tr>
+<tr><td><b>KL R / ACC</b></td><td>Accessory (radio) position: some things work, engine off</td><td>"Listening to radio in the parking lot"</td></tr>
+</table></div>
+<p class="small muted">"KL" comes from the German word <i>Klemme</i> (terminal). German car makers use these names everywhere.</p>
+
+<h3>Power modes (the car's "states")</h3>
+<ol>
+  <li><b>Sleep / Off</b>: car locked, ECUs sleeping to save battery.</li>
+  <li><b>Wake-up</b>: door unlocked; ECUs wake and the network starts.</li>
+  <li><b>Accessory</b>: some screens on, engine off.</li>
+  <li><b>Ignition ON</b>: all systems on; the cluster does its <b>bulb check</b> (all telltales light briefly).</li>
+  <li><b>Crank</b>: starting the engine; battery voltage dips (to around 6&ndash;9 V for a moment).</li>
+  <li><b>Run / Drive</b>.</li>
+  <li><b>Ignition OFF &rarr; after-run &rarr; sleep</b>: screens may stay on a short time, then everything sleeps together (this "sleep together" coordination is called <b>network management</b>).</li>
+</ol>
+
+<h3>What to test around power</h3>
+<ul>
+  <li><b>Ignition cycle</b>: off &rarr; on. Does Bluetooth reconnect? Does the last music source resume? Are settings kept?</li>
+  <li><b>Sleep / wake</b>: after sleeping, does the screen wake correctly, or freeze/black screen?</li>
+  <li><b>Low voltage</b>: normal battery is about 12&ndash;14.5 V. Test at low voltage (e.g. 9 V) and during a crank pulse. The screen may reset, but must recover correctly.</li>
+  <li><b>Boot time</b>: time from ignition on until the screen is usable, and until the rear camera is visible.</li>
+  <li><b>Power loss (KL30 off)</b>: odometer, clock, settings must survive.</li>
+</ul>
+
+<h2>Where you test: SIL, HIL and the real car</h2>
+<div class="table-wrap"><table>
+<tr><th>Level</th><th>What it is</th><th>Pros / cons</th></tr>
+<tr><td><b>SIL</b> (Software-in-the-Loop)</td><td>The software runs on a PC, with a simulated screen. No real hardware.</td><td>Fast and cheap; misses hardware problems</td></tr>
+<tr><td><b>HIL</b> (Hardware-in-the-Loop)</td><td>The real ECU hardware (head unit, cluster) on a bench; a PC simulates the rest of the car</td><td>Realistic and controllable. <b>This is where you'll work most</b></td></tr>
+<tr><td><b>Vehicle</b></td><td>A real prototype car</td><td>Most realistic; expensive, slow, less controllable</td></tr>
+</table></div>
+
+<h3>What a HIL test bench looks like</h3>
+<figure class="diagram">
+<svg viewBox="0 0 760 380" role="img" aria-label="HIL test bench: PC, CAN interface, head unit, cluster, power supply, phone">
+  <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-2)"/></marker></defs>
+  <text class="t" x="24" y="30" font-size="15" font-weight="700">The PC fakes the rest of the car; the real screens react</text>
+  <path class="line" d="M154 144V200" marker-end="url(#arr2)"/><path class="line" d="M424 72H284" marker-end="url(#arr2)"/><path class="line" d="M648 92H624" marker-end="url(#arr2)"/><path class="line" d="M524 280V224" marker-end="url(#arr2)"/>
+  <path class="line-accent" d="M384 100V228M384 100H424M384 196H424M284 228H384"/>
+  <text class="t2" x="162" y="176" font-size="11.5">USB</text>
+  <text class="t2" x="354" y="64" text-anchor="middle" font-size="11.5">logs (Ethernet/USB)</text>
+  <text class="t" x="334" y="220" text-anchor="middle" font-size="11.5" font-weight="700">CAN bus</text>
+  <text class="t2" x="532" y="256" font-size="11.5">power</text>
+  <rect class="box-accent" x="24" y="56" width="260" height="88" rx="8"/>
+  <text class="t" x="40" y="80" font-weight="700" font-size="13">Test PC</text>
+  <text class="t" x="40" y="98" font-size="11.5">CANoe: sends fake signals</text>
+  <text class="t" x="40" y="114" font-size="11.5">Robot Framework: runs test suites</text>
+  <text class="t" x="40" y="130" font-size="11.5">DLT Viewer: reads logs</text>
+  <rect class="box" x="24" y="200" width="260" height="56" rx="8"/>
+  <text class="t" x="40" y="224" font-weight="700" font-size="13">CAN interface</text><text class="t2" x="40" y="242" font-size="11.5">e.g. Vector VN1630 (PC &harr; bus)</text>
+  <rect class="box" x="424" y="56" width="200" height="72" rx="8"/>
+  <text class="t" x="440" y="80" font-weight="700" font-size="13">Head unit (IVI)</text><text class="t" x="440" y="98" font-size="11.5">Media, phone, navigation</text><text class="t2" x="440" y="114" font-size="11.5">Linux or Android inside</text>
+  <rect class="box" x="648" y="56" width="88" height="72" rx="8"/>
+  <text class="t" x="692" y="86" text-anchor="middle" font-weight="700" font-size="13">Phone</text><text class="t" x="692" y="106" text-anchor="middle" font-size="11.5">USB stick</text>
+  <rect class="box" x="424" y="168" width="200" height="56" rx="8"/>
+  <text class="t" x="440" y="192" font-weight="700" font-size="13">Instrument cluster</text><text class="t" x="440" y="210" font-size="11.5">Speed, telltales, warnings</text>
+  <rect class="box" x="424" y="280" width="200" height="72" rx="8"/>
+  <text class="t" x="440" y="304" font-weight="700" font-size="13">Power supply, relay box</text><text class="t" x="440" y="322" font-size="11.5">KL30: battery voltage</text><text class="t" x="440" y="338" font-size="11.5">KL15: ignition on/off</text>
+</svg>
+<figcaption>A camera or video grabber usually records the screens too, so every failure has video evidence.</figcaption>
+</figure>
+
+<h3>Bench parts and what they are for</h3>
+<ul>
+  <li><b>ECUs under test</b>: head unit and cluster (the real hardware, called the "target").</li>
+  <li><b>Test PC</b> with simulation (CANoe), automation (e.g. Robot Framework) and log tools.</li>
+  <li><b>CAN/LIN/Ethernet interface</b>: the box that connects the PC to the car network (e.g. Vector VN1630, VN5620).</li>
+  <li><b>Programmable power supply</b>: provides 12 V and can simulate low voltage.</li>
+  <li><b>Relay box</b>: switches KL15 (ignition) and KL30 by software, so tests can do ignition cycles.</li>
+  <li><b>Peripherals</b>: test phones (iPhone and Android), USB sticks with test music, GPS simulator, antenna, speakers/microphone.</li>
+  <li><b>Camera / video grabber</b>: records the screen for evidence and for automated image checks.</li>
+  <li><b>Remote access</b>: for remote benches &mdash; remote desktop, VPN, webcam, remote power switch.</li>
+</ul>
+
+<div class="callout say"><span class="label">Say this in the interview: "What test bench setup have you used?"</span>
+<p class="say-quote">"A HIL bench with the real head unit and cluster, a programmable power supply with a relay box for KL15 and KL30, a Vector CAN interface and a PC with CANoe for signal simulation and trace recording. Phones and USB sticks for media and Bluetooth tests, and a camera for evidence. [We also had remote benches that we accessed through remote desktop, with a webcam and remote power control.]"</p>
+</div>
+
+<h2>Diagnostics: DTCs and UDS (intermediate)</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Every ECU keeps a list of problems it noticed, like a notebook of errors. Each problem is a <b>DTC</b> (Diagnostic Trouble Code). A <b>diagnostic tool</b> can read and clear this list, read the software version, and even install new software. The language these tools speak is called <b>UDS</b>.</p>
+</div>
+<h3>DTCs</h3>
+<ul>
+  <li>Format like <code>P0301</code>, <code>B1234</code>, <code>C0035</code>, <code>U0155</code>. The letter shows the area: <b>P</b> = powertrain, <b>B</b> = body, <b>C</b> = chassis, <b>U</b> = network/communication.</li>
+  <li>Example: <code>U0155</code> = "lost communication with instrument panel cluster".</li>
+  <li>Why you care: when you test a sensor failure, the expected result often includes "DTC is stored". After the test you <b>clear DTCs</b> so the next test starts clean.</li>
+</ul>
+<h3>UDS services you might hear about</h3>
+<div class="table-wrap"><table>
+<tr><th>Service ID</th><th>Name</th><th>What it does (plain words)</th></tr>
+<tr><td><code>0x10</code></td><td>Diagnostic Session Control</td><td>Switch the ECU into a special mode (default, extended, programming)</td></tr>
+<tr><td><code>0x11</code></td><td>ECU Reset</td><td>Restart the ECU</td></tr>
+<tr><td><code>0x14</code></td><td>Clear Diagnostic Information</td><td>Delete stored DTCs</td></tr>
+<tr><td><code>0x19</code></td><td>Read DTC Information</td><td>Read the list of DTCs</td></tr>
+<tr><td><code>0x22</code></td><td>Read Data By Identifier</td><td>Read a value, e.g. software version, serial number</td></tr>
+<tr><td><code>0x2E</code></td><td>Write Data By Identifier</td><td>Write a value, e.g. variant coding</td></tr>
+<tr><td><code>0x27</code></td><td>Security Access</td><td>Unlock protected functions with a key</td></tr>
+<tr><td><code>0x31</code></td><td>Routine Control</td><td>Start a routine, e.g. self-test</td></tr>
+<tr><td><code>0x34 / 0x36 / 0x37</code></td><td>Request Download / Transfer Data / Transfer Exit</td><td>Used to flash new software</td></tr>
+<tr><td><code>0x3E</code></td><td>Tester Present</td><td>"I'm still here" message to keep the session open</td></tr>
+</table></div>
+<p>A positive answer has the service ID + 0x40 (0x22 &rarr; answer 0x62). A negative answer starts with <code>0x7F</code> and a reason code, e.g. <code>0x7F 22 31</code> = "request out of range". Diagnostics over Ethernet is called <b>DoIP</b>; the socket in every car is the <b>OBD</b> port.</p>
+<div class="callout warn"><span class="label">Level check</span>
+<p>For a 1&ndash;2 year HMI test role, you only need to know what DTCs are, that you read and clear them with a diagnostic tool, and roughly what UDS is. Don't go deeper unless asked.</p>
+</div>
+
+<h2>Variants, samples and software versions</h2>
+<ul>
+  <li><b>Variant</b>: the same car model is sold in many versions: EU/US/China, left/right-hand drive, basic/premium, with or without HUD. Software checks <b>variant coding</b> (a configuration stored in the ECU) to know which features to show. A bug may appear in only one variant, so always write the variant in bug reports.</li>
+  <li><b>Hardware samples</b>: prototypes mature in stages: <b>A-sample</b> (early, rough), <b>B-sample</b> (functional), <b>C-sample</b> (near production), <b>D-sample</b> (production tools). Write the sample in bug reports too.</li>
+  <li><b>Software version</b>: every build has a version number (e.g. 24.3.1 or a long ID). You find it in an engineering/hidden menu, through diagnostics (UDS 0x22) or in the flashing tool. <b>Always</b> write it in bug reports and test results.</li>
+  <li><b>SOP</b> (Start of Production): the date the factory starts building the car. Everything important must be fixed before SOP. After SOP, updates happen by workshop or <b>OTA</b> (over-the-air, like a phone update).</li>
+</ul>
+
+<h2>Quick answers for the interview</h2>
+<details class="qa"><summary>What is an ECU?</summary><div class="ans"><p>An Electronic Control Unit: a small embedded computer in the car that controls one function, like the engine, brakes, airbag or the cluster display. A modern car has 50&ndash;100 ECUs that talk over networks like CAN.</p></div></details>
+<details class="qa"><summary>What is CAN?</summary><div class="ans"><p>Controller Area Network, the most common in-car network. ECUs send short messages with an ID and up to 8 bytes of data (64 with CAN FD). Every ECU sees all messages and picks the ones it needs. Lower IDs have higher priority. Signals inside the messages are described in a DBC file.</p></div></details>
+<details class="qa"><summary>What is the difference between CAN and LIN?</summary><div class="ans"><p>CAN is faster (up to 1 Mbit/s) and used for most ECU communication; any node can send. LIN is slow (up to 20 kbit/s) and cheap, used for simple parts like switches and mirrors, with one master that controls the slaves.</p></div></details>
+<details class="qa"><summary>What is HIL testing?</summary><div class="ans"><p>Hardware-in-the-Loop: the real ECU hardware is tested on a bench while a simulator provides all the signals from the rest of the car. It's realistic, repeatable, and you can create situations that are dangerous or hard in a real car, like sensor failures.</p></div></details>
+<details class="qa"><summary>What is a DBC file?</summary><div class="ans"><p>A database file that describes the CAN messages and signals: ID, position in the data, factor, offset, range, unit and special values. Tools like CANoe use it to show real values like "5.0 &deg;C" instead of raw bytes.</p></div></details>
+<details class="qa"><summary>What is signal simulation and why do we need it?</summary><div class="ans"><p>On a test bench the real car isn't there, so a tool like CANoe sends the signals the other ECUs would send: speed, gear, temperature, warnings. This lets us test any situation on demand, including boundaries and failures, in a repeatable way.</p></div></details>
+
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function fmt(n) { return (Math.round(n * 1000) / 1000).toString(); }
+  function calc() {
+    var raw = parseInt(($('dRaw').value || '0').replace(/^0x/i, ''), 16);
+    var f = parseFloat($('dFac').value), o = parseFloat($('dOff').value), u = $('dUnit').value;
+    if (isNaN(raw) || isNaN(f) || isNaN(o)) { $('dPhys').textContent = '?'; $('dHint').textContent = 'Please enter a valid hex value, factor and offset.'; return; }
+    var phys = raw * f + o;
+    $('dDec').textContent = raw;
+    $('dPhys').textContent = fmt(phys) + ' ' + u;
+    var h = raw + ' × ' + f + ' + (' + o + ') = ' + fmt(phys);
+    if (raw === 255 && u.indexOf('C') >= 0) h += '  — Careful: 0xFF is often "SNA" (signal not available). The screen should show "--" or a fault, not ' + fmt(phys) + ' ' + u + '!';
+    $('dHint').textContent = h;
+  }
+  ['dRaw', 'dFac', 'dOff', 'dUnit'].forEach(function (id) { $(id).addEventListener('input', calc); });
+  document.querySelectorAll('[data-preset]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var p = b.getAttribute('data-preset').split(',');
+      $('dRaw').value = p[0]; $('dFac').value = p[1]; $('dOff').value = p[2]; $('dUnit').value = p[3]; calc();
+    });
+  });
+  calc();
+})();
+</script>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

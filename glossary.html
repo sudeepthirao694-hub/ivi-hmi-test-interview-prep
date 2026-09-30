@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dictionary A–Z · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="glossary.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Reference</div>
+<h1>Dictionary A&ndash;Z</h1>
+<p class="lead">Every word from the job description, the interview and this site, explained in plain English with an example. Type in the box to search, or tap a category.</p>
+<div class="meta-row"><span class="pill easy">Use any time</span><span class="pill" id="gCount">&hellip; words</span></div>
+
+<input class="search" id="gSearch" type="search" placeholder="Search, e.g. DBC, severity, KL15, hysteresis&hellip;" aria-label="Search the dictionary">
+<div class="chips" id="gChips"></div>
+<div id="gList" aria-live="polite"></div>
+
+<div class="callout idea"><span class="label">Tip</span>
+<p>Learn the words with the <a href="quiz.html#flash">flashcards</a> on the Quiz page: they use this same list.</p>
+</div>
+
+</article></main></div>
+<script src="assets/glossary.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var data = (window.GLOSSARY || []).slice().sort(function (a, b) { return a[0].toLowerCase().localeCompare(b[0].toLowerCase()); });
+  var cats = ['All'];
+  data.forEach(function (g) { if (cats.indexOf(g[1]) < 0) cats.push(g[1]); });
+  var names = { Car: 'Car & networks', HMI: 'HMI & infotainment', Testing: 'Testing (ISTQB)', Defects: 'Bugs & defects', Process: 'Process & Agile', Automation: 'Automation', Tools: 'Tools', Standards: 'Standards & safety' };
+  var current = 'All';
+  var chips = document.getElementById('gChips');
+  var list = document.getElementById('gList');
+  var search = document.getElementById('gSearch');
+  document.getElementById('gCount').textContent = data.length + ' words';
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function drawChips() {
+    chips.innerHTML = cats.map(function (c) {
+      return '<button class="chip' + (c === current ? ' on' : '') + '" data-cat="' + esc(c) + '">' + esc(names[c] || c) + '</button>';
+    }).join('');
+  }
+  function draw() {
+    var q = search.value.trim().toLowerCase();
+    var rows = data.filter(function (g) {
+      if (current !== 'All' && g[1] !== current) return false;
+      if (!q) return true;
+      return (g[0] + ' ' + g[2] + ' ' + g[3]).toLowerCase().indexOf(q) >= 0;
+    });
+    if (!rows.length) { list.innerHTML = '<p class="muted">No word found. Try a shorter search.</p>'; return; }
+    var html = '', letter = '';
+    rows.forEach(function (g) {
+      var L = g[0].charAt(0).toUpperCase();
+      if (!q && current === 'All' && L !== letter) { letter = L; html += '<h3 style="margin:22px 0 6px">' + esc(L) + '</h3>'; }
+      html += '<div class="term"><h4>' + esc(g[0]) + '<span class="cat">' + esc(names[g[1]] || g[1]) + '</span></h4><p>' + esc(g[2]) + '</p>' +
+        (g[3] ? '<p class="ex">Example: ' + esc(g[3]) + '</p>' : '') + '</div>';
+    });
+    list.innerHTML = html;
+  }
+  chips.addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    current = b.getAttribute('data-cat'); drawChips(); draw();
+  });
+  search.addEventListener('input', draw);
+  drawChips(); draw();
+})();
+</script>
+</body>
+</html>

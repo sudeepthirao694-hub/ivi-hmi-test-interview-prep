@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The job explained simply · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="start.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 1</div>
+<h1>The job explained simply</h1>
+<p class="lead">Before any technical detail, understand the job as a story. After this page you will know what you will do every day and what every line of the job description means.</p>
+<div class="meta-row"><span class="pill easy">Beginner</span><span class="pill">Reading time: 25 min</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>The job as a story</h2>
+<p>Imagine a new car. It has two big screens: one behind the steering wheel (speed, fuel, warnings) and one in the middle (music, phone, maps). Hundreds of software developers write the code for these screens. Before real customers drive the car, somebody must check that everything works. <b>That somebody is you.</b></p>
+
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Think of yourself as a teacher checking an exam. The student's answers are the <b>screens</b>. The answer sheet is the <b>requirement</b> (a written rule for what the screen must do). You compare the two. When they don't match, you write it down clearly: that is a <b>bug report</b>.</p>
+</div>
+
+<h3>The whole job in 6 steps</h3>
+<ol class="steps">
+  <li><strong>Someone writes down what the screen must do.</strong>This written rule is a <b>requirement</b>. Example: "The snowflake icon shall be shown when the outside temperature is below 5&nbsp;&deg;C." (In requirements, "shall" means "must".)</li>
+  <li><strong>You turn each rule into checks.</strong>One check, with exact steps and the expected result, is a <b>test case</b>. Example: "Set the temperature to 4.9&nbsp;&deg;C &rarr; the snowflake must appear." Many test cases together form a <b>test suite</b>.</li>
+  <li><strong>Developers give you a new software version.</strong>One version is a <b>build</b> (for example "build 24.3.1"). You install it on the test hardware. Installing car software is called <b>flashing</b>.</li>
+  <li><strong>You run the checks.</strong>By hand while looking at the screen: <b>manual testing</b>. Or you start a program that clicks and checks automatically: <b>automated testing</b> ("running the suite").</li>
+  <li><strong>When something is wrong, you write a bug report.</strong>A bug is also called a <b>defect</b> or <b>issue</b>. You write it in a web tool called <b>Jira</b>. One bug report there is a <b>ticket</b>, with an ID like IVI-1433.</li>
+  <li><strong>The developer fixes it and you check again.</strong>Checking the same bug again is a <b>retest</b>. Checking that the fix didn't break anything else is <b>regression testing</b>. At the end you write a <b>test report</b>: what works, what doesn't, and whether the software is ready.</li>
+</ol>
+
+<h2>The job description, decoded line by line</h2>
+<p>Here is every line of your JD, what it really means, what they may ask about it, and what to say.</p>
+
+<div class="table-wrap"><table>
+<tr><th>JD says</th><th>What it means in easy words</th><th>They may ask</th><th>You should show</th></tr>
+<tr><td>Perform manual testing activities for automotive HMI systems</td><td>Operate the car screens yourself and check them against the requirements</td><td>"What HMI have you tested? How do you design test cases?"</td><td>Screens/features you tested; techniques like BVA and equivalence partitioning</td></tr>
+<tr><td>Execute automated test cases using customer-provided frameworks and tools</td><td>The customer already has automated tests. You don't write the framework; you run it</td><td>"Which frameworks have you used? How do you run a suite?"</td><td>"I start the suite on the bench, check it runs, collect the results and logs"</td></tr>
+<tr><td>Analyze test automation execution results and identify failures</td><td>After the run, some tests fail. You find out why each one failed</td><td>"A test failed. What do you do?"</td><td>Your triage steps: read log &rarr; reproduce manually &rarr; classify (bug / script / bench)</td></tr>
+<tr><td>Create detailed defect tickets: description, reproduction steps, logs/traces/evidence, impact analysis</td><td>Write bug reports with everything a developer needs</td><td>"What is in a good bug report?"</td><td>The 12 fields of a bug report (<a href="defects.html#bug-report">chapter 6</a>)</td></tr>
+<tr><td>Maintain accurate test execution records and detailed test reports</td><td>Record every result (which build, which bench, pass/fail) and summarise it</td><td>"How do you document test results?"</td><td>Test management tool (Xray, Polarion, TestRail); what goes into a test report</td></tr>
+<tr><td>Collaborate with the customer proxy team</td><td>A team that speaks for the car maker gives you tests and priorities, and reads your reports</td><td>"How do you work with the customer?"</td><td>Clear status updates, raise problems early, facts not opinions</td></tr>
+<tr><td>Support debugging with detailed failure analysis and traces</td><td>Help developers find the root cause by giving them recordings (traces) and logs</td><td>"How do you do log analysis?"</td><td>Find the failure time &rarr; check trace &rarr; check log &rarr; compare with a passing run</td></tr>
+<tr><td>Work with specialized simulation tools for Car HMI signal simulation</td><td>On the test bench there is no real car. A PC tool (like Vector CANoe) pretends to be the car and sends signals such as speed and temperature</td><td>"Have you used signal simulation?"</td><td>"I set the signal in the simulator and check that the screen reacts correctly and in time"</td></tr>
+<tr><td>Follow defined testing processes, quality standards, documentation</td><td>Automotive is strict: every step is documented and traceable</td><td>"Do you know ASPICE / ISTQB?"</td><td>Traceability from requirement to test to bug; reviews; documentation</td></tr>
+<tr><td>Work independently with distributed international teams</td><td>Colleagues in other countries (often Germany + India); English communication; time zones</td><td>"How do you communicate with remote teams?"</td><td>Written clarity, short daily updates, overlap hours</td></tr>
+</table></div>
+
+<div class="callout say"><span class="label">Say this in the interview (summary of the role)</span>
+<p class="say-quote">"As I understand it, the role has three parts: manual testing of the HMI against requirements, executing your automation suites and analysing every failure, and writing detailed defect reports with logs, traces and impact analysis. That matches what I do today: [one sentence about your current work]."</p>
+</div>
+
+<h3>What "Senior" means when you have 1&ndash;2 years of experience</h3>
+<p>The title says "Senior", but the questions show they mainly want someone who is <b>independent and careful</b>. For 1&ndash;2 years of experience, prove that you:</p>
+<ul>
+  <li>can work without step-by-step instructions (you know the process by heart);</li>
+  <li>think before raising a bug (check duplicates, check the requirement, check the bench);</li>
+  <li>can explain <i>why</i> you choose certain tests (risk, boundaries, changes);</li>
+  <li>communicate clearly in writing (bug reports, status updates).</li>
+</ul>
+
+<h2>Who is who: the people around you</h2>
+<div class="table-wrap"><table>
+<tr><th>Role</th><th>What they do (plain words)</th><th>How you work with them</th></tr>
+<tr><td><b>OEM</b> (the customer)</td><td>The car maker, e.g. Volkswagen, BMW, Mercedes. They pay for the software.</td><td>Their requirements are what you test against.</td></tr>
+<tr><td><b>Tier-1 supplier</b></td><td>The company that builds the screen hardware + software for the OEM (e.g. Bosch, Continental, Harman, LG, Visteon).</td><td>Often your company works for the Tier-1 or directly for the OEM.</td></tr>
+<tr><td><b>Customer proxy team</b></td><td>"Proxy" = stand-in. A small team that represents the customer day to day.</td><td>They give you test suites, set priorities, review your tickets. You report to them.</td></tr>
+<tr><td><b>Developers</b></td><td>Write the code.</td><td>They fix your tickets and ask you questions about them.</td></tr>
+<tr><td><b>Test lead / test manager</b></td><td>Plans testing and leads the testers.</td><td>Gives you tasks, reviews your reports.</td></tr>
+<tr><td><b>Requirements engineer</b></td><td>Writes and owns the requirements.</td><td>You ask them when a requirement is unclear.</td></tr>
+<tr><td><b>Automation engineer</b></td><td>Builds and maintains automated tests.</td><td>You tell them when a failure is the script's fault, not the product's.</td></tr>
+<tr><td><b>Product owner / project manager</b></td><td>Decides what gets fixed first and when to release.</td><td>Decides the <b>priority</b> of your tickets and the release date.</td></tr>
+</table></div>
+
+<h2>A typical day in this job</h2>
+<div class="table-wrap"><table>
+<tr><th>Time</th><th>What you do</th><th>Words used</th></tr>
+<tr><td>09:00</td><td>15-minute team meeting: what you did yesterday, what you'll do today, what is stopping you</td><td>stand-up, blocker</td></tr>
+<tr><td>09:20</td><td>A new build arrived. You flash it on your test bench and quickly check the basics: does it start, do the main screens open?</td><td>flashing, test bench, smoke test</td></tr>
+<tr><td>10:00</td><td>You start the automated test suite. It runs by itself for about 2 hours</td><td>execution, test run</td></tr>
+<tr><td>10:15</td><td>While it runs, you test a new feature by hand</td><td>manual testing, exploratory testing</td></tr>
+<tr><td>12:00</td><td>The suite finished: 200 passed, 8 failed. For each failure you decide: real bug, script problem, or bench problem</td><td>triage, failure analysis</td></tr>
+<tr><td>14:00</td><td>You write 2 new tickets with logs and video, and add evidence to 1 existing ticket</td><td>defect report, evidence, duplicate</td></tr>
+<tr><td>15:30</td><td>3 bugs were fixed in this build. You retest them and close them</td><td>retest, verified, closed</td></tr>
+<tr><td>16:30</td><td>You update results in the test tool and send a short status to the proxy team</td><td>execution records, status report</td></tr>
+</table></div>
+
+<div class="callout example"><span class="label">Real example: a daily status message</span>
+<p>"Build 24.3.1 on bench B-03: 200/208 passed. 8 failures: 2 new bugs (IVI-1432, IVI-1433), 1 known issue (IVI-1301), 5 environment issues (USB hub disconnected &ndash; fixed and re-run, now passing). Blockers: none. Tomorrow: retest of IVI-1290 and IVI-1295."</p>
+</div>
+
+<h2>Pass, fail, blocked: what results mean</h2>
+<div class="table-wrap"><table>
+<tr><th>Result</th><th>Meaning</th><th>Example</th></tr>
+<tr><td><b>Pass</b></td><td>Actual result = expected result</td><td>Snowflake appears at 4.9 &deg;C as required</td></tr>
+<tr><td><b>Fail</b></td><td>Actual result differs from expected</td><td>Snowflake doesn't appear at 4.9 &deg;C &rarr; you raise a ticket</td></tr>
+<tr><td><b>Blocked</b></td><td>You can't run the test at all because something else is broken</td><td>The media app crashes on opening, so you can't test the shuffle button</td></tr>
+<tr><td><b>Not run / Not executed</b></td><td>Not done yet (no time, out of scope, waiting)</td><td>Planned for the next build</td></tr>
+<tr><td><b>N/A (not applicable)</b></td><td>The test doesn't apply to this variant</td><td>Head-up display test on a car variant without HUD</td></tr>
+</table></div>
+
+<h2>Manual vs automated testing</h2>
+<div class="table-wrap"><table>
+<tr><th></th><th>Manual testing</th><th>Automated testing</th></tr>
+<tr><td>Who does the work</td><td>You, with your eyes and hands</td><td>A program (script) presses buttons, sends signals and checks results</td></tr>
+<tr><td>Good for</td><td>New features, look and feel, strange behaviour, exploring, one-time checks</td><td>Repeating the same hundreds of checks on every build, night runs, long stability runs</td></tr>
+<tr><td>Weak at</td><td>Slow, boring for repeated checks, humans get tired</td><td>Only checks what it was told to check; breaks when the screen changes; can be "flaky"</td></tr>
+<tr><td>Your role here</td><td>Design and run tests, judge what you see</td><td>Start the suite, watch it, read results, analyse every failure</td></tr>
+</table></div>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>In this job you mostly <b>run</b> automated tests that someone else wrote. You do <b>not</b> need to be a programmer. You need to read the results and logs and explain failures clearly. Being able to read a little Python or Robot Framework is a bonus (<a href="automation.html">chapter 8</a> teaches you enough).</p>
+</div>
+
+<h2>Where the testing happens</h2>
+<p>There is no real car on your desk. Instead there is a <b>test bench</b>: the real screen computers (head unit and cluster) connected to a PC that pretends to be the rest of the car. Sometimes the bench is in another country and you control it remotely. You will learn exactly how this works in <a href="car-basics.html">chapter 2</a>.</p>
+<div class="grid">
+  <div class="card"><h4>Test bench (HIL)</h4><p>Real screen hardware + simulated car. Most of your work happens here.</p></div>
+  <div class="card"><h4>Remote bench</h4><p>Same, but in another location. You use remote desktop, a webcam on the screen and a remote power switch.</p></div>
+  <div class="card"><h4>Test vehicle</h4><p>A real prototype car. Used for final checks (camera, GPS, real driving). Less common for this role.</p></div>
+</div>
+
+<h2>What this client is really checking in the interview</h2>
+<p>From the question list you received, the interviewer focuses on <b>process and judgement</b>, not on deep programming. Expect these areas, roughly in this order:</p>
+<ol>
+  <li>ISTQB certification and how you used it</li>
+  <li>HMI experience: what you tested, team setup, where the hardware was</li>
+  <li>Test process from a customer's feature request to delivery</li>
+  <li>Bug reports: contents, tracking, assignment</li>
+  <li>Regression: strategy, which fixed bugs to add, how to reduce the set</li>
+  <li>Judgement: when NOT to create a ticket (duplicates, many testers)</li>
+  <li>Boundary value analysis: the snowflake at 5 &deg;C</li>
+  <li>Plus possibly: telltales, sensor failure, log analysis, Robot Framework, Python, Jira, traceability</li>
+</ol>
+<p>Every one of these has its own section in this site, with a ready answer.</p>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

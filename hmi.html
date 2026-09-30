@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HMI &amp; IVI features · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="hmi.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 3 &middot; Foundations</div>
+<h1>HMI &amp; IVI features</h1>
+<p class="lead">What every car screen and feature does, how to test it, and which bugs are typical. When the interviewer asks "How would you test X?", the answer is in this chapter.</p>
+<div class="meta-row"><span class="pill easy">Beginner</span><span class="pill">Reading time: 45 min</span><span class="pill hot">Often asked: telltales, warnings, "how would you test&hellip;"</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>What HMI and IVI mean</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p><b>HMI</b> (Human&ndash;Machine Interface) = every way the driver and the car communicate: screens, buttons, touch, voice, sounds, warning lamps. <b>IVI</b> (In-Vehicle Infotainment) = the "information + entertainment" part, mainly the centre screen: music, phone, maps, apps, settings.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Display / part</th><th>Where</th><th>What it shows</th><th>Why testers care</th></tr>
+<tr><td>Instrument cluster</td><td>Behind the steering wheel</td><td>Speed, RPM, gear, fuel/battery, range, odometer, outside temp, telltales, warnings</td><td>Safety-relevant: wrong speed or a missing warning is critical</td></tr>
+<tr><td>Centre display (head unit)</td><td>Middle of the dashboard</td><td>Media, radio, phone, navigation, climate, settings, apps, camera</td><td>Most features and most user complaints</td></tr>
+<tr><td>Head-up display (HUD)</td><td>Projected on the windscreen</td><td>Speed, navigation arrows, speed limit, warnings</td><td>Must match the cluster exactly</td></tr>
+<tr><td>Passenger / rear displays</td><td>Front passenger or back seats</td><td>Media, climate for rear</td><td>Must not distract the driver (e.g. video)</td></tr>
+<tr><td>Controls</td><td>Steering-wheel buttons, rotary knob, touch, hardkeys</td><td>Input to the HMI</td><td>Each input path must work: touch AND buttons AND voice</td></tr>
+<tr><td>Audio</td><td>Speakers</td><td>Chimes, warnings, navigation voice, music, calls</td><td>Sound priority: a warning must be heard over music</td></tr>
+</table></div>
+
+<h2>The instrument cluster and telltales</h2>
+<p>A <b>telltale</b> is a small lamp symbol on the cluster. Colours have fixed meanings (standard <b>ISO 2575</b>):</p>
+<div class="table-wrap"><table>
+<tr><th>Colour</th><th>Meaning</th><th>Examples</th></tr>
+<tr><td style="color:#c62f2f;font-weight:700">Red</td><td>Danger / stop now / serious problem</td><td>Seatbelt not fastened, brake system fault, airbag fault, oil pressure, battery/charging fault, door open</td></tr>
+<tr><td style="color:#b86e00;font-weight:700">Amber / yellow</td><td>Warning / check soon / a system is limited</td><td>Engine check (MIL), ABS fault, tyre pressure (TPMS), low fuel, ESC off / ESC active (flashing)</td></tr>
+<tr><td style="color:#1f8a4c;font-weight:700">Green</td><td>A function is on and working</td><td>Turn indicators, low beam, cruise control active, "Ready" in EVs</td></tr>
+<tr><td style="color:#2563c9;font-weight:700">Blue</td><td>High beam on</td><td>High beam</td></tr>
+<tr><td style="font-weight:700">White / grey</td><td>Information, standby</td><td>Cruise control standby, set speed</td></tr>
+</table></div>
+
+<h3>How to test a telltale (complete checklist)</h3>
+<ol>
+  <li><b>Correct symbol</b>: the right icon from the spec/ISO 2575.</li>
+  <li><b>Correct colour</b>: red, amber, green, blue as specified.</li>
+  <li><b>Correct position</b>: in its fixed place on the cluster.</li>
+  <li><b>ON condition</b>: turns on exactly when the signal says so (e.g. <code>SeatbeltDriver = unbuckled</code> and speed &gt; X).</li>
+  <li><b>OFF condition</b>: turns off when the condition ends.</li>
+  <li><b>Blinking</b>: blink rate if it blinks. Turn indicators must flash about 90 &plusmn; 30 times per minute (UN R48).</li>
+  <li><b>Bulb check</b>: at ignition ON, telltales light briefly to prove they work.</li>
+  <li><b>Timing</b>: reaction time from signal to display within the spec (e.g. &lt; 200 ms).</li>
+  <li><b>Signal faults</b>: invalid value (SNA) or message timeout &rarr; defined fault behaviour, never stuck.</li>
+  <li><b>Priority / overlap</b>: with many telltales on, nothing overlaps or hides another.</li>
+  <li><b>Day / night brightness</b>: readable in both.</li>
+  <li><b>Persistence</b>: after an ignition cycle, the telltale comes back if the problem still exists.</li>
+</ol>
+
+<div class="callout say"><span class="label">Say this: "Explain your experience with telltale testing"</span>
+<p class="say-quote">"For each telltale I verify symbol, colour and position against the spec, then the on and off conditions by simulating the input signals in CANoe. I check blinking frequency, the bulb check at ignition on, reaction time, and what happens when the signal is invalid or times out. I also test several telltales together for priority and overlap, and I repeat critical ones after an ignition cycle."</p>
+</div>
+
+<h3>Speed display rules (good to know)</h3>
+<ul>
+  <li><b>UN R39</b>: the speedometer may show <i>more</i> than the true speed but <b>never less</b>. (Displayed speed &le; 110% of true speed + 4 km/h.)</li>
+  <li>The needle, digital value, HUD and any other speed display must agree with each other.</li>
+  <li>Units follow the settings (km/h vs mph) everywhere at once.</li>
+</ul>
+
+<h2>Warnings, pop-ups and chimes</h2>
+<p>Besides telltales, the cluster shows <b>warning messages</b> (pop-ups) like "Tyre pressure low" and plays <b>chimes</b> (warning sounds).</p>
+<ul>
+  <li><b>Priority</b>: warnings have levels (e.g. critical &gt; warning &gt; info). A critical warning must interrupt anything else on screen and any music.</li>
+  <li><b>Queueing</b>: if 3 warnings come at once, they are shown in priority order; none is lost.</li>
+  <li><b>Acknowledge</b>: some can be closed with OK; critical ones may not be closable.</li>
+  <li><b>Re-appear</b>: a closed warning comes back after a time or an ignition cycle if the problem still exists.</li>
+  <li><b>Chime rules</b>: correct sound, volume (not silenced by the media volume), repetition, stops when the problem is gone.</li>
+  <li><b>Audio ducking</b>: music gets quieter (or pauses) while a warning or navigation voice plays.</li>
+</ul>
+<div class="callout example"><span class="label">Real example: seatbelt warning</span>
+<p>Spec: "If speed &gt; 20 km/h and the driver seatbelt is unbuckled, show the red seatbelt telltale and play a chime for 90 s." Tests: 19/20/21 km/h (boundaries), buckled/unbuckled, seat empty (passenger side), chime stops after 90 s, chime stops immediately when buckled, loud music playing, ignition cycle while unbuckled.</p>
+</div>
+
+<h2>The "5 directions" method: how to test ANY feature</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>When someone asks "How would you test X?", don't panic. Walk through these five directions and you will always have a structured, complete answer.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Direction</th><th>Question to ask yourself</th><th>Example for Bluetooth phone calls</th></tr>
+<tr><td>1. Normal use</td><td>Does it work the way a normal user uses it?</td><td>Pair phone, make a call, receive a call, end it</td></tr>
+<tr><td>2. Boundaries</td><td>What happens at the limits (min, max, just over)?</td><td>Max number of paired phones; 5,000 contacts; very long names</td></tr>
+<tr><td>3. Interruptions</td><td>What if something else happens in the middle?</td><td>Call during navigation voice; reverse gear during call; second incoming call</td></tr>
+<tr><td>4. Errors / negative</td><td>What if something goes wrong?</td><td>Phone out of range, Bluetooth switched off on phone, wrong PIN, battery empty</td></tr>
+<tr><td>5. Power / state changes</td><td>What about ignition cycles, sleep, low voltage?</td><td>Auto-reconnect after ignition off/on; call active while ignition goes off</td></tr>
+</table></div>
+
+<h2>Feature by feature: what to test and classic bugs</h2>
+
+<h3>1. Bluetooth &amp; phone</h3>
+<div class="table-wrap"><table>
+<tr><th>Test area</th><th>What to check</th></tr>
+<tr><td>Pairing</td><td>Pair from car and from phone; PIN / passkey confirmation; iPhone and Android; max paired devices; delete a device</td></tr>
+<tr><td>Connection</td><td>Auto-reconnect after ignition cycle; two phones at once; priority phone; out of range and back</td></tr>
+<tr><td>Phonebook / contacts</td><td>Sync time; 1,000+ contacts; special characters (&auml;, &eacute;, emoji); photos; sorting; search</td></tr>
+<tr><td>Calls</td><td>Dial, accept, reject, end, hold, mute, second call, conference; call from steering wheel and voice; call timer</td></tr>
+<tr><td>Audio</td><td>Call audio in car speakers, microphone works, no echo, volume</td></tr>
+<tr><td>Messages</td><td>SMS read-out, notifications (if supported)</td></tr>
+<tr><td>Status icons</td><td>Signal strength, battery level, network name correct</td></tr>
+</table></div>
+<p><b>Classic bugs:</b> contacts missing or duplicated after sync; names with umlauts broken; echo; call drops when switching to CarPlay; phone doesn't reconnect after sleep; call timer wrong; ringtone plays over the navigation prompt.</p>
+
+<h3>2. Media (USB, Bluetooth audio)</h3>
+<div class="table-wrap"><table>
+<tr><th>Test area</th><th>What to check</th></tr>
+<tr><td>Sources</td><td>USB, Bluetooth audio, CarPlay/Android Auto audio, streaming apps; switching between them</td></tr>
+<tr><td>Formats</td><td>MP3, AAC, FLAC, WAV; supported and unsupported files; corrupted file</td></tr>
+<tr><td>Metadata</td><td>Title, artist, album, cover art; missing tags; very long titles; special characters</td></tr>
+<tr><td>Controls</td><td>Play/pause, next/previous, seek, shuffle, repeat (one/all); from touch, steering wheel and voice</td></tr>
+<tr><td>Progress</td><td>Elapsed/remaining time and progress bar match</td></tr>
+<tr><td>Big data</td><td>USB with 10,000 files, deep folders, 64/128 GB stick; indexing time</td></tr>
+<tr><td>Interruptions</td><td>Unplug USB while playing; incoming call; navigation voice; traffic announcement</td></tr>
+<tr><td>Resume</td><td>After ignition cycle, resume same source, same track, same position</td></tr>
+</table></div>
+<p><b>Classic bugs:</b> progress bar doesn't match the time; wrong cover art; shuffle repeats songs; crash on corrupt file; resumes the wrong track; text in the wrong language.</p>
+
+<h3>3. Radio (FM / AM / DAB)</h3>
+<ul>
+  <li>Frequency band limits: FM 87.5&ndash;108.0 MHz (steps of 0.1 or 0.05), AM (kHz). Nothing outside the band.</li>
+  <li>Seek up/down, scan, manual tuning, presets (save, recall, overwrite), station list.</li>
+  <li>RDS: station name and radio text; long text must scroll or be shortened, not overflow.</li>
+  <li>TA (traffic announcements) interrupt music and go back afterwards.</li>
+  <li>DAB &harr; FM switching when the digital signal is weak.</li>
+  <li><b>Classic bugs:</b> preset highlights the wrong station; frequency shown with wrong unit or format; RDS text overflows; no audio after TA.</li>
+</ul>
+
+<h3>4. Navigation</h3>
+<ul>
+  <li>Destination entry: address, POI, favourites, voice; special characters (Stra&szlig;e, &auml;).</li>
+  <li>Route calculation, alternatives, reroute when you leave the route.</li>
+  <li>Turn-by-turn guidance: arrow on centre screen, <b>cluster and HUD must match</b>, voice prompt timing, lane guidance.</li>
+  <li>ETA and remaining distance/time; units km/miles; 12/24-hour time.</li>
+  <li>No GPS (tunnel, garage); map updates; traffic info.</li>
+  <li><b>Classic bugs:</b> arrow shows right, text says left; ETA in the past; street name cut off; wrong units; lane guidance doesn't highlight the lane.</li>
+</ul>
+
+<h3>5. Apple CarPlay / Android Auto (phone projection)</h3>
+<ul>
+  <li>Wired and wireless connection; first connection and reconnection.</li>
+  <li>Switching between native car screens and projection; home button; reverse camera must still appear.</li>
+  <li>Audio focus: phone music vs car radio vs navigation voice vs calls.</li>
+  <li>Steering-wheel buttons and voice (Siri/Google Assistant) work.</li>
+  <li>Disconnect during navigation or a call; phone OS updates.</li>
+  <li><b>Classic bugs:</b> black screen; audio stays muted after a call; no reconnect after sleep; touch offset.</li>
+</ul>
+
+<h3>6. Climate (HVAC)</h3>
+<ul>
+  <li>Temperature range and step (e.g. 16&ndash;28 &deg;C in 0.5 steps, plus LO/HI) &mdash; perfect for BVA.</li>
+  <li>&deg;C/&deg;F setting everywhere; driver/passenger sync.</li>
+  <li>Fan levels (e.g. 1&ndash;7), AUTO, A/C, recirculation, MAX defrost (usually cancels AUTO).</li>
+  <li>Seat heating/ventilation levels; steering-wheel heating.</li>
+  <li>Screen and physical buttons stay in sync.</li>
+  <li><b>Classic bugs:</b> mixed units; values outside the range; two conflicting modes active; screen shows ON but the function is OFF.</li>
+</ul>
+
+<h3>7. Rear camera &amp; parking (PDC)</h3>
+<ul>
+  <li>Camera appears quickly after selecting reverse. US rule FMVSS 111: within <b>2 seconds</b>. Also test right after ignition on (boot time).</li>
+  <li>Guide lines move with the steering angle; static and dynamic lines.</li>
+  <li>Parking sensors: bars and beep speed match the distance; front/rear/side.</li>
+  <li>Camera has priority over other screens (CarPlay, pop-ups).</li>
+  <li>Camera image freeze must be detected (not showing an old image).</li>
+  <li><b>Classic bugs:</b> camera late or black; frozen image; pop-up covers camera; lines don't move.</li>
+</ul>
+
+<h3>8. Voice control</h3>
+<ul>
+  <li>Commands: "Call Anna", "Navigate home", "Temperature 21 degrees".</li>
+  <li>Accents, noise (open window, fan at max), cancel, timeout, languages.</li>
+  <li>Music ducked while listening; correct feedback on screen.</li>
+</ul>
+
+<h3>9. Settings &amp; localisation (language)</h3>
+<ul>
+  <li>Language change: <b>every</b> text changes, nothing is left in the old language, no text cut off (German words are long!), right-to-left languages (Arabic, Hebrew) mirrored correctly.</li>
+  <li>Units: km/miles, &deg;C/&deg;F, 12/24 h, date format (30.09.2026 vs 09/30/2026), decimal comma vs point.</li>
+  <li>Date/time: manual and GPS/network time; time zones; daylight saving.</li>
+  <li>Profiles: settings saved per driver; factory reset clears everything (including phone pairings).</li>
+</ul>
+
+<h3>10. Driver-distraction restrictions</h3>
+<p>Many functions are <b>blocked while driving</b> for safety: video playback, typing on the keyboard, long lists. Test: at speed below the limit they work; above it they are blocked with a clear message; passenger screen may still play video.</p>
+
+<h3>11. Software update / OTA</h3>
+<ul>
+  <li>Update download, installation, progress, cancel, power loss during update, rollback if it fails, version shown after update.</li>
+  <li>Settings and pairings kept after update.</li>
+</ul>
+
+<h3>12. Electric-car (EV) screens</h3>
+<ul>
+  <li>Battery % (state of charge, SoC), battery bar, range; they must agree.</li>
+  <li>Charging: plug connected, power (kW), time to full (hours and minutes!), charge limit.</li>
+  <li>Charging stops on the navigation route; battery at arrival.</li>
+  <li>Logic: the car cannot be charging from a charger while driving.</li>
+</ul>
+
+<h2>Look and feel: the UI checklist</h2>
+<p>These are the things you check on every screen (this is also the method for the <a href="eye-tests.html">spot-the-defect drills</a>):</p>
+<div class="grid">
+  <div class="card"><h4>Text</h4><p>Spelling, language mix, cut-off text, placeholder text ("Hello", "TBD", "STR_ID_12").</p></div>
+  <div class="card"><h4>Units &amp; formats</h4><p>km/mi, &deg;C/&deg;F, date and time format, decimal separator, impossible values (30 February, 25:10, 00:75).</p></div>
+  <div class="card"><h4>Consistency</h4><p>The same value is shown the same way everywhere (needle vs number, cluster vs HUD).</p></div>
+  <div class="card"><h4>Icons &amp; colours</h4><p>Right icon for the label; colour meaning (red/amber/green).</p></div>
+  <div class="card"><h4>Layout</h4><p>Overlap, alignment, cut-off, tilted images, missing items.</p></div>
+  <div class="card"><h4>State</h4><p>The highlighted button matches the current screen or mode.</p></div>
+  <div class="card"><h4>Logic</h4><p>Impossible combinations (charging while driving, ETA in the past).</p></div>
+  <div class="card"><h4>Touch &amp; feedback</h4><p>Touch area big enough, press feedback, no double action, scroll works.</p></div>
+</div>
+
+<h2>Performance and stability</h2>
+<div class="table-wrap"><table>
+<tr><th>Check</th><th>What it means</th><th>Example target (from spec)</th></tr>
+<tr><td>Boot time</td><td>Ignition on &rarr; screen usable</td><td>e.g. home screen &lt; 10 s, rear camera &lt; 2 s</td></tr>
+<tr><td>Response time</td><td>Touch &rarr; screen reacts</td><td>e.g. &lt; 200 ms</td></tr>
+<tr><td>Screen transition</td><td>Time to switch screens, smooth animations</td><td>no freeze, no flicker</td></tr>
+<tr><td>Endurance / stability</td><td>Run for hours (e.g. 8&ndash;24 h), many ignition cycles</td><td>no crash, no slowdown</td></tr>
+<tr><td>Memory leak</td><td>Memory use keeps growing until the system slows or crashes</td><td>check with long runs and logs</td></tr>
+<tr><td>Stress</td><td>Fast repeated actions (press next 100 times), many devices</td><td>no crash</td></tr>
+</table></div>
+
+<h2>Quick answers for the interview</h2>
+<details class="qa"><summary>What is the difference between HMI and IVI?</summary><div class="ans"><p>HMI is everything the driver uses to interact with the car: displays, buttons, touch, voice, sounds, warning lamps. IVI is the infotainment part of it, mainly the centre screen with media, phone, navigation and apps. The cluster is HMI but not really infotainment.</p></div></details>
+<details class="qa"><summary>How would you test an HMI warning when a sensor fails or is disconnected?</summary><div class="ans"><p>I would simulate the failure in the signal simulator in three ways: send the "signal not available" value, stop sending the message so it times out, and set the sensor fault flag if there is one. On a HIL bench I could also disconnect the real sensor. Expected, per spec: the HMI shows the fault indication (for example dashes or an amber fault telltale with a message), does not freeze on the old value, does not crash, a DTC is stored, and everything recovers when the signal comes back. I also check the timing of the fault detection.</p></div></details>
+<details class="qa"><summary>How would you test Bluetooth phone pairing?</summary><div class="ans"><p>I use five directions. Normal: pair from the car and from the phone, with iPhone and Android, confirm the PIN. Boundaries: maximum number of paired devices, very long device names. Interruptions: incoming call during pairing, ignition off during pairing. Negative: wrong PIN, Bluetooth off on the phone, phone out of range, cancel pairing. Power: auto-reconnect after an ignition cycle and after sleep. I also check the phonebook sync and the status icons.</p></div></details>
+<details class="qa"><summary>What types of HMI components have you tested?</summary><div class="ans"><p>Answer with your real experience, grouped: "On the cluster: [telltales, warnings, speed and fuel displays]. On the head unit: [media, Bluetooth phone, radio, navigation, climate, settings, camera]. And cross-cutting topics like language switching, units and ignition-cycle behaviour."</p></div></details>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

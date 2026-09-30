@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz &amp; flashcards · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="quiz.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 12 &middot; Practice</div>
+<h1>Quiz &amp; flashcards</h1>
+<p class="lead">Check yourself. Tap an answer: it turns green if right or red if wrong, and the explanation appears. Aim for <b>80% or more</b> before the interview.</p>
+<div class="meta-row"><span class="pill easy">Self-test</span><span class="pill" id="qTotalPill">&hellip; questions</span><span class="pill" id="fTotalPill">&hellip; flashcards</span></div>
+<div id="toc" class="toc"></div>
+
+<h2 id="quiz">Multiple-choice quiz</h2>
+<div class="chips" id="qChips"></div>
+<div class="toolbar">
+  <button class="btn secondary" id="qShuffle">Shuffle questions</button>
+  <button class="btn secondary" id="qReset">Start again</button>
+</div>
+<div class="score" id="qScore">Score: 0 / 0</div>
+<div id="qList"></div>
+
+<h2 id="flash">Flashcards (vocabulary)</h2>
+<p>Read the word, say the meaning out loud, then tap the card to check. Keyboard: <b>Space</b> = flip, <b>&larr; &rarr;</b> = previous / next.</p>
+<div class="toolbar">
+  <select id="fCat" class="search" style="width:auto;margin:0;padding:8px 12px" aria-label="Flashcard category"></select>
+  <button class="btn secondary" id="fShuffle">Shuffle</button>
+</div>
+<div class="flash"><div class="flash-card" id="fCard" tabindex="0" role="button" aria-label="Flashcard, tap to flip"></div></div>
+<div class="toolbar" style="justify-content:space-between;align-items:center">
+  <button class="btn secondary" id="fPrev">&larr; Previous</button>
+  <span class="muted" id="fPos">1 / 1</span>
+  <button class="btn" id="fFlip">Flip</button>
+  <button class="btn secondary" id="fNext">Next &rarr;</button>
+</div>
+
+</article></main></div>
+<script src="assets/glossary.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  /* ---------------- Quiz ---------------- */
+  var ALL = (window.QUIZ || []).map(function (q, i) { return Object.assign({ id: i }, q); });
+  var topics = ['All'];
+  ALL.forEach(function (q) { if (topics.indexOf(q.t) < 0) topics.push(q.t); });
+  var names = { Basics: 'Testing basics', Design: 'Test design & BVA', Defects: 'Defects', Regression: 'Regression', Automation: 'Automation', Car: 'Car & tools', HMI: 'HMI' };
+  var topic = 'All', order = ALL.slice(), right = 0, answered = 0;
+  var list = document.getElementById('qList'), chips = document.getElementById('qChips'), score = document.getElementById('qScore');
+  document.getElementById('qTotalPill').textContent = ALL.length + ' questions';
+
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function best() { return window.siteStore ? window.siteStore('quizBest') : null; }
+
+  function drawChips() {
+    chips.innerHTML = topics.map(function (t) {
+      var n = t === 'All' ? ALL.length : ALL.filter(function (q) { return q.t === t; }).length;
+      return '<button class="chip' + (t === topic ? ' on' : '') + '" data-t="' + t + '">' + (names[t] || t) + ' (' + n + ')</button>';
+    }).join('');
+  }
+  function updateScore() {
+    var shown = order.filter(function (q) { return topic === 'All' || q.t === topic; }).length;
+    var pct = answered ? Math.round(right / answered * 100) : 0;
+    var msg = answered === shown && shown ? (pct >= 80 ? ' &middot; Great! You are ready for this topic.' : ' &middot; Read the explanations and try again.') : '';
+    var b = best();
+    score.innerHTML = 'Score: ' + right + ' / ' + answered + ' answered (' + pct + '%) &middot; ' + shown + ' questions' + (b ? ' &middot; Best full quiz: ' + b + '%' : '') + msg;
+    if (topic === 'All' && answered === ALL.length && window.siteStore) {
+      if (!b || pct > parseInt(b, 10)) window.siteStore('quizBest', String(pct));
+    }
+  }
+  function draw() {
+    right = 0; answered = 0;
+    var qs = order.filter(function (q) { return topic === 'All' || q.t === topic; });
+    list.innerHTML = qs.map(function (q, n) {
+      var idx = shuffle(q.o.map(function (_, i) { return i; }));
+      return '<div class="quiz-q" data-a="' + q.a + '"><div><b>' + (n + 1) + '.</b> <span class="pill" style="margin-left:4px">' + (names[q.t] || q.t) + '</span></div>' +
+        '<p style="margin:8px 0 0;font-weight:600">' + q.q + '</p><div class="opts">' +
+        idx.map(function (i) { return '<button class="opt" data-i="' + i + '">' + q.o[i] + '</button>'; }).join('') +
+        '</div><div class="why"><b>Why:</b> ' + q.w + '</div></div>';
+    }).join('');
+    updateScore();
+  }
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('button.opt'); if (!b) return;
+    var box = b.closest('.quiz-q'); if (box.classList.contains('answered')) return;
+    var a = box.getAttribute('data-a');
+    box.classList.add('answered'); answered++;
+    box.querySelectorAll('button.opt').forEach(function (o) {
+      o.disabled = true;
+      if (o.getAttribute('data-i') === a) o.classList.add('right');
+    });
+    if (b.getAttribute('data-i') === a) right++; else b.classList.add('wrong');
+    updateScore();
+  });
+  chips.addEventListener('click', function (e) {
+    var c = e.target.closest('.chip'); if (!c) return;
+    topic = c.getAttribute('data-t'); drawChips(); draw();
+  });
+  document.getElementById('qShuffle').addEventListener('click', function () { order = shuffle(ALL.slice()); draw(); });
+  document.getElementById('qReset').addEventListener('click', function () { order = ALL.slice(); draw(); window.scrollTo({ top: document.getElementById('quiz').offsetTop - 70 }); });
+  drawChips(); draw();
+
+  /* ---------------- Flashcards ---------------- */
+  var G = window.GLOSSARY || [];
+  document.getElementById('fTotalPill').textContent = G.length + ' flashcards';
+  var cats = ['All'];
+  G.forEach(function (g) { if (cats.indexOf(g[1]) < 0) cats.push(g[1]); });
+  var sel = document.getElementById('fCat');
+  sel.innerHTML = cats.map(function (c) { return '<option value="' + c + '">' + (c === 'All' ? 'All words' : c) + '</option>'; }).join('');
+  var deck = [], pos = 0, flipped = false;
+  var card = document.getElementById('fCard'), posEl = document.getElementById('fPos');
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function build(doShuffle) {
+    deck = G.filter(function (g) { return sel.value === 'All' || g[1] === sel.value; });
+    if (doShuffle) shuffle(deck);
+    pos = 0; flipped = false; show();
+  }
+  function show() {
+    if (!deck.length) { card.innerHTML = '<div class="back">No cards.</div>'; return; }
+    var g = deck[pos];
+    card.innerHTML = flipped
+      ? '<div class="back"><b>' + esc(g[0]) + '</b><br><br>' + esc(g[2]) + (g[3] ? '<br><br><i class="muted">Example: ' + esc(g[3]) + '</i>' : '') + '</div>'
+      : '<div class="front">' + esc(g[0]) + '</div><div class="muted small" style="margin-top:12px">' + esc(g[1]) + ' &middot; tap to see the meaning</div>';
+    posEl.textContent = (pos + 1) + ' / ' + deck.length;
+  }
+  function flip() { flipped = !flipped; show(); }
+  function move(d) { pos = (pos + d + deck.length) % deck.length; flipped = false; show(); }
+  card.addEventListener('click', flip);
+  card.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); }
+    else if (e.key === 'ArrowRight') move(1);
+    else if (e.key === 'ArrowLeft') move(-1);
+  });
+  document.getElementById('fFlip').addEventListener('click', flip);
+  document.getElementById('fNext').addEventListener('click', function () { move(1); });
+  document.getElementById('fPrev').addEventListener('click', function () { move(-1); });
+  document.getElementById('fShuffle').addEventListener('click', function () { build(true); });
+  sel.addEventListener('change', function () { build(false); });
+  build(true);
+})();
+</script>
+</body>
+</html>

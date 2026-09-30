@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interview Q&amp;A · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="questions.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 11 &middot; Practice</div>
+<h1>Interview questions &amp; answers (130)</h1>
+<p class="lead">Every question from your interview list, plus the extra questions people with 1&ndash;2 years' experience usually get. Each answer has a <b>green short answer</b> (say this first, about 20 seconds), then a longer version if they want more detail.</p>
+<div class="meta-row"><span class="pill hot">Most important page</span><span class="pill">130 questions</span><span class="pill">&#9733; = top-10 question</span></div>
+
+<div class="callout warn"><span class="label">Be honest &mdash; always</span>
+<p>The answers use <b>[brackets]</b> for your real details (company, project, tool). Replace them with the truth. If you have never used a tool, say: <i>"I haven't used it in a project yet, but I understand how it works: &hellip;, and I can learn it quickly."</i> Interviewers respect honesty far more than a made-up story they can break with one follow-up question.</p>
+</div>
+
+<div class="callout idea"><span class="label">How to practise this page</span>
+<ol>
+<li>Read the question. <b>Close your eyes and answer out loud</b> before opening it.</li>
+<li>Open it and compare. Did you mention the key words in bold?</li>
+<li>Use <b>"Random question"</b> to test yourself like a real interview.</li>
+</ol>
+</div>
+
+<div class="toolbar">
+<button class="btn" id="randomQ">Random question</button>
+<button class="btn secondary" data-expand="all">Open all</button>
+<button class="btn secondary" data-expand="none">Close all</button>
+</div>
+
+<div id="toc" class="toc"></div>
+
+<h2 id="g-a">A. About you, ISTQB and your background</h2>
+
+<details class="qa" id="q-intro"><summary><span class="qn">Q1</span>&#9733; Tell me about yourself.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I'm a test engineer with [X] years' experience in [domain]. I do manual functional and regression testing, write test cases from requirements, report defects in Jira and support automation with Python and Robot Framework. I'm ISTQB Foundation certified and I enjoy HMI testing because every detail the driver sees matters."</p>
+<p>Use the 4-part formula: <b>who you are &rarr; what you do daily &rarr; one achievement &rarr; why this job</b>. Keep it under 90 seconds. Full templates are on the <a href="final-prep.html#intro">Final prep page</a>.</p>
+</div></details>
+
+<details class="qa" id="q-istqb-when"><summary><span class="qn">Q2</span>When did you get your ISTQB Foundation certificate and how did you use it in your job?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I got it in [month/year]. I use it every day: <b>test design techniques</b> like boundary values and equivalence partitioning to write test cases, the <b>test process</b> (plan, design, execute, report) to organise my work, and the shared vocabulary &mdash; defect, failure, regression, severity &mdash; to communicate clearly with developers."</p>
+<p>Give one concrete example: "When I tested the [volume / temperature] setting, I used BVA and tested min, min+1, max&minus;1 and max. That found a bug at the maximum value."</p>
+<p><b>Not certified yet?</b> Say: "I'm preparing for it / I've studied the syllabus, and I already apply its techniques." Never claim a certificate you don't have &mdash; it's checked.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q3</span>How did the certification concretely help you?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Three ways: I write <b>fewer but better test cases</b> using techniques instead of guessing; I write <b>clearer bug reports</b> because I separate defect from failure and severity from priority; and I talk to developers and managers in the <b>same standard terms</b>, so there's less confusion."</p>
+<p>Extra point: it taught me testing is <b>risk-based</b> &mdash; you can't test everything (principle 2, "exhaustive testing is impossible"), so you test the most important and risky parts first.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q4</span>What do you know about our company / this role?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "The role is manual testing of automotive HMI &mdash; cluster and infotainment &mdash; on test benches, with defect reporting in Jira, regression testing, and supporting test automation with Python and Robot Framework. The quality of the HMI directly affects driver safety and brand image, which is why I like it."</p>
+<p>Before the interview, look at the company website: which OEMs they work for, their products, their locations. Mention one fact.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q5</span>Why do you want to work in automotive testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Cars are becoming software products. The HMI is where the driver meets that software, so bugs are visible and can be safety-relevant. I like work where precision matters, and automotive has strong processes &mdash; V-model, ASPICE, traceability &mdash; that make me a better engineer."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q6</span>What are your strengths and weaknesses as a tester?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Strength: I'm very <b>detail-oriented</b> &mdash; I notice small UI inconsistencies like wrong units or cut-off text, and I write reproducible bug reports. Weakness: I used to spend too long investigating one bug. Now I <b>time-box</b> analysis to about 30 minutes, then raise the ticket with what I have and keep adding information."</p>
+<p>Always pair a weakness with what you are doing to fix it. Never say "I have no weakness" or "I'm a perfectionist".</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q7</span>What is the difference between QA and testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Testing</b> finds defects in the product (product-focused, corrective). <b>Quality assurance</b> improves the process so fewer defects are made (process-focused, preventive). Testing is part of quality control, which sits under quality management."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q8</span>Where do you see yourself in 3&ndash;5 years?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Deeper in automotive testing: strong in HMI and CAN/diagnostics, doing more automation with Python and Robot Framework, and taking responsibility for a feature area &mdash; planning its tests and guiding newer testers. Maybe ISTQB Advanced or the automotive tester certificate (CTFL-AuT)."</p>
+</div></details>
+
+<h2 id="g-b">B. HMI and automotive experience</h2>
+
+<details class="qa"><summary><span class="qn">Q9</span>Have you tested HMI software before? What kind?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Yes, I tested [infotainment / cluster / mobile / web UI]. For example [media, Bluetooth phone, navigation, settings, warnings]. I checked <b>function</b> (does it work), <b>display</b> (texts, icons, units, layout), <b>behaviour</b> (transitions, timing, touch response) and <b>robustness</b> (power cycles, disconnects, fast inputs)."</p>
+<p>If your HMI experience is from mobile/web apps: "My UI testing was on [mobile/web], but the skills transfer directly: checking layout, texts, states, localisation and user flows. I've studied automotive specifics such as telltales, CAN signals and driver distraction rules."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q10</span>What HMI components or functions have you tested?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Examples: [cluster speed and warnings / media USB and Bluetooth / phone calls / radio / navigation / climate / settings and language / rear camera]. For each I tested normal flows, boundaries, error cases and interruptions &mdash; like an incoming call during navigation."</p>
+<p>See the <a href="hmi.html">HMI chapter</a> for a test list per feature, so you can speak about any of them.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q11</span>Did you work alone or in a team? How was it organised?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "In a team of [N] testers and [M] developers, working in <b>Scrum</b> with 2-week sprints. We had daily stand-ups, sprint planning and a review. Features were split between testers, and a test lead handled the release reports. I worked closely with developers on bug analysis."</p>
+<p>Mention roles: product owner (priorities), Scrum master, developers, testers, test lead/manager, and the customer (OEM).</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q12</span>Where was your target hardware &mdash; on a test bench or remote?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Mostly a <b>test bench</b> on my desk: the real head unit or cluster ECU, a power supply, a CAN interface with CANoe to simulate the rest of the car, plus USB and a phone. Sometimes we used <b>remote benches</b> through a PC connection and camera, and we booked them in a shared calendar."</p>
+<p>Bonus: "Before testing on a remote bench, I check the software version, power state and that nobody else is using it."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q13</span>Explain your experience with telltale / warning-lamp testing.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "For each telltale I check: it switches <b>on</b> when the signal requests it and <b>off</b> when it stops; the <b>colour</b> is right (red = danger, amber = warning, green/blue = info); the <b>timing</b> is within spec; the <b>bulb check</b> at start-up works; the <b>priority</b> is right when several warnings come; and it behaves safely on <b>signal loss</b> (timeout, invalid value)."</p>
+<p>The full 12-point checklist is on the <a href="hmi.html">HMI page</a>.</p>
+</div></details>
+
+<details class="qa" id="q-sensor-fail"><summary><span class="qn">Q14</span>How would you test an HMI warning when a sensor fails or is disconnected?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I simulate the failure: <b>stop sending</b> the CAN message (timeout), send the <b>invalid / SNA value</b> (like 0xFF), send out-of-range values, and physically <b>unplug</b> the sensor if possible. I check the display shows the <b>defined fallback</b> &mdash; usually dashes '---' or a 'sensor fault' warning, never a frozen old value &mdash; that a DTC is stored, and that it <b>recovers</b> when the signal comes back."</p>
+<ol class="steps">
+<li><strong>Read the requirement</strong> for signal failure: timeout time (e.g. 500 ms), what to show.</li>
+<li><strong>Normal state first</strong>: check the value shows correctly.</li>
+<li><strong>Cause the failure</strong> in CANoe: disable the message or set it to SNA.</li>
+<li><strong>Measure</strong>: after how long does the display react? Is the text right?</li>
+<li><strong>Recover</strong>: restart the message; does it go back to normal?</li>
+<li><strong>Evidence</strong>: CAN trace + photo/video + DTC read-out.</li>
+</ol>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q15</span>What test bench setup have you used?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A <b>power supply</b> (12 V, with KL30 and KL15), the <b>DUT</b> (head unit or cluster), a <b>CAN/LIN interface</b> like Vector VN1630 with <b>CANoe</b> to simulate other ECUs, a display or the real screen, <b>USB sticks</b> and <b>phones</b> for media and Bluetooth, a <b>debug connection</b> for logs (DLT, ADB or serial), and a <b>flashing tool</b> to load new software."</p>
+<p>A bench diagram is in <a href="car-basics.html">Car basics</a>.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q16</span>What hardware and tools did you use in your test environment?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Hardware: power supply, DUT, Vector CAN interface, USB media, phones, sometimes a HIL rack. Software: <b>CANoe/CANalyzer</b> for bus simulation and traces, <b>DLT Viewer</b> or <b>ADB logcat</b> for logs, <b>Jira</b> for bugs, <b>Xray/Polarion</b> for test cases, <b>Python/Robot Framework</b> for automation, and a flash tool for software updates."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q17</span>How do you do log analysis during automotive testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I note the <b>exact time</b> the bug happened, then open the logs around that time: the <b>CAN trace</b> to see if the input signal was correct, and the <b>ECU log</b> (DLT or logcat) to see errors, warnings or crashes. If the input was right but the display was wrong, it's an HMI bug; if the input was already wrong, it's the sender. I attach the log part to the ticket."</p>
+<p>Steps and examples: <a href="tools-logs.html">Tools &amp; logs</a>.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q18</span>What is CAN, and why does an HMI tester need it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "CAN is the network that lets ECUs in a car talk to each other. The cluster gets speed, warnings and temperatures as <b>CAN signals</b>. As a tester I use CANoe to <b>send</b> those signals (simulate the car) and to <b>read the trace</b>, so I can tell whether a wrong display comes from a wrong input or from the HMI."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q19</span>What is a DBC file?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A DBC is the dictionary of the CAN bus. It lists every message (ID, length, cycle time) and every signal inside it (start bit, length, <b>factor, offset</b>, unit, min/max). The tool uses it to turn raw bytes into real values: <b>real = raw &times; factor + offset</b>."</p>
+<p>Example: raw 0x64 = 100, factor 0.5, offset &minus;40 &rarr; 100 &times; 0.5 &minus; 40 = 10 &deg;C. Try the decoder on the <a href="car-basics.html">Car basics</a> page.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q20</span>What are KL15 and KL30?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>KL30</b> is permanent battery power, always on. <b>KL15</b> is ignition &mdash; on when the key/start button is on. <b>KL31</b> is ground. On the bench we switch KL15 to test start-up, shutdown and sleep behaviour."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q21</span>What is the difference between HIL, SIL and vehicle testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>SIL</b> (software-in-the-loop): the software runs on a PC with simulated inputs &mdash; fast and cheap, early. <b>HIL</b> (hardware-in-the-loop): the real ECU is connected to a simulator that pretends to be the car &mdash; realistic and repeatable. <b>Vehicle</b> testing: in the real car &mdash; most realistic, but expensive and late."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q22</span>What is driver distraction, and how does it affect HMI testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Rules and guidelines (like AAM or NHTSA guidelines) limit what the driver can do while driving. For example, typing a destination, watching video or scrolling long lists is <b>blocked above a speed</b> like 5&ndash;8 km/h. I test that these functions lock at the speed threshold, show a message, and unlock when stopped."</p>
+</div></details>
+
+<h2 id="g-c">C. Test process, requirements and documentation</h2>
+
+<details class="qa" id="q-process"><summary><span class="qn">Q23</span>&#9733; A customer wants a new feature. What's your process from request to delivery?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "First I <b>analyse the requirement</b> and ask questions if something is unclear or untestable. Then I <b>plan</b> (scope, environment, effort), <b>design test cases</b> with techniques like BVA and link them to the requirement, <b>prepare the bench</b>, <b>execute</b> and report bugs, <b>retest fixes and run regression</b>, and finally write the <b>test report</b> with a release recommendation."</p>
+<ol class="steps">
+<li><strong>Requirement analysis</strong> &mdash; read the spec, check it is clear, complete and testable. Ask: "Below 5 &deg;C &mdash; is 5.0 included?" Record questions.</li>
+<li><strong>Test planning</strong> &mdash; what to test, what not, which bench, which software version, effort, risks, entry/exit criteria.</li>
+<li><strong>Test design</strong> &mdash; write test cases (preconditions, steps, expected results) using EP, BVA, state transition. Link each to the requirement ID (traceability).</li>
+<li><strong>Environment setup</strong> &mdash; flash the software, configure CANoe, check the bench works (smoke test).</li>
+<li><strong>Execution</strong> &mdash; run tests, mark pass/fail/blocked, collect evidence, raise defects in Jira.</li>
+<li><strong>Defect follow-up</strong> &mdash; retest fixes, run regression around the change.</li>
+<li><strong>Reporting &amp; closure</strong> &mdash; test report: coverage, results, open bugs with risk, recommendation (release / release with known issues / don't release).</li>
+</ol>
+<p>This is the <b>STLC</b> (software testing life cycle). Details: <a href="testing-basics.html">Testing basics</a>.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q24</span>How do you review a new functional requirement before testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I check it is <b>clear</b> (one meaning), <b>complete</b> (all cases, including errors), <b>consistent</b> (doesn't contradict other requirements), <b>testable</b> (measurable expected result) and <b>feasible</b> on our bench. I write down open questions and clarify them with the requirement owner before I design tests."</p>
+<p>Example of an untestable requirement: "The warning should appear quickly." Better: "within 500 ms after the signal".</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q25</span>How do you decide if a requirement can be tested in your current environment?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I check whether the bench can <b>create the inputs</b> (can we simulate that signal? do we have that phone, that sensor?) and <b>observe the outputs</b> (can we see or measure the result? do we have logs?). If not, I raise it early: we may need a new simulation, extra hardware, a HIL, or a vehicle test &mdash; and I note it as a risk in the plan."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q26</span>Walk me through requirement &rarr; plan &rarr; design &rarr; setup &rarr; execution &rarr; reporting.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> Same as Q23. Say each step with <b>one output</b>: requirement &rarr; list of questions; plan &rarr; test plan; design &rarr; test cases + traceability; setup &rarr; working bench with the right software; execution &rarr; results + defects; reporting &rarr; test report + recommendation.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q27</span>Is your testing documented? How do you document test results?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Yes. Each test case run gets a <b>status</b> (pass, fail, blocked, not run), the <b>software version</b>, bench, date and tester. Failed tests are <b>linked to the Jira defect</b>. I attach evidence &mdash; screenshots, videos, CAN traces, logs. At the end we create a test report from the tool."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q28</span>What tools do you use to document test results?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "[Jira with Xray / Zephyr, Polarion, TestRail, ALM, or Excel]. Automated results come from Robot Framework's <b>output.xml, log.html and report.html</b>, often published through Jenkins."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q29</span>What issue trackers have you used?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Mainly <b>Jira</b>. I know others exist: Polarion, Azure DevOps, Bugzilla, Redmine. The idea is the same: a ticket with a life cycle, fields, links and history."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q30</span>What do you put in the final test report for the customer?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Software version and scope tested; test environment; <b>how many tests</b> passed, failed, blocked and not run; <b>requirement coverage</b>; list of <b>open defects</b> with severity and risk; what was not tested and why; and a <b>release recommendation</b>."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q31</span>How do you support a release recommendation?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I compare the results with the <b>exit criteria</b> &mdash; for example: all critical tests executed, no open critical/blocker bugs, regression passed. Then I state the <b>facts and risks</b>: 'Release with 2 known minor issues' or 'Not recommended: 1 critical bug in the rear camera'. The final decision belongs to the project/release manager, but my data drives it."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q32</span>What are entry and exit criteria?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Entry</b> criteria: conditions to <b>start</b> testing &mdash; stable build flashed, smoke test passed, test cases ready, bench available. <b>Exit</b> criteria: conditions to <b>stop</b> &mdash; planned tests executed, coverage reached, no open critical defects, report done."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q33</span>What is a test plan, and what's inside?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "The document that says <b>what, how, who, when</b> for testing: scope (in/out), approach and test levels, environment, schedule, roles, entry/exit criteria, risks, deliverables."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q34</span>What makes a good test case?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A unique <b>ID</b>, clear <b>title</b>, link to the <b>requirement</b>, <b>preconditions</b>, numbered <b>steps</b>, a <b>precise expected result</b> for each step, test data, and priority. Anyone should be able to run it and get the same verdict."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q35</span>What is a test scenario vs a test case?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A <b>scenario</b> is <b>what</b> to test, in one line: 'Check an incoming call during navigation.' A <b>test case</b> is <b>how</b>, in detail: preconditions, steps, data and expected results. One scenario usually becomes several test cases."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q36</span>What is traceability, and how do you maintain it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Traceability means every requirement is <b>linked</b> to its test cases, and every test result and defect is linked back. I create the links in the tool (Polarion/DOORS/Jira-Xray) when I write test cases, and I check the <b>traceability matrix</b> for requirements without tests. When a requirement changes, the links show which tests to update."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q37</span>Which tools have you used for requirements traceability?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "[Polarion / IBM DOORS / Jira with Xray / codeBeamer]. In automotive, requirements often come from the OEM in DOORS or Polarion; test cases link to the requirement ID."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q38</span>What is the V-model?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A development model where every design step on the left has a matching test level on the right: requirements &harr; acceptance/system test, architecture &harr; integration test, detailed design &harr; unit test. It means test planning starts early, together with each design step. Automotive uses it through <b>ASPICE</b>."</p>
+</div></details>
+
+<h2 id="g-d">D. Test automation and tools</h2>
+
+<details class="qa"><summary><span class="qn">Q39</span>Which automation tools or frameworks have you used?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "[<b>Robot Framework</b> with Python libraries, <b>pytest</b>, <b>python-can</b> for CAN, CANoe test modules / CAPL, Jenkins for scheduled runs]. My role was [writing and maintaining test scripts / running suites and analysing failures]."</p>
+<p>At 1&ndash;2 years, it's fine to say: "I mainly <b>executed and analysed</b> automated suites, and I wrote or updated simple test cases."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q40</span>How have you used Python in testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "For small helper scripts: <b>sending and reading CAN messages</b> with python-can and cantools, <b>parsing logs</b> to find errors, <b>comparing results</b>, generating test data, and writing <b>custom Robot Framework keywords</b>."</p>
+<p>Example scripts are on the <a href="automation.html">Automation page</a>.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q41</span>What experience do you have with Robot Framework?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Robot Framework is a <b>keyword-driven</b> framework: tests are readable steps like <code>Set Vehicle Speed  50</code>. I've [written test cases, used <b>tags</b> to select suites, run them from the command line, and analysed <b>log.html</b> for failures]. Keywords come from libraries, often our own Python libraries for CAN or the HMI."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q42</span>How are test results generated in Robot Framework?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Every run creates three files: <b>output.xml</b> (all raw results, machine-readable), <b>log.html</b> (step-by-step details with errors and screenshots) and <b>report.html</b> (the summary with pass/fail per test and tag). You can merge several runs with <b>rebot</b>, and Jenkins shows the trends."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q43</span>What artifacts or logs do you collect after a test run?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Robot files (output.xml, log.html, report.html), <b>CAN traces</b> (.blf/.asc), <b>ECU logs</b> (DLT/logcat/serial), <b>screenshots or videos</b>, the <b>software version</b> and bench configuration, and any <b>DTCs</b> read from the ECU."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q44</span>An automated test failed. What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I open log.html and find the failing step and message. Then I decide: is it a <b>real product bug</b>, a <b>script problem</b> (wrong locator, timing), an <b>environment problem</b> (bench, power, network) or a <b>flaky test</b>? I re-run it manually to confirm. Only real product bugs go to a Jira defect; script issues I fix or report to the automation owner."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q45</span>What is a flaky test, and how do you handle it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A test that passes and fails on the <b>same software</b> without changes &mdash; often due to timing, waits or unstable benches. I don't ignore it: I analyse the cause, replace fixed sleeps with <b>'wait until'</b> checks, and quarantine it (tag it) until it's fixed so it doesn't hide real failures."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q46</span>What should and shouldn't be automated?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Automate tests that are <b>repeated often</b> (regression, smoke), <b>stable</b>, data-driven, or need precise timing. Keep manual for <b>new or changing features</b>, exploratory testing, visual and usability checks, and one-off tests."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q47</span>What is Jenkins used for in testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Jenkins is a <b>CI server</b>: it automatically builds software, flashes the bench and runs test suites &mdash; for example every night or after each build &mdash; then publishes the Robot reports. So we get fast feedback without starting tests by hand."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q48</span>How do you use Jira for defect tracking?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I create a Bug with all fields (summary, steps, expected/actual, version, severity, attachments), link it to the test case and requirement, and follow it through the <b>workflow</b> (Open &rarr; In Progress &rarr; Resolved &rarr; Verify &rarr; Closed). I use <b>JQL filters and dashboards</b> to see my open bugs and bugs waiting for retest."</p>
+<p>Example JQL: <code>project = IVI AND status = Resolved AND reporter = currentUser()</code></p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q49</span>What is CANoe, and what did you do with it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "CANoe from Vector is the main tool for CAN, LIN and automotive Ethernet. I used it to <b>simulate other ECUs</b> (send signals like speed or temperature), view the <b>trace</b>, use <b>panels</b> to change values, and log data. CAPL is its scripting language for automation inside CANoe."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q50</span>What is DLT / ADB logcat?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>DLT</b> (Diagnostic Log and Trace) is the AUTOSAR/GENIVI log format; we view it in <b>DLT Viewer</b>. <b>ADB logcat</b> shows logs from Android-based head units. Both show timestamps, app/context IDs and log levels (error, warning, info, debug) to find what happened when the bug appeared."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q51</span>What is the difference between a false positive and a false negative in testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>False positive</b>: the test reports a failure but there is no product bug (e.g. script or bench issue). <b>False negative</b>: the test passes but a bug really exists &mdash; more dangerous because we miss it."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q52</span>How do you flash (update) software on the ECU?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "With the project's flash tool &mdash; e.g. <b>vFlash</b> over CAN/Ethernet via UDS, or a USB update for head units. After flashing I <b>verify the version</b> (in the engineering menu or via diagnostics), do a power cycle and a quick smoke test before real testing."</p>
+</div></details>
+
+<h2 id="g-e">E. Defect management</h2>
+
+<details class="qa" id="q-bugreport"><summary><span class="qn">Q53</span>&#9733; What are the elements of a good bug report (Jira ticket)?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A clear <b>summary</b> (where + what), <b>environment</b> (software version, hardware, bench), <b>preconditions</b>, numbered <b>steps to reproduce</b>, <b>expected result</b> (with requirement ID) and <b>actual result</b>, <b>reproducibility</b> (e.g. 5 of 5), <b>severity/priority</b>, <b>attachments</b> (photo/video, CAN trace, logs with timestamp), and the <b>component</b> and links."</p>
+<p>Good summary: <i>"[Cluster] Snowflake icon shown at 5.0 &deg;C &mdash; should appear only below 5 &deg;C"</i>. Bad summary: <i>"Snowflake wrong"</i>. Full example: <a href="defects.html#bug-report">Defects page</a>.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q54</span>What details would you put in a Jira defect?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> Same 12 fields as Q53 &mdash; also mention Jira fields: <b>Project, Issue type = Bug, Component, Affects Version, Labels, Assignee, Linked test case/requirement</b>, and the <b>time stamp</b> of the failure so developers find it in the logs.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q55</span>How do you track a bug after creating it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I <b>watch</b> the ticket and use a <b>filter/dashboard</b> of my open bugs. I answer developer questions quickly and add logs if they ask. I follow status changes, join the <b>bug triage</b> meeting if needed, and when it's <b>Resolved</b> with a fix version, I retest on that build and close or reopen it."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q56</span>How do you know whom to assign a ticket to?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "By the <b>component</b>: the project has a component list with owners (e.g. Media &rarr; media team). Jira often auto-assigns by component. If unsure, I assign to the <b>team lead or triage owner</b> of that area, or ask my test lead. I never guess an individual developer randomly."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q57</span>How do you identify the right developer or component owner?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I use the logs to <b>narrow the cause</b>: if the CAN input is wrong, it's the sending ECU; if the input is right but the display is wrong, it's the HMI. Then I check the component owner list or the architecture document, and confirm in triage."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q58</span>What is your process after creating a defect?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Link it to the test case, mark the test as <b>failed</b>, inform the team if it's critical or blocking, <b>follow up</b> in triage, support the developer with information, then <b>retest</b> the fix and run <b>regression</b> around it."</p>
+</div></details>
+
+<details class="qa" id="q-afterfix"><summary><span class="qn">Q59</span>&#9733; After the developer fixes a defect, what testing do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "First I check the fix is in the build I'm testing (<b>fix version</b>). Then <b>retesting</b> (confirmation testing): I run the exact steps from the ticket &mdash; if it works, I close it; if not, I reopen with new evidence. Then <b>regression testing</b> around the change to make sure the fix didn't break anything else. If it's an important bug, I suggest adding a test to the regression suite."</p>
+<ol class="steps">
+<li><strong>Check the build</strong> contains the fix (release notes / fix version).</li>
+<li><strong>Retest</strong> with the original steps, same conditions. Try the variations too (the edge values).</li>
+<li><strong>Regression</strong> of related features (impact analysis: what else does that code touch?).</li>
+<li><strong>Update the ticket</strong>: "Verified in build 2.4.1, 5/5 OK, video attached" &rarr; Closed. Or Reopen.</li>
+<li><strong>Update the regression suite</strong> if needed.</li>
+</ol>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q60</span>What's the difference between retesting and regression testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Retesting</b> checks that <b>the bug itself is fixed</b> &mdash; same steps, planned, on failed tests. <b>Regression testing</b> checks that the change <b>didn't break other things</b> that worked before &mdash; on passed tests, often automated."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q61</span>How do you verify a fix hasn't affected other functions?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Through <b>impact analysis</b>: I ask the developer what code was changed and which features use it, then run regression for those features plus a general <b>smoke test</b>. For example, a fix in Bluetooth audio &rarr; I retest Bluetooth phone calls, media streaming, source switching and voice control."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q62</span>How do you handle a defect caused by another component or dependency?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I collect proof from the logs (e.g. the CAN trace shows the wrong value coming from the sending ECU), then raise or move the ticket to <b>that component's team</b>, with the evidence. I link it to my test case, mark the test as <b>blocked or failed</b> with the link, and follow up. I don't just close it as 'not our problem'."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q63</span>How do you decide severity and priority?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Severity</b> = how bad the impact is on the system (tester decides): Blocker, Critical, Major, Minor, Trivial. <b>Priority</b> = how soon it must be fixed (business/project decides): P1&ndash;P4. In automotive, anything <b>safety-related</b> (wrong speed, missing warning, rear camera) is at least Critical."</p>
+<p>Classic examples: <b>High severity, low priority</b> &mdash; crash in a rarely used engineering menu. <b>Low severity, high priority</b> &mdash; wrong brand logo at start-up before a car show.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q64</span>What is the defect life cycle?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>New</b> &rarr; <b>Open/Assigned</b> &rarr; <b>In Progress</b> &rarr; <b>Resolved/Fixed</b> &rarr; <b>Retest</b> &rarr; <b>Closed</b>. Side paths: <b>Reopened</b> (fix doesn't work), <b>Rejected</b> (not a bug), <b>Duplicate</b>, <b>Deferred</b> (fix later), <b>Cannot reproduce</b>."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q65</span>A developer says "cannot reproduce". What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I try again myself on a clean setup, then compare our <b>environments</b>: software version, bench, phone model, settings, signal values. I add missing details, a video and logs, and offer to <b>show it live</b> on my bench. If it's intermittent, I state the rate (e.g. 2 of 10) and the conditions I noticed."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q66</span>How do you handle an intermittent (random) bug?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I <b>keep logging on all the time</b>, note the exact time, repeat the steps many times and write the rate (3/20). I look for a pattern: temperature, time after start-up, a specific phone, fast inputs. I raise the ticket even if it's intermittent, with all logs, because rare bugs still happen in customer cars."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q67</span>The developer disagrees that it's a bug. What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I go back to the <b>requirement</b>, because it decides &mdash; not opinions. If the requirement supports me, I show it. If the requirement is unclear, I ask the <b>requirement owner / product owner</b> to clarify, and we update the requirement. I stay factual and polite: we both want a good product."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q68</span>What do you do if you find a critical bug just before release?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I report it <b>immediately</b> &mdash; ticket plus a direct message or call to my lead and the developer &mdash; with clear evidence and the impact. I don't wait for the daily meeting. Management decides whether to delay the release or accept a workaround, but they need the information fast."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q69</span>What is root cause analysis?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Finding the <b>real origin</b> of a defect, not only the symptom &mdash; for example the wrong text was caused by a missing translation key, which was caused by no review step. Tools: the <b>5 Whys</b> and fishbone diagrams. It helps prevent similar bugs."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q70</span>What is the difference between error, defect and failure?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A human makes an <b>error</b> (mistake) &rarr; it creates a <b>defect</b> (bug) in the code or document &rarr; when that code runs, it may cause a <b>failure</b> (the wrong behaviour we see)."</p>
+<p>Example: developer typed <code>&lt;=</code> instead of <code>&lt;</code> (error) &rarr; wrong condition in code (defect) &rarr; snowflake shows at exactly 5 &deg;C (failure).</p>
+</div></details>
+
+<h2 id="g-f">F. Regression testing (very important)</h2>
+
+<details class="qa" id="q-regression"><summary><span class="qn">Q71</span>&#9733; What is your regression testing strategy?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I use <b>layers</b>. For every new build: an automated <b>smoke</b> test (does it start, basic functions work). For each fix: <b>targeted regression</b> based on impact analysis. Every sprint or release candidate: the <b>core regression</b> suite with high-priority tests. Before a big release: the <b>full regression</b>. I choose tests by <b>risk</b>: safety-relevant, often-used, recently changed and historically buggy areas first. As much as possible is automated and runs nightly."</p>
+<div class="table-wrap"><table>
+<tr><th>Layer</th><th>When</th><th>Size / time</th></tr>
+<tr><td>Smoke</td><td>Every build</td><td>~20 tests, 15&ndash;30 min, automated</td></tr>
+<tr><td>Targeted</td><td>After a fix or change</td><td>Tests around the change</td></tr>
+<tr><td>Core (P1)</td><td>Each sprint / release candidate</td><td>Most important tests, ~1 day</td></tr>
+<tr><td>Full</td><td>Big release, SOP</td><td>Everything, several days</td></tr>
+</table></div>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q72</span>&#9733; With thousands of test cases and limited time, how do you choose regression tests?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "By <b>risk and impact</b>. I pick: (1) <b>safety-critical</b> functions &mdash; telltales, speed, rear camera, warnings; (2) areas <b>changed</b> in this build and the areas connected to them; (3) <b>most-used</b> customer functions &mdash; phone, media, navigation; (4) areas with <b>many past bugs</b>; (5) tests for <b>fixed critical bugs</b>; (6) customer or <b>legal requirements</b>. I give tests priorities P1/P2/P3 and run P1 always, P2 if time allows, P3 in the full cycle."</p>
+<p>Follow-up "what about criticality of bugs?" &rarr; "Tests for <b>critical and major fixed bugs</b> go into regression; tests for trivial cosmetic bugs usually don't. The more critical the old bug, the higher the test priority."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q73</span>&#9733; Should every fixed defect be added to the regression suite?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "No. Regression time is limited, and a suite with thousands of small checks becomes too slow to run. I add a fixed bug's test when the bug was <b>severe, safety-related, customer-visible, in a frequently changed area, or has come back before</b>. I don't add it for <b>trivial cosmetic</b> bugs, <b>one-time</b> issues (like a wrong build config), or when an <b>existing test already covers</b> it."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q74</span>Give one situation where you WOULD add a fixed bug to regression.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "The <b>rear-camera image froze</b> when reversing right after an incoming call. It's <b>safety-relevant</b> (FMVSS 111), it involves two features interacting, and that code changes often. I'd add a test so it can never come back unnoticed."</p>
+<p>Other good examples: speed shown wrong at a unit change; warning not shown after sleep/wake; a crash when a specific phone connects; a bug that already came back once.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q75</span>Give one situation where you would NOT add it.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A <b>typo in a rarely used engineering menu</b> text. It's cosmetic, not customer-visible, and the text-check tests already cover all strings. Adding a separate test only makes regression slower."</p>
+<p>Other examples: a bug caused by a <b>wrong test-bench configuration</b>; a bug in a feature that is being <b>removed</b>; a bug already covered by an existing test case.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q76</span>How do you prioritise regression tests when time is short?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Safety first, then changed areas, then most-used functions, then everything else. I use the P1/P2/P3 tags, run the automated suite in parallel overnight, and spend manual time on what automation can't cover. I tell the lead clearly what was <b>not</b> tested, so the risk is known."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q77</span>How do you prioritise safety-critical vs non-critical tests?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Safety-critical tests are <b>always run</b> and never cut: telltales, speed display, warnings, rear camera, driver-distraction lock-outs, eCall. Non-critical ones (themes, wallpapers, cosmetic texts) are prioritised by usage and change risk and can move to the next cycle."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q78</span>Regression must be finished in one day. How do you select tests?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "In the morning I do <b>impact analysis</b> with the release notes, then pick: smoke + all P1 safety tests + tests for changed areas + top customer flows. Automation runs in parallel. I report at mid-day and at the end with what passed, failed, and <b>what's left untested</b>, so the team can make a risk-based decision."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q79</span>The customer has an urgent release deadline. How do you handle regression?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I don't skip testing silently. I agree a <b>reduced, risk-based scope</b> with the lead: safety and changed areas first. I report daily, write down the <b>residual risk</b> (what wasn't tested), and the release manager decides. After the release, we run the remaining tests and fix anything found in a maintenance release."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q80</span>What is impact analysis?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Finding out <b>which parts of the system a change can affect</b>. I use the release notes, the changed components, the developer's explanation and the traceability links, then choose regression tests for those areas."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q81</span>What's the difference between smoke and sanity testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Smoke</b>: a wide but shallow check on every new build &mdash; does it boot, do the main functions work at all? If it fails, the build is rejected. <b>Sanity</b>: a narrow, deeper check of one area after a small change or fix &mdash; is that area logically working?"</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q82</span>How do you keep a regression suite healthy?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Review it regularly: <b>remove</b> obsolete and duplicate tests, <b>update</b> tests when requirements change, <b>fix</b> flaky automated tests, <b>add</b> tests for important fixed bugs and new features, and check that execution time stays within the budget."</p>
+</div></details>
+
+<h2 id="g-g">G. Duplicates, teamwork and when NOT to create a defect</h2>
+
+<details class="qa" id="q-duplicate"><summary><span class="qn">Q83</span>&#9733; Two testers find the same bug. Should there be two Jira tickets?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "No. <b>One problem = one ticket</b>. Duplicates waste developer time, split the discussion and make bug statistics wrong. The second tester adds a <b>comment</b> to the existing ticket with extra information &mdash; another software version, another bench, a new log &mdash; which helps the developer."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q84</span>How do you check whether a defect is already reported?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Before creating a ticket I <b>search Jira</b> with key words (e.g. 'snowflake', 'outside temperature'), the component and recent dates, and check the <b>known-issues list</b> and release notes. I also ask in the team chat. If I find it, I comment and link; if it's slightly different, I create a new one and <b>link it as related</b>."</p>
+<p>Example JQL: <code>project = IVI AND component = Cluster AND text ~ "snowflake" AND status != Closed</code></p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q85</span>How do you avoid duplicates when many testers test the same software?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "(1) <b>Search before creating</b>. (2) Use a <b>standard summary format</b> ('[Component] What &ndash; where') so searches find it. (3) Split <b>test areas</b> between testers. (4) Share new findings in the <b>daily stand-up or team chat</b>. (5) A <b>triage owner</b> reviews new tickets daily and marks duplicates."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q86</span>Your defect is actually caused by another component. How do you handle it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> Same as Q62: prove it with logs, move the ticket to the right team (or create one there and link), inform both teams, and follow up until it's fixed.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q87</span>How do you work with developers and other testers when investigating a defect?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I share <b>facts</b>: exact steps, logs, time stamps, video. I offer to reproduce it <b>together on the bench</b>. I check with other testers whether they've seen it on other benches or versions. Tone matters: I talk about the <b>problem, not the person</b>."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q88</span>How does testing work when several teams, customers or OEMs test the same software?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Everyone must use the <b>same defect database</b> or a synchronised one, a common <b>naming convention</b> and clear <b>variant info</b> (which OEM, which car line, which software). We search before raising, link cross-team tickets, and a triage board decides ownership. Bugs found by the OEM often come through their system and are mirrored to ours."</p>
+</div></details>
+
+<details class="qa" id="q-whennot"><summary><span class="qn">Q89</span>&#9733; Even if you're sure it's a bug, are there situations where you shouldn't create a new ticket?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Yes: (1) it's <b>already reported</b> &mdash; I comment on the existing ticket instead; (2) it's <b>expected behaviour</b> per the requirement (or a known limitation); (3) the problem is the <b>test environment</b> &mdash; bench, wrong software, wrong configuration, simulation error; (4) the feature is <b>not yet implemented</b> in this build (check the release notes); (5) it's already listed as a <b>known issue</b>. In those cases I comment, fix the setup, or ask for a requirement clarification."</p>
+<p>The interviewer's hints were "lots of tickets in the system" and "several testers testing at the same time" &mdash; both point to <b>duplicates</b>. Say that first.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q90</span>How do you handle a defect that's already reported?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I don't create a new one. I <b>add a comment</b> with my details (version, bench, reproduction rate, logs), <b>vote/watch</b> it, and link my failed test case to it. If it's closed but happening again, I <b>reopen</b> it (or create a new one linked to it, as the project rules say)."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q91</span>The behaviour is actually expected per the requirement. What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "No defect. If I still think it's <b>bad for the user</b> &mdash; for example confusing &mdash; I raise it as an <b>improvement / change request</b> or ask the product owner, not as a bug. And I update my test case if my expected result was wrong."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q92</span>The failure is caused by the test environment or hardware. What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "No product defect. I <b>fix the setup</b> (reflash, correct CANoe config, change the cable/power supply) and rerun. If the bench itself is broken, I report it to the <b>lab/bench owner</b> or raise an environment ticket, and mark my tests as <b>blocked</b>, not failed."</p>
+<p>How to tell: does it happen on another bench? With the correct software? With a known-good input? If not &rarr; environment.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q93</span>When would you close, reject or link a defect instead of creating a new one?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Close</b>: fix verified. <b>Reject</b> (or ask to reject): not a bug &mdash; expected behaviour, environment issue, cannot reproduce after good effort. <b>Link</b>: same or related problem already exists &mdash; mark as duplicate or 'relates to', or 'is caused by' another component's ticket."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q94</span>How do you tell an environment problem from a product problem?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I <b>change one thing</b> at a time: try another bench, reflash the correct software, check cables and power, check the CANoe simulation sends correct values, compare with a colleague. If the problem stays with the product software on a known-good setup, it's a product bug."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q95</span>How do you communicate a bug to a developer who is defensive?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Stay factual and neutral: 'I see X, the requirement says Y, here is the video and the log.' No blame words. Offer to show it on the bench. If we still disagree, escalate to the requirement owner &mdash; the spec decides, not who is louder."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q96</span>What is bug triage?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A regular meeting (or process) where leads, developers and testers review <b>new defects</b>: confirm it's valid, find duplicates, set <b>priority</b> and <b>owner</b>, and decide which release it's fixed in."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q97</span>You're blocked because the bench is down. What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Report it straight away to the bench owner and my lead, mark tests as <b>blocked</b>, try a <b>remote or spare bench</b>, and use the time productively: review requirements, write or update test cases, analyse logs from earlier runs, or update automation scripts."</p>
+</div></details>
+
+<h2 id="g-h">H. Test design, BVA and the snowflake question</h2>
+
+<details class="qa" id="q-bva"><summary><span class="qn">Q98</span>&#9733; What is Boundary Value Analysis (BVA)?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "BVA is a black-box technique that tests <b>at and around the edges</b> of valid ranges, because developers often make mistakes there &mdash; like <code>&lt;</code> instead of <code>&lt;=</code>. For a range 16&ndash;28 &deg;C, I test 15.5, 16, 16.5 and 27.5, 28, 28.5 (with a 0.5 step). In the <b>2-value</b> version I take the boundary and its nearest neighbour; in the <b>3-value</b> version, the boundary and both neighbours."</p>
+</div></details>
+
+<details class="qa" id="q-snowflake"><summary><span class="qn">Q99</span>&#9733; Apply BVA to the snowflake: appears below 5 &deg;C, disappears at 4 &deg;C or above. What values do you test?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "First I'd point out that the requirement <b>overlaps</b>: 'appears below 5' and 'disappears at 4 or above' conflict between 4 and 5 &deg;C (at 4.5 &deg;C, is it ON or OFF?). I'd clarify it &mdash; usually it's meant as <b>hysteresis</b>, e.g. ON at 4 &deg;C or below, OFF at 5 &deg;C or above, keeping the last state in between. Then I test <b>both boundaries</b> with the signal resolution (0.1 &deg;C): <b>3.9, 4.0, 4.1</b> and <b>4.9, 5.0, 5.1</b>, in <b>both directions</b> (cooling down and warming up), plus normal values, flicker around the boundary, and a missing/invalid signal."</p>
+<div class="table-wrap"><table>
+<tr><th>Temperature</th><th>Cooling down (from 6 &deg;C)</th><th>Warming up (from 3 &deg;C)</th><th>Why</th></tr>
+<tr><td>5.1</td><td>OFF</td><td>OFF</td><td>Just above upper boundary</td></tr>
+<tr><td>5.0</td><td>OFF</td><td>OFF &larr; switches off here</td><td>On upper boundary</td></tr>
+<tr><td>4.9</td><td>OFF (hold)</td><td>ON (hold)</td><td>Just below upper boundary</td></tr>
+<tr><td>4.1</td><td>OFF (hold)</td><td>ON (hold)</td><td>Just above lower boundary</td></tr>
+<tr><td>4.0</td><td>ON &larr; switches on here</td><td>ON</td><td>On lower boundary</td></tr>
+<tr><td>3.9</td><td>ON</td><td>ON</td><td>Just below lower boundary</td></tr>
+</table></div>
+<p>If they confirm the simple rule "ON below 5 &deg;C", the key values are <b>4.9 &rarr; ON, 5.0 &rarr; OFF, 5.1 &rarr; OFF</b>, plus normal values like 3 &deg;C and 6 &deg;C. The <b>must-say</b> point: <i>don't only test 0 &deg;C and 10 &deg;C &mdash; BVA means testing at and right next to the boundary.</i></p>
+<p>Full step-by-step explanation and a live simulator: <a href="test-design.html#snowflake">Test design &rarr; snowflake</a>.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q100</span>Why is BVA useful in automotive testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Cars are full of <b>thresholds</b>: warning temperatures, speed limits for driver-distraction lock-out, low fuel, tyre pressure, battery levels. Most threshold bugs sit exactly at the boundary. BVA finds them with <b>few test cases</b>, which saves bench time."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q101</span>What's the difference between BVA and Equivalence Partitioning?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>EP</b> divides inputs into <b>groups</b> that should behave the same, and tests <b>one value per group</b> (e.g. &minus;10 &deg;C for 'cold', 20 &deg;C for 'warm'). <b>BVA</b> then tests the <b>edges between the groups</b> (4.9, 5.0, 5.1). They're used together: EP for coverage, BVA for the risky edges."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q102</span>How many test cases per boundary?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "With <b>2-value BVA</b>: 2 per boundary (the boundary value and its closest neighbour on the other side). With <b>3-value BVA</b>: 3 (just below, on, just above). For safety-relevant thresholds I use 3-value."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q103</span>"Below 5 &deg;C" versus "5 &deg;C and below" &mdash; what's the difference?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "It's exactly the boundary value 5.0. '<b>Below 5</b>' = <code>temp &lt; 5</code> &rarr; at 5.0 the snowflake is <b>OFF</b>. '<b>5 and below</b>' = <code>temp &lt;= 5</code> &rarr; at 5.0 it's <b>ON</b>. That's why testing exactly 5.0 is the most important value."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q104</span>How would you test the transition 4 &rarr; 5 &rarr; 6 &deg;C?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Start cold so the snowflake is ON. Raise the temperature in small steps using CANoe (e.g. 0.1 &deg;C), <b>hold each value</b> a few seconds (longer than any filter/debounce time), and record the exact value where the icon <b>turns off</b>. Compare with the requirement. Keep the CAN trace and video as evidence."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q105</span>How would you test the reverse transition 6 &rarr; 5 &rarr; 4 &deg;C?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Start warm so it's OFF, lower in 0.1 &deg;C steps and record where it <b>turns on</b>. The two directions can switch at different values &mdash; that's <b>hysteresis</b>, used so the icon doesn't <b>flicker</b> when the temperature hovers around one value. I also test it hovering: 4.9 &harr; 5.1 repeatedly &mdash; the icon must not flicker."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q106</span>The snowflake appears at 5.0 &deg;C but the requirement says "below 5". What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "It's a <b>defect</b> (probably <code>&lt;=</code> instead of <code>&lt;</code>). I first confirm: repeat it, check in the CAN trace that the value sent is really 5.0 (not 4.96 rounded to 5.0), and check the requirement version. Then I raise a ticket with the evidence."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q107</span>How would you report that snowflake defect?</summary><div class="ans">
+<p class="short"><b>Short answer:</b></p>
+<div class="table-wrap"><table>
+<tr><td><b>Summary</b></td><td>[Cluster] Snowflake icon shown at exactly 5.0 &deg;C &mdash; should appear only below 5 &deg;C</td></tr>
+<tr><td><b>Environment</b></td><td>Cluster SW 3.2.1, bench B-07, CANoe 17, DBC v4.2</td></tr>
+<tr><td><b>Precondition</b></td><td>KL15 on, outside temp 10 &deg;C, snowflake OFF</td></tr>
+<tr><td><b>Steps</b></td><td>1. Set OutsideTemp = 5.1 &deg;C, wait 5 s. 2. Set OutsideTemp = 5.0 &deg;C, wait 5 s.</td></tr>
+<tr><td><b>Expected</b></td><td>Snowflake stays OFF at 5.0 &deg;C (REQ-CLU-123: "below 5 &deg;C")</td></tr>
+<tr><td><b>Actual</b></td><td>Snowflake turns ON at 5.0 &deg;C</td></tr>
+<tr><td><b>Reproducibility</b></td><td>5/5</td></tr>
+<tr><td><b>Severity</b></td><td>Major (wrong warning; driver information, not a failure of the warning itself)</td></tr>
+<tr><td><b>Attachments</b></td><td>Video, CAN trace (.blf) with time stamp 10:42:13, screenshot</td></tr>
+</table></div>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q108</span>What is a decision table? Give an example.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "A table of all <b>combinations of conditions</b> and the expected action. Example seatbelt warning: conditions = seat occupied? belt buckled? speed &gt; 25 km/h? &rarr; 2&times;2&times;2 = 8 rules, each with 'warning yes/no'. It makes sure no combination is forgotten."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q109</span>What is state transition testing? Give an HMI example.</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Testing a system that has <b>states</b> and <b>events</b> that move it between them. Phone call: Idle &rarr; Ringing (incoming call) &rarr; Active (accept) &rarr; Held &rarr; Active &rarr; Idle (end). I test every valid transition and also <b>invalid ones</b> (e.g. 'end call' while idle) to check nothing strange happens."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q110</span>What are error guessing and exploratory testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Error guessing</b>: using experience to guess where bugs hide &mdash; long names, special characters, fast double-taps, power loss during an update. <b>Exploratory testing</b>: learning, designing and testing <b>at the same time</b>, without a script, usually time-boxed (e.g. 60-minute session with a goal) and with notes."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q111</span>Write test cases for the volume control (range 0&ndash;40).</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "EP: valid 0&ndash;40, invalid &lt;0 and &gt;40. BVA: 0, 1, 39, 40, and try to go below 0 and above 40 (must stay at 0/40). Plus: volume keeps after power cycle, each source keeps its own volume if specified, the steering-wheel button and touch slider give the same result, the mute button, and fast repeated presses."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q112</span>How would you test a Bluetooth phone connection?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Pairing (first time, PIN confirmation), auto-reconnect after restart, several phones and brands (iPhone, Samsung, Pixel), <b>calls</b> (incoming, outgoing, reject, hold, two calls), contacts and call-history sync, audio quality, <b>media streaming</b> and metadata, connection loss and reconnection, and max number of paired devices. Plus interruptions: call during navigation announcement, reverse gear during a call."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q113</span>How would you test the rear-view camera?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Image appears <b>within 2 s</b> of selecting reverse (FMVSS 111), from any screen and even during start-up; guidelines move with the steering angle; image disappears when leaving reverse (after a defined time or speed); it overrides other pop-ups; behaviour when the camera is disconnected (error message, not a frozen image); day and night quality."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q114</span>How would you test language/localisation?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Change the language and check <b>every screen</b>: all texts translated (no English left, no text keys like TXT_MENU_01), <b>no cut-off text</b> (German is ~30% longer), correct <b>formats</b> for date, time, decimal and units, special characters (&auml;, &ntilde;, &#1078;), right-to-left for Arabic/Hebrew, and the language stays after a restart."</p>
+</div></details>
+
+<h2 id="g-i">I. Extra basics and scenario questions (for 1&ndash;2 years' experience)</h2>
+
+<details class="qa"><summary><span class="qn">Q115</span>What are the 7 testing principles?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "1) Testing shows defects are present, not that there are none. 2) Exhaustive testing is impossible. 3) Early testing saves time and money. 4) Defects cluster together. 5) Tests wear out (pesticide paradox) &mdash; update them. 6) Testing depends on context. 7) Absence-of-errors fallacy &mdash; bug-free but useless is still a failure."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q116</span>What are the test levels?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Component (unit)</b> &mdash; one piece of code, by developers. <b>Integration</b> &mdash; pieces working together. <b>System</b> &mdash; the whole product against requirements (where HMI testers mostly work). <b>Acceptance</b> &mdash; does it meet the customer's needs."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q117</span>What is functional vs non-functional testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Functional</b>: <b>what</b> the system does &mdash; the call connects, the warning appears. <b>Non-functional</b>: <b>how well</b> &mdash; start-up time, touch response time, memory, reliability, usability."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q118</span>What is black-box vs white-box testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<b>Black-box</b>: testing from the requirements without looking at the code (EP, BVA, decision tables). <b>White-box</b>: testing based on the code structure (statement and branch coverage), usually done by developers."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q119</span>What is static testing?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Testing <b>without running</b> the software: reviewing requirements, designs, code and test cases, or static code analysis. It finds problems <b>early</b> &mdash; like an unclear snowflake requirement &mdash; when they're cheapest to fix."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q120</span>What is Agile/Scrum, and what does a tester do in it?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Scrum delivers in short <b>sprints</b> (2&ndash;4 weeks). The tester joins <b>refinement</b> (asks questions, adds acceptance criteria), <b>sprint planning</b> (estimates test effort), <b>daily stand-up</b> (progress, blockers), tests stories during the sprint, and joins the <b>review and retrospective</b>."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q121</span>What is ASPICE?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Automotive SPICE is a <b>process-quality model</b> the OEMs use to assess suppliers. For testers it means: tests must be <b>planned, traceable to requirements, documented and reviewed</b>, with results recorded &mdash; so everything is auditable."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q122</span>What is ISO 26262?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "The <b>functional safety</b> standard for car electronics. It rates risks with <b>ASIL A&ndash;D</b> (D is highest). Safety-relevant HMI parts like certain telltales need stricter testing and evidence."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q123</span>What would you test on a cluster at start-up?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Boot time to the first image, the <b>bulb check</b> (all telltales light briefly, then turn off unless active), welcome animation, correct values appear (fuel, range, odometer), last settings restored, and no error pop-ups. Also start-up with low battery voltage and very fast KL15 off/on."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q124</span>What would you test with power modes and voltage?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Sleep/wake behaviour, KL15 on/off cycles, <b>under-voltage</b> (e.g. 9 V, engine crank dip to 6 V), <b>over-voltage</b> (16 V), what's saved on shut-down (volume, last source), and that the unit really goes to sleep (no battery drain)."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q125</span>You get a feature with no written requirements. What do you do?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I ask for them, but I don't stop. I collect information from the product owner, developers, similar previous products, standards and user expectations; write down my <b>assumptions</b>, get them confirmed, and use <b>exploratory testing</b>. My test notes become the base for the missing requirements."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q126</span>How do you estimate test effort?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I count the test cases and estimate time per case from experience (e.g. 10 min simple, 30 min complex), add time for bench setup, retests and reporting, and add a <b>buffer</b> (~20%) for bugs and blocked time. I compare with similar past features."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q127</span>How do you handle many tasks at once (multiple priorities)?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "I list them, ask my lead which is most important if priorities conflict, work on blockers and safety topics first, and give a quick status update if something will be late. I don't silently switch tasks."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q128</span>Tell me about a difficult bug you found (STAR).</summary><div class="ans">
+<p class="short"><b>Short answer:</b> Use <b>S</b>ituation, <b>T</b>ask, <b>A</b>ction, <b>R</b>esult. Example structure: "During [release] testing (S), I had to verify [feature] (T). I noticed [symptom] only after [condition], so I kept logs running, repeated it 20 times and found the pattern [X] (A). The developer found the root cause in [area] within a day, and we added a regression test (R)."</p>
+<p>More STAR examples on the <a href="final-prep.html">Final prep</a> page. Use a <b>real</b> story from your work.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q129</span>What would you do in your first 30 days here?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Learn the product, the bench and the tools; read the key requirements and the existing test cases; run the smoke and regression suites to learn the system; ask many questions; and start taking my own test tasks and bugs as soon as possible."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q130</span>Do you have any questions for us?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> Always say <b>yes</b>. Good ones: "What does a typical day look like for this role?" &middot; "Which HMI parts would I test first &mdash; cluster or infotainment?" &middot; "How big is the test team, and how is manual and automated testing split?" &middot; "Which tools and benches do you use?" &middot; "How do you measure success for this role in the first six months?"</p>
+</div></details>
+
+<div class="callout say"><span class="label">Done all 130?</span>
+<p>Go to the <a href="quiz.html">Quiz</a> to test yourself, then the <a href="final-prep.html">Final prep</a> page to practise your self-introduction out loud.</p>
+</div>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

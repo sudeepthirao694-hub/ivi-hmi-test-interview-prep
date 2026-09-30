@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retest &amp; regression · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="regression.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 7 &middot; Core skill</div>
+<h1>Retest &amp; regression testing</h1>
+<p class="lead">The interviewer spent many questions on regression: strategy, which fixed bugs to add, and how to cut thousands of tests down to what fits in the time. This chapter gives you clear, structured answers.</p>
+<div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 35 min</span><span class="pill hot">Very important area</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>Retest vs regression, in plain words</h2>
+<div class="callout idea"><span class="label">Simple idea: fixing a pipe</span>
+<p>A plumber fixes a leaking pipe in your kitchen. <b>Retest</b> = you check that the kitchen pipe doesn't leak anymore. <b>Regression test</b> = you check the bathroom and the washing machine too, because the plumber turned off the water and touched other pipes. Maybe something else broke.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th></th><th>Retest (confirmation testing)</th><th>Regression testing</th></tr>
+<tr><td>Question</td><td>"Is this bug really fixed?"</td><td>"Did the change break anything else?"</td></tr>
+<tr><td>What you run</td><td>The exact failed test / steps from the ticket</td><td>Other tests around and beyond the change</td></tr>
+<tr><td>When</td><td>When a fix is delivered</td><td>After any change: fixes, new features, new builds, configuration changes</td></tr>
+<tr><td>Result used for</td><td>Closing or reopening the ticket</td><td>Confidence to release</td></tr>
+<tr><td>Order</td><td>First</td><td>Second</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this</span>
+<p class="say-quote">"Retesting confirms that a specific defect is fixed by repeating the failed steps. Regression testing checks that the fix or other changes didn't break existing functionality. I always retest first, then run regression for the affected area."</p>
+</div>
+
+<h2>Why regression is so important in cars</h2>
+<ul>
+  <li>Car software is huge and connected: a change in the audio code can break phone calls, navigation voice and warning chimes.</li>
+  <li>New builds come very often (daily/weekly), so old features must be re-checked constantly.</li>
+  <li>Some features are safety-relevant or legally required; they must never break.</li>
+  <li>Bugs that were fixed can come back (e.g. a code merge undoes a fix).</li>
+</ul>
+
+<h2>A regression strategy: layers</h2>
+<p>You can't run everything on every build. So regression is organised in <b>layers</b>, from small and frequent to big and rare:</p>
+<div class="table-wrap"><table>
+<tr><th>Layer</th><th>Size (example)</th><th>When</th><th>Contents</th></tr>
+<tr><td><b>Smoke</b></td><td>20&ndash;50 tests, ~30 min</td><td>Every new build</td><td>Boots, main screens, key functions, no crash</td></tr>
+<tr><td><b>Sanity / targeted</b></td><td>As needed</td><td>After a specific fix</td><td>The fixed area and its neighbours</td></tr>
+<tr><td><b>Core regression</b></td><td>300&ndash;800 tests, 1&ndash;2 days</td><td>Each release candidate or sprint end</td><td>Safety/legal functions, most-used features, recently changed areas, previously buggy areas</td></tr>
+<tr><td><b>Full regression</b></td><td>Everything, 1&ndash;3 weeks</td><td>Major releases, before SOP</td><td>All test cases</td></tr>
+</table></div>
+<p>Automation helps a lot: stable, repetitive tests run automatically every night; people focus on new features, visual checks and exploratory testing.</p>
+<div class="callout say"><span class="label">Say this: "What is your regression strategy?"</span>
+<p class="say-quote">"Risk-based and in layers. A smoke test on every new build; targeted regression around each fix; a core regression set on each release candidate with safety-relevant functions, frequently used features, recently changed and historically buggy areas; and full regression for major releases. Stable repetitive tests are automated and run nightly, while manual effort goes to new features and visual checks. I use the release notes and the developers' impact analysis to decide what to add for each build."</p>
+</div>
+
+<h2>Impact analysis: what did the change touch?</h2>
+<p>Before choosing regression tests, find out <b>what changed</b>:</p>
+<ol>
+  <li>Read the <b>release notes</b>: which tickets were fixed, which features added.</li>
+  <li>Ask the <b>developer</b>: which modules/files changed? What could be affected?</li>
+  <li>Use <b>traceability</b>: which requirements belong to the changed feature &rarr; which tests are linked to them.</li>
+  <li>Think about <b>dependencies</b>: audio change &rarr; also calls, nav voice, chimes. Bluetooth change &rarr; also CarPlay, phonebook, media.</li>
+</ol>
+
+<h2 id="choose-tests">Choosing tests when time is short</h2>
+<p>The interviewer: "Regression time is limited and there are thousands of tests. What criteria would you use?" Use these criteria, in this order:</p>
+<ol class="steps">
+  <li><strong>Safety-critical and legal functions</strong>Always in: speed display, telltales and warnings, rear camera, seatbelt chime. (ISO 26262 / ASIL-relevant, UN regulations.)</li>
+  <li><strong>Changed areas</strong>Everything directly affected by this build's changes (from impact analysis).</li>
+  <li><strong>Recently fixed, high-severity bugs</strong>Their tests confirm the fixes still hold. This is the "criticality of bugs" follow-up: critical and major bugs' tests stay; trivial ones can be dropped or sampled.</li>
+  <li><strong>Historically buggy areas</strong>"Defects cluster together": areas with many past bugs get more tests.</li>
+  <li><strong>Most-used customer features</strong>Phone, media, navigation: customers notice immediately.</li>
+  <li><strong>Integration points</strong>Where systems meet: phone &harr; head unit, head unit &harr; cluster, CarPlay &harr; native.</li>
+  <li><strong>Cheap automated tests</strong>If a test is automated, include it; it runs overnight at no extra people-cost.</li>
+</ol>
+<p>Then <b>remove</b>: duplicate tests (same check twice), obsolete tests (removed features), and low-value cosmetic tests on unchanged screens.</p>
+<div class="callout example"><span class="label">A simple prioritisation table</span>
+<div class="table-wrap"><table>
+<tr><th>Priority</th><th>What</th><th>Rule</th></tr>
+<tr><td>P1 &mdash; must run</td><td>Safety/legal + changed areas + critical bug fixes</td><td>Always, even if the release is tomorrow</td></tr>
+<tr><td>P2 &mdash; should run</td><td>Most-used features, buggy areas, integration points</td><td>Run if time allows (usually yes)</td></tr>
+<tr><td>P3 &mdash; could run</td><td>Stable, rarely used, cosmetic, unchanged</td><td>Automated overnight, or sampled, or next cycle</td></tr>
+</table></div>
+</div>
+<div class="callout say"><span class="label">Say this</span>
+<p class="say-quote">"I prioritise by risk. First safety-critical and legally relevant functions, then everything touched by the change according to the release notes and developer impact analysis, then tests for recently fixed critical and major defects, then historically buggy areas and the most-used features. Automated tests I include anyway because they run overnight. I remove duplicates and obsolete tests, and whatever doesn't fit I report as not covered &mdash; residual risk &mdash; so the release decision is informed."</p>
+</div>
+
+<h2 id="add-to-regression">Should every fixed bug go into regression?</h2>
+<p><b>No.</b> If every fixed bug added a test, the suite would grow forever and become too slow. You add a bug's test when it's likely to come back or would be bad if it did.</p>
+<div class="grid">
+  <div class="card" style="border-color:var(--good)"><h4 style="color:var(--good)">Add it when&hellip;</h4><p>&bull; it's safety-relevant or legal (speed, warnings, camera)<br>&bull; it's severe and customer-visible<br>&bull; the area changes often or the bug came back before<br>&bull; it's a boundary/logic bug that a code change could easily reintroduce<br>&bull; existing tests didn't catch it (a coverage gap)</p></div>
+  <div class="card" style="border-color:var(--bad)"><h4 style="color:var(--bad)">Don't add it when&hellip;</h4><p>&bull; it was a one-off typo already covered by a language/screenshot check<br>&bull; the feature was removed or completely redesigned<br>&bull; it was caused by the test environment, not the software<br>&bull; an existing regression test already covers the same thing<br>&bull; it's trivial and in a rarely used, unchanged screen</p></div>
+</div>
+<div class="callout say"><span class="label">Say this: one example each</span>
+<p class="say-quote">"I would add it: the speed shown on the cluster was wrong after an ignition cycle. That's safety-relevant, and ignition-cycle code changes often, so I'd add that test to the core regression set. I would not add it: a spelling mistake in one German menu label. It's fixed, it's already covered by our screenshot check of all texts, and adding a separate test gives no extra value."</p>
+</div>
+
+<h2>Safety-critical vs non-critical tests</h2>
+<ul>
+  <li><b>Safety-critical first, always, completely.</b> They are never cut for time.</li>
+  <li>Non-critical: by risk (changed? often used? buggy before?) and sampling.</li>
+  <li>Safety-critical tests may also need stricter evidence (videos, traces) and review.</li>
+</ul>
+
+<h2>Scenario: regression must finish in one day</h2>
+<ol>
+  <li><b>Morning:</b> smoke test the build (30 min). If it fails badly, stop and report immediately.</li>
+  <li>Start the <b>automated suite</b> right away on a free bench (it runs while you work).</li>
+  <li>Run <b>P1 manually</b>: safety/legal + changed areas + critical fixes.</li>
+  <li>Then <b>P2</b> as time allows. Use several benches/testers in parallel if possible.</li>
+  <li>Triage automation failures as they come.</li>
+  <li><b>Evening:</b> report: what was run, results, open bugs, and <b>what was not covered</b> (residual risk).</li>
+</ol>
+
+<h2>Scenario: urgent release deadline</h2>
+<ul>
+  <li>Agree the <b>reduced scope with the customer/proxy team in writing</b> (which tests will be skipped).</li>
+  <li>Parallelise: more benches, more testers, overnight automation.</li>
+  <li>Focus on P1 + areas changed since the last fully tested build.</li>
+  <li>Report the <b>residual risk</b> clearly: "Not tested: X, Y. Risk: low/medium because&hellip;"</li>
+  <li><b>Never skip tests silently.</b> The release decision belongs to the project, but it must be based on honest information.</li>
+</ul>
+
+<h2>Keeping the regression suite healthy</h2>
+<ul>
+  <li>Review it regularly: remove obsolete and duplicate tests.</li>
+  <li>Refresh test data (principle: tests wear out / pesticide paradox).</li>
+  <li>Add tests for new features and for important bugs that escaped.</li>
+  <li>Track flaky automated tests and get them fixed.</li>
+  <li>Keep traceability updated so impact analysis works.</li>
+</ul>
+
+<h2>Quick answers for the interview</h2>
+<details class="qa"><summary>What is the difference between retesting and regression testing?</summary><div class="ans"><p>Retesting repeats the failed test to confirm a specific defect is fixed. Regression testing re-runs other tests to make sure the change didn't break anything else. Retesting is planned per ticket; regression is selected by risk and impact.</p></div></details>
+<details class="qa"><summary>How do you verify that a fix hasn't impacted other functionality?</summary><div class="ans"><p>I find out what the fix changed &mdash; release notes and the developer's impact analysis &mdash; then run regression tests for that area and its dependencies, plus the smoke test and the automated suite. If something in a neighbouring area fails, I check whether it's a new regression and report it with a link to the fix ticket.</p></div></details>
+<details class="qa"><summary>How would you prioritise when regression time is limited?</summary><div class="ans"><p>By risk: safety and legal first, then changed areas, then fixes for critical defects, then buggy and frequently used areas, and I always include automated tests because they're cheap. I report what I couldn't cover as residual risk.</p></div></details>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

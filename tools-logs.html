@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools, traces &amp; logs · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="tools-logs.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 9 &middot; Core skill</div>
+<h1>Tools, traces &amp; logs</h1>
+<p class="lead">The JD mentions "simulation tools for vehicle signals", "logs, traces and evidence" and "trace/log analysis". This chapter explains each tool in plain words and teaches you to read traces and logs, with exercises.</p>
+<div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 55 min + exercises</span><span class="pill hot">Often asked: log analysis, CANoe, tools used</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>Your toolbox at a glance</h2>
+<div class="table-wrap"><table>
+<tr><th>Need</th><th>Typical tools</th></tr>
+<tr><td>Simulate the car's signals</td><td>Vector CANoe (+ CAPL scripts, panels), dSPACE, NI VeriStand, custom simulators</td></tr>
+<tr><td>Watch and record the bus</td><td>CANoe, CANalyzer, PCAN-View, BusMaster</td></tr>
+<tr><td>Read ECU logs</td><td>DLT Viewer (Linux ECUs), ADB logcat (Android), serial console</td></tr>
+<tr><td>Diagnostics / flashing</td><td>CANoe diagnostics, Vector vFlash, OEM tools (e.g. ODIS for VW group, ISTA for BMW, XENTRY for Mercedes)</td></tr>
+<tr><td>Run automation</td><td>Robot Framework, pytest, ecu.test, CANoe test modules, Jenkins</td></tr>
+<tr><td>Bugs and tasks</td><td>Jira (most common), Polarion, ALM, Redmine</td></tr>
+<tr><td>Test cases and results</td><td>Jira Xray/Zephyr, Polarion, TestRail, ALM</td></tr>
+<tr><td>Requirements and traceability</td><td>Polarion, IBM DOORS, Codebeamer, Jira</td></tr>
+<tr><td>Documentation</td><td>Confluence, SharePoint</td></tr>
+<tr><td>Evidence</td><td>Screen recorder / video grabber, camera, Snipping Tool, OBS</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this: "What tools have you used?"</span>
+<p class="say-quote">"[List only what you used, grouped like this:] For simulation and traces, [CANoe]; for logs, [DLT Viewer / ADB logcat]; for defects, Jira; for test cases and results, [Xray / TestRail]; for requirements, [Polarion / DOORS]; for automation, [Robot Framework with Jenkins]. I adapt quickly to customer-specific tools because the concepts are the same."</p>
+</div>
+
+<h2>Vector CANoe: the signal simulator</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>CANoe is a PC program that can <b>pretend to be all the other ECUs</b> of the car (this is called <b>rest-bus simulation</b>). It sends the messages they would send, so the real head unit and cluster on your bench think they are in a real car. It also <b>records everything</b> on the bus.</p>
+</div>
+<h3>The parts of CANoe you'll use</h3>
+<div class="table-wrap"><table>
+<tr><th>Part</th><th>What it is for</th></tr>
+<tr><td>Configuration (.cfg)</td><td>The saved setup: which networks, which DBC files, which simulated ECUs, which panels. The customer usually provides it.</td></tr>
+<tr><td>Start / Stop measurement</td><td>The big lightning/start button. Nothing is sent or recorded until the measurement runs.</td></tr>
+<tr><td>Simulation setup</td><td>Shows the simulated ECUs (nodes); you can switch a node off to simulate a missing ECU (timeout test!).</td></tr>
+<tr><td>Panels</td><td>Windows with sliders, buttons and switches to change signals by hand (e.g. temperature slider, gear selector).</td></tr>
+<tr><td>Trace window</td><td>Live list of all messages with time, ID, name, data and decoded signals.</td></tr>
+<tr><td>Data / Graphics window</td><td>Show selected signal values as numbers or as graphs over time.</td></tr>
+<tr><td>Write window</td><td>Text output from CAPL scripts and CANoe itself.</td></tr>
+<tr><td>Logging block</td><td>Saves the trace to a file (.blf or .asc) for evidence.</td></tr>
+<tr><td>Replay block</td><td>Plays back a recorded trace, e.g. from a test drive, to reproduce a problem.</td></tr>
+<tr><td>Diagnostics console</td><td>Send diagnostic requests: read/clear DTCs, read the SW version.</td></tr>
+</table></div>
+<p><b>CANalyzer</b> is its smaller sibling: mainly for watching, analysing and recording the bus, with limited simulation.</p>
+
+<h3>CAPL: CANoe's scripting language</h3>
+<p>CAPL looks like the C language. It is <b>event-driven</b>: you write "when this happens, do that" (on key press, on message received, on timer).</p>
+<pre><code>variables {
+  msTimer rampTimer;          // a timer in milliseconds
+  float temp = 6.0;
+}
+
+on key 'r' {                  // press 'r' to start the ramp
+  temp = 6.0;
+  setTimer(rampTimer, 2000);
+}
+
+on timer rampTimer {          // every 2 s: lower the temperature by 0.1
+  temp = temp - 0.1;
+  $Outside_Temp = temp;       // set the signal value
+  write("Outside_Temp = %.1f", temp);
+  if (temp &gt; 3.85) setTimer(rampTimer, 2000);
+}
+
+on message Ambient_Info {     // whenever this message is on the bus
+  write("Raw byte 0 = 0x%02X", this.byte(0));
+}</code></pre>
+<p>This script does the BVA "falling" test automatically: 6.0 &rarr; 5.9 &rarr; &hellip; &rarr; 3.9 &deg;C, with 2 s at each value, while you watch the cluster.</p>
+<div class="callout warn"><span class="label">Level check</span>
+<p>For this role you should know what CAPL is and be able to read a simple script. Writing complex CAPL is not expected for 1&ndash;2 years' experience unless your CV says so.</p>
+</div>
+
+<div class="callout say"><span class="label">Say this: "How do you use signal simulation?"</span>
+<p class="say-quote">"I load the customer's CANoe configuration, start the measurement so the rest-bus simulation runs, and use the panels or a small CAPL script to set signals like speed, gear or outside temperature. For failure tests I stop a simulated node or send invalid values. I always log the trace to a .blf file so I have evidence with timestamps."</p>
+</div>
+
+<h2>Reading a CAN trace</h2>
+<p>A trace is a recording of the bus. In text form (.asc) it looks like this:</p>
+<pre><code>date Wed Sep 30 10:15:00.000 am 2026
+base hex  timestamps absolute
+   31.920000 1  3A5             Rx   d 8 5C 00 00 00 00 00 00 00
+   32.020000 1  1F0             Rx   d 8 88 13 00 00 00 00 00 00
+   32.120000 1  3A5             Rx   d 8 5A 00 00 00 00 00 00 00
+   32.220000 1  3A5             Rx   d 8 5A 00 00 00 00 00 00 00</code></pre>
+<div class="table-wrap"><table>
+<tr><th>Column</th><th>Example</th><th>Meaning</th></tr>
+<tr><td>Time</td><td>32.120000</td><td>Seconds since measurement start</td></tr>
+<tr><td>Channel</td><td>1</td><td>Which CAN network (CAN 1, CAN 2&hellip;)</td></tr>
+<tr><td>ID</td><td>3A5</td><td>Message ID (hex)</td></tr>
+<tr><td>Direction</td><td>Rx / Tx</td><td>Received or transmitted by the tool</td></tr>
+<tr><td>d 8</td><td>d = data frame, 8 = length</td><td>8 data bytes follow</td></tr>
+<tr><td>Data</td><td>5A 00 00&hellip;</td><td>The bytes; the DBC turns them into signals</td></tr>
+</table></div>
+<details class="qa"><summary><span class="qn">Exercise</span>Outside_Temp = byte 0 of 0x3A5, factor 0.5, offset &minus;40. What happened at 32.12 s? And what is message 0x1F0 if it carries speed in bytes 0&ndash;1 (Intel), factor 0.01?</summary><div class="ans"><p>At 31.92 s byte 0 was 0x5C = 92 &rarr; 92 &times; 0.5 &minus; 40 = <b>6.0 &deg;C</b>. At 32.12 s it changed to 0x5A = 90 &rarr; <b>5.0 &deg;C</b>. So the temperature dropped from 6.0 to 5.0 &deg;C at 32.12 s &mdash; exactly the moment to check the snowflake.</p><p>0x1F0 bytes 0&ndash;1 in Intel order are <code>88 13</code> &rarr; read as 0x1388 = 5000 &rarr; 5000 &times; 0.01 = <b>50.00 km/h</b>. (Intel = little-endian: the lower byte comes first.)</p><p>Try it in the <a href="car-basics.html#decoder">CAN decoder</a>.</p></div></details>
+
+<h2>ECU logs: DLT and DLT Viewer</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>A <b>log</b> is the software's diary: it writes lines like "button pressed", "USB mounted", "error: file not found". Linux-based car ECUs use the <b>DLT</b> format (Diagnostic Log and Trace, an AUTOSAR/COVESA standard). The program to read it is <b>DLT Viewer</b>.</p>
+</div>
+<pre><code>Index  Time                     ECU   App   Ctx   Level  Payload
+10231  2026/09/30 10:15:32.124  CLU1  HMI   TEMP  info   OutsideTemp=5.0 IceWarning active=1
+10232  2026/09/30 10:15:32.130  CLU1  HMI   GFX   debug  Icon snowflake visible
+10240  2026/09/30 10:15:40.010  HU01  MED   USB   error  Mount failed: /dev/sda1 not found
+10241  2026/09/30 10:15:40.012  HU01  MED   PLY   warn   No playable source, switching to radio</code></pre>
+<div class="table-wrap"><table>
+<tr><th>Field</th><th>Meaning</th></tr>
+<tr><td>Time</td><td>When it happened (compare with the trace and the video)</td></tr>
+<tr><td>ECU ID</td><td>Which ECU wrote it (CLU1 = cluster, HU01 = head unit)</td></tr>
+<tr><td>App ID</td><td>Which application (HMI, MED = media)</td></tr>
+<tr><td>Context ID</td><td>Which part of the application (TEMP, USB, GFX)</td></tr>
+<tr><td>Level</td><td>How serious: <b>fatal &gt; error &gt; warn &gt; info &gt; debug &gt; verbose</b></td></tr>
+<tr><td>Payload</td><td>The message text</td></tr>
+</table></div>
+<p><b>How you use DLT Viewer:</b> connect to the ECU (usually over Ethernet, default TCP port 3490) or open a saved <code>.dlt</code> file; add <b>filters</b> (only App ID "HMI", only level error and above); search text; set <b>markers</b> at important moments; export the relevant part and attach it to the ticket.</p>
+<details class="qa"><summary><span class="qn">Exercise</span>Read the log above. What two stories does it tell?</summary><div class="ans"><p>1) At 10:15:32.124 the cluster received 5.0 &deg;C and decided "IceWarning active=1", then drew the snowflake 6 ms later. The input was correct, the decision was wrong &rarr; bug in the cluster HMI logic (&lt; vs &le;).</p><p>2) At 10:15:40 the head unit failed to mount the USB stick and switched to radio. Next step: is the USB stick/hub OK (environment) or does it happen with other sticks too (product bug)?</p></div></details>
+
+<h2>Android head units: ADB and logcat</h2>
+<p>Many new head units run <b>Android Automotive OS</b>. There you use <b>ADB</b> (Android Debug Bridge), a command-line tool, and <b>logcat</b>, the Android log.</p>
+<div class="table-wrap"><table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>adb devices</code></td><td>List connected devices (is the head unit visible?)</td></tr>
+<tr><td><code>adb logcat -c</code></td><td>Clear the old log before a test</td></tr>
+<tr><td><code>adb logcat -v time &gt; log.txt</code></td><td>Save the log with timestamps to a file</td></tr>
+<tr><td><code>adb logcat *:E</code></td><td>Show only errors (and worse)</td></tr>
+<tr><td><code>adb logcat -s MediaPlayer</code></td><td>Show only one tag</td></tr>
+<tr><td><code>adb shell screencap -p /sdcard/s.png</code> + <code>adb pull /sdcard/s.png</code></td><td>Take a screenshot and copy it to the PC</td></tr>
+<tr><td><code>adb shell screenrecord /sdcard/v.mp4</code></td><td>Record a video of the screen</td></tr>
+<tr><td><code>adb bugreport bug.zip</code></td><td>Collect a full debug package (logs, system state)</td></tr>
+<tr><td><code>adb shell getprop ro.build.fingerprint</code></td><td>Read the exact software build</td></tr>
+<tr><td><code>adb reboot</code></td><td>Restart the device</td></tr>
+</table></div>
+<p>Logcat levels: <b>V</b>erbose, <b>D</b>ebug, <b>I</b>nfo, <b>W</b>arning, <b>E</b>rror, <b>F</b>atal. Important keywords: <code>FATAL EXCEPTION</code> (an app crashed), <code>ANR</code> (Application Not Responding = frozen), <code>tombstone</code> (native crash).</p>
+
+<h2>Log analysis: the method</h2>
+<ol class="steps">
+  <li><strong>Find the exact failure time</strong>From the video, the Robot log timestamp, or your notes.</li>
+  <li><strong>Align the clocks</strong>PC time, ECU time and video time may differ by seconds. Find one known event in all of them (e.g. ignition on) to align.</li>
+  <li><strong>Open trace and logs around that time</strong>&plusmn;30 seconds is a good window.</li>
+  <li><strong>Check the input</strong>In the CAN trace: did the expected signal really arrive with the right value?</li>
+  <li><strong>Check the reaction</strong>In the ECU log: was the input received? What was decided? Any error, exception, crash, restart, timeout?</li>
+  <li><strong>Compare with a passing run</strong>What is different?</li>
+  <li><strong>Write down the story and attach evidence</strong>Put the key lines and timestamps in the ticket; attach the trimmed files and keep the originals.</li>
+</ol>
+<p><b>Search keywords:</b> error, fail, exception, fatal, crash, abort, timeout, reset, restart, watchdog, not found, invalid, SNA, overflow.</p>
+<div class="callout say"><span class="label">Say this: "How do you perform log analysis?"</span>
+<p class="say-quote">"I start from the exact failure time from the video or test log and align the clocks. Then I look at the CAN trace around that moment to check whether the input signal was correct, and at the ECU log &mdash; DLT or logcat &mdash; to see how the software reacted: errors, exceptions, restarts or timeouts. I compare with a passing run, and in the ticket I describe what I found with the timestamps and attach the trimmed logs and trace."</p>
+</div>
+
+<h2>Diagnostics and flashing tools</h2>
+<ul>
+  <li>Read and clear <b>DTCs</b> before and after tests (see <a href="car-basics.html">chapter 2</a>).</li>
+  <li>Read the <b>software version</b> to confirm the right build is on the bench.</li>
+  <li><b>Flashing</b> (installing a build): with a flashing tool (e.g. Vector vFlash), the OEM's tool, a USB update, or a customer script. After flashing: check the version and do a smoke test.</li>
+</ul>
+
+<h2>Test management &amp; traceability tools</h2>
+<div class="table-wrap"><table>
+<tr><th>Tool</th><th>Used for</th><th>Key idea</th></tr>
+<tr><td>Jira + Xray / Zephyr</td><td>Tests, executions, bugs in one place</td><td>Test Execution per build; failed test &rarr; linked bug</td></tr>
+<tr><td>Polarion</td><td>Requirements, tests, results, traceability</td><td>Work items linked together; very common in automotive</td></tr>
+<tr><td>IBM DOORS</td><td>Requirements management</td><td>Each requirement has an ID and links to tests</td></tr>
+<tr><td>Codebeamer</td><td>Requirements + tests + ALM</td><td>Similar to Polarion</td></tr>
+<tr><td>TestRail / ALM</td><td>Test case management</td><td>Test runs and results per version</td></tr>
+<tr><td>Confluence</td><td>Team documentation</td><td>Bench guides, process pages, meeting notes</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this: "How do you maintain traceability?"</span>
+<p class="say-quote">"Every test case carries the ID of the requirement it covers, and in the tool they're linked. Test executions are linked to the test cases, and failed executions to the defect tickets. That way a coverage report shows untested requirements, and when a requirement changes, the tool flags the linked tests for update."</p>
+</div>
+
+<h2>Evidence: good habits</h2>
+<ul>
+  <li>Name files clearly: <code>IVI-1433_TC-TEMP-003_24.3.1_B03_video.mp4</code>.</li>
+  <li>Keep trace and video running while testing so you never miss a rare bug.</li>
+  <li>Screenshot the problem with the software version visible if possible.</li>
+  <li>Store originals; attach trimmed parts to tickets.</li>
+</ul>
+
+<h2>Remote benches</h2>
+<ul>
+  <li>Access through <b>VPN + remote desktop</b> to the bench PC.</li>
+  <li>A <b>webcam</b> points at the screens; a <b>video grabber</b> captures the display output.</li>
+  <li>A <b>remote power switch / relay box</b> lets you power-cycle and switch ignition.</li>
+  <li>Etiquette: book bench time, don't change configuration without telling others, leave the bench in a clean state, report hardware problems to the local team.</li>
+</ul>
+
+<h2>Bench health checklist (before every run)</h2>
+<ul>
+  <li>&#9744; Correct build flashed and version checked</li>
+  <li>&#9744; Power supply voltage correct (e.g. 13.5 V), relay box working</li>
+  <li>&#9744; CANoe configuration and DBC version match the build</li>
+  <li>&#9744; Phones charged, paired as needed; USB sticks with test data plugged in</li>
+  <li>&#9744; Logging on: trace, DLT/logcat, video</li>
+  <li>&#9744; DTCs cleared</li>
+  <li>&#9744; Smoke test passed</li>
+</ul>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

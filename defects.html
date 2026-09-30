@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bugs, Jira &amp; defect reports · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="defects.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 6 &middot; Core skill</div>
+<h1>Bugs, Jira &amp; defect reports</h1>
+<p class="lead">Writing defect tickets is a main part of this job and a main part of the interview. After this chapter you can write a perfect bug report and answer every "what would you do with this bug?" question.</p>
+<div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 50 min</span><span class="pill hot">Very important: bug report, duplicates, when not to raise</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>The words: bug, defect, issue, ticket</h2>
+<ul>
+  <li><b>Defect</b> = <b>bug</b> = <b>fault</b>: something in the software that doesn't match the requirement. "Issue" is often used the same way.</li>
+  <li><b>Failure</b>: what you see on the screen when the defect shows up.</li>
+  <li><b>Ticket</b>: one bug report in Jira, with an ID such as IVI-1433. You "raise", "log" or "file" a ticket.</li>
+  <li><b>Jira</b>: the most common web tool for tickets. Others: Polarion, ALM, Redmine, Bugzilla, Azure DevOps.</li>
+</ul>
+
+<h2 id="bug-report">A perfect bug report, field by field</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>A good bug report lets a developer who has <b>never seen the problem</b> reproduce it on the <b>first try</b>, understand how bad it is, and start fixing &mdash; without asking you a single question.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Field</th><th>What to write</th><th>Example</th></tr>
+<tr><td>1</td><td><b>Summary (title)</b></td><td>[Area] what goes wrong + when. Short and specific</td><td>[Cluster] Snowflake shown at exactly 5.0 &deg;C; spec requires &lt; 5.0 &deg;C</td></tr>
+<tr><td>2</td><td><b>Environment</b></td><td>SW build, HW sample, bench ID, variant/market, language, units, phone model + OS if relevant</td><td>SW 24.3.1, C-sample, bench B-03, EU, EN, &deg;C</td></tr>
+<tr><td>3</td><td><b>Preconditions</b></td><td>State before the steps</td><td>Ignition ON, cluster started, Outside_Temp = 6.0 &deg;C</td></tr>
+<tr><td>4</td><td><b>Steps to reproduce</b></td><td>Numbered, minimal, exact values</td><td>1. Set Outside_Temp = 5.0 &deg;C 2. Wait 3 s</td></tr>
+<tr><td>5</td><td><b>Expected result</b></td><td>What should happen + requirement ID</td><td>No snowflake (REQ-HMI-TEMP-012)</td></tr>
+<tr><td>6</td><td><b>Actual result</b></td><td>What really happened, facts only</td><td>Snowflake shown after 0.4 s</td></tr>
+<tr><td>7</td><td><b>Reproducibility</b></td><td>How often: 5/5, 2/10, "once in 8 h"</td><td>3/3</td></tr>
+<tr><td>8</td><td><b>Severity / priority</b></td><td>Your proposed severity; priority is usually set in triage</td><td>Severity: Minor</td></tr>
+<tr><td>9</td><td><b>Evidence</b></td><td>Screenshot, video, CAN trace, DLT/logcat log, timestamps, Robot log.html</td><td>video.mp4, trace.blf (10:15:32), cluster.dlt</td></tr>
+<tr><td>10</td><td><b>Analysis (optional but valued)</b></td><td>What you found in logs/traces</td><td>Bus value correct; HMI logic likely uses &le;</td></tr>
+<tr><td>11</td><td><b>Impact analysis</b></td><td>Who/what is affected, safety relevance, other variants, workaround</td><td>False warning; all EU variants; no workaround needed</td></tr>
+<tr><td>12</td><td><b>Links &amp; classification</b></td><td>Requirement, test case, related/duplicate tickets; component; affected version; labels</td><td>REQ-HMI-TEMP-012, TC-TEMP-003; component Cluster-HMI</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this: "What makes a good bug report?"</span>
+<p class="say-quote">"A clear summary with the area and the problem; the environment &mdash; build, bench, variant; preconditions and numbered steps with exact values; expected result with the requirement ID and the actual result; how often it happens; severity; and evidence: screenshots or video, CAN traces and logs with timestamps. I add my own analysis and the impact, and link the requirement and the test case. The goal is that the developer can reproduce it on the first try."</p>
+</div>
+
+<h2>How to write each part well</h2>
+<h3>The summary</h3>
+<p>Formula: <b>[Component] + what is wrong + under which condition</b>. Someone scanning a list of 500 tickets must understand the bug from the title alone.</p>
+<div class="table-wrap"><table>
+<tr><th>Bad summary</th><th>Why bad</th><th>Good summary</th></tr>
+<tr><td>Snowflake bug</td><td>Which bug? When?</td><td>[Cluster] Snowflake shown at exactly 5.0 &deg;C; spec requires &lt; 5.0 &deg;C</td></tr>
+<tr><td>Bluetooth not working</td><td>Too vague</td><td>[BT] iPhone 15 not auto-reconnecting after ignition cycle (Android OK)</td></tr>
+<tr><td>Crash!!!</td><td>No information</td><td>[Media] Head unit restarts when USB stick is removed during MP3 playback</td></tr>
+<tr><td>Wrong text</td><td>Where? Which text?</td><td>[Settings/DE] "Einstellungen" button label cut off to "Einstellun" in German</td></tr>
+</table></div>
+
+<h3>Steps to reproduce</h3>
+<ul>
+  <li>Start from a <b>known state</b> (preconditions).</li>
+  <li>Number the steps; one action per step.</li>
+  <li>Use <b>exact values</b> ("set 5.0 &deg;C", not "set a low temperature").</li>
+  <li><b>Minimal</b>: remove steps that aren't needed to trigger the bug.</li>
+  <li>Try them yourself once more exactly as written before submitting.</li>
+</ul>
+
+<h3>Evidence (the JD asks for this explicitly)</h3>
+<div class="table-wrap"><table>
+<tr><th>Evidence</th><th>When</th><th>Tip</th></tr>
+<tr><td>Screenshot</td><td>Visual bugs</td><td>Mark the problem area with a red box</td></tr>
+<tr><td>Video</td><td>Timing, flicker, sequences</td><td>Show a clock or the trace timestamp in the video if possible</td></tr>
+<tr><td>CAN trace (.blf/.asc)</td><td>Anything depending on signals</td><td>Write the timestamp of the problem in the ticket</td></tr>
+<tr><td>Log (DLT, logcat)</td><td>Crashes, errors, wrong logic</td><td>Trim to the relevant time window, but keep the original</td></tr>
+<tr><td>Automation report</td><td>Failures from test runs</td><td>Link log.html and point to the failing step</td></tr>
+<tr><td>Crash dump</td><td>Crashes, resets</td><td>Attach it; developers need it</td></tr>
+</table></div>
+
+<h3>Impact analysis (explicitly in the JD)</h3>
+<p>Impact analysis answers: <b>"How bad is this, and for whom?"</b> Ask yourself:</p>
+<ul>
+  <li><b>Safety</b>: could the driver be misled or distracted? (wrong speed, missing warning)</li>
+  <li><b>Function</b>: is a function lost completely, partly, or just cosmetic?</li>
+  <li><b>Scope</b>: which variants, languages, markets, phones are affected?</li>
+  <li><b>Frequency</b>: every time, or rarely?</li>
+  <li><b>Workaround</b>: can the user avoid it? (e.g. reconnect the phone)</li>
+  <li><b>Other features</b>: does it affect other tests (blocked tests)?</li>
+</ul>
+<div class="callout example"><span class="label">Example impact statement</span>
+<p>"Impact: The driver sees an ice warning at exactly 5.0 &deg;C when there is no ice risk (false warning). Affects all EU variants using this cluster software. No safety function is lost; could reduce trust in the warning. Also causes TC-TEMP-004 to fail. No workaround needed."</p>
+</div>
+
+<h2>Bad report vs good report</h2>
+<div class="grid">
+  <div class="card" style="border-color:var(--bad)"><h4 style="color:var(--bad)">Bad</h4><p><b>Title:</b> Music problem<br><b>Description:</b> Sometimes the music stops. Please fix asap.<br><br>Problems: no build, no steps, no expected result, no evidence, no frequency, emotional wording.</p></div>
+  <div class="card" style="border-color:var(--good)"><h4 style="color:var(--good)">Good</h4><p><b>Title:</b> [Media] BT audio stops after incoming call ends (iPhone 15, iOS 18)<br><b>Env:</b> SW 24.3.1, bench B-02<br><b>Steps:</b> 1. Play BT music 2. Receive call 3. Accept 4. End call after 10 s<br><b>Expected:</b> Music resumes (REQ-MED-045)<br><b>Actual:</b> Music stays paused; source shows "Playing"<br><b>Repro:</b> 4/5<br><b>Evidence:</b> video, logcat 14:02:11</p></div>
+</div>
+
+<h2>Severity vs priority</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p><b>Severity</b> = how <b>bad</b> the effect is (a technical judgement; the tester proposes it). <b>Priority</b> = how <b>soon</b> it must be fixed (a business decision; the project / product owner decides, usually in triage).</p>
+</div>
+<h3>Typical severity levels</h3>
+<div class="table-wrap"><table>
+<tr><th>Severity</th><th>Meaning</th><th>Automotive HMI example</th></tr>
+<tr><td><b>Blocker</b></td><td>Testing or use is impossible</td><td>Head unit doesn't boot; cluster black screen</td></tr>
+<tr><td><b>Critical</b></td><td>Main or safety function broken, no workaround</td><td>Wrong speed shown; rear camera doesn't appear; brake warning missing</td></tr>
+<tr><td><b>Major</b></td><td>Important function broken, workaround may exist</td><td>Bluetooth doesn't reconnect (manual reconnect works); navigation arrow wrong</td></tr>
+<tr><td><b>Minor</b></td><td>Small function problem or clear visual issue</td><td>Progress bar doesn't match time; text slightly cut off</td></tr>
+<tr><td><b>Trivial</b></td><td>Cosmetic, barely noticeable</td><td>2-pixel misalignment in a sub-menu</td></tr>
+</table></div>
+<p class="small muted">Names differ between companies (e.g. A/B/C, S1&ndash;S4). Always follow your project's definitions.</p>
+
+<h3>The four combinations (classic interview question)</h3>
+<div class="table-wrap"><table>
+<tr><th></th><th>High priority</th><th>Low priority</th></tr>
+<tr><th>High severity</th><td>Speedometer shows wrong speed. Head unit reboots when reverse is selected.</td><td>Crash only in a language that isn't released yet, or only with 5,000 contacts plus a rare character</td></tr>
+<tr><th>Low severity</th><td>Car maker's brand name misspelled on the start-up screen (visible to every customer, embarrassing)</td><td>Small misalignment on a rarely used service screen</td></tr>
+</table></div>
+<h3>How to decide severity</h3>
+<ol>
+  <li>Is safety or a legal rule affected? &rarr; Critical (or higher).</li>
+  <li>Is a whole function lost? Is there a workaround? &rarr; Major if lost with workaround, Critical without.</li>
+  <li>Is it only visual? &rarr; Minor / Trivial.</li>
+  <li>How often and how many users? Frequent + many users pushes it up.</li>
+</ol>
+
+<h2>The defect life cycle</h2>
+<figure class="diagram">
+<svg viewBox="0 0 760 396" role="img" aria-label="Defect life cycle">
+  <defs><marker id="arrL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-2)"/></marker></defs>
+  <text class="t" x="24" y="32" font-size="15" font-weight="700">A ticket loops back until the retest passes</text>
+  <g class="line"><path d="M168 100H212" marker-end="url(#arrL)"/><path d="M348 100H392" marker-end="url(#arrL)"/><path d="M528 100H572" marker-end="url(#arrL)"/><path d="M640 122V188" marker-end="url(#arrL)"/><path d="M640 232V298" marker-end="url(#arrL)"/><path d="M572 210H548" marker-end="url(#arrL)"/><path d="M480 188V122" marker-end="url(#arrL)"/><path d="M280 122V188" marker-end="url(#arrL)"/></g>
+  <g font-size="13" font-weight="700">
+  <rect class="box" x="32" y="78" width="136" height="44" rx="8"/><text class="t" x="100" y="104" text-anchor="middle">New</text>
+  <rect class="box" x="212" y="78" width="136" height="44" rx="8"/><text class="t" x="280" y="104" text-anchor="middle">Triage</text>
+  <rect class="box" x="392" y="78" width="136" height="44" rx="8"/><text class="t" x="460" y="104" text-anchor="middle">Assigned</text>
+  <rect class="box" x="572" y="78" width="136" height="44" rx="8"/><text class="t" x="640" y="104" text-anchor="middle">In progress</text>
+  <rect class="box" x="572" y="188" width="136" height="44" rx="8"/><text class="t" x="640" y="214" text-anchor="middle">Ready for retest</text>
+  <rect class="box-warn" x="412" y="188" width="136" height="44" rx="8"/><text class="t" x="480" y="214" text-anchor="middle">Reopened</text>
+  <rect class="box-accent" x="572" y="298" width="136" height="44" rx="8"/><text class="t" x="640" y="324" text-anchor="middle">Closed</text>
+  </g>
+  <rect class="box" x="178" y="188" width="204" height="88" rx="8" stroke-dasharray="4 4"/>
+  <text class="t" x="194" y="212" font-weight="700" font-size="13">Other exits</text>
+  <text class="t" x="194" y="230" font-size="11.5">Rejected: works as designed</text>
+  <text class="t" x="194" y="246" font-size="11.5">Duplicate: linked to original</text>
+  <text class="t" x="194" y="262" font-size="11.5">Deferred: a later release</text>
+  <text class="t2" x="648" y="160" font-size="11.5">developer fixes</text>
+  <text class="t2" x="648" y="270" font-size="11.5">retest passes</text>
+  <text class="t2" x="560" y="176" text-anchor="middle" font-size="11.5">retest fails</text>
+  <text class="t2" x="24" y="378" font-size="11.5">You: create, retest, close or reopen &middot; Triage team: checks and assigns &middot; Developer: fixes and marks Ready for retest</text>
+</svg>
+<figcaption>Status names differ per project (e.g. "Resolved" instead of "Ready for retest"), but the idea is always the same.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<tr><th>Status</th><th>Meaning</th><th>Who moves it</th></tr>
+<tr><td>New / Open</td><td>Just created</td><td>You (reporter)</td></tr>
+<tr><td>Triage / Analysis</td><td>Checked: valid? duplicate? priority? which team?</td><td>Triage team / defect manager / proxy team</td></tr>
+<tr><td>Assigned</td><td>A developer or team is responsible</td><td>Triage</td></tr>
+<tr><td>In progress</td><td>Developer is working on it</td><td>Developer</td></tr>
+<tr><td>Resolved / Ready for retest</td><td>Fix done, available in a build (fix version)</td><td>Developer</td></tr>
+<tr><td>Closed / Verified</td><td>You retested and it works</td><td>You</td></tr>
+<tr><td>Reopened</td><td>Retest failed, bug still there</td><td>You (with evidence)</td></tr>
+<tr><td>Rejected / Works as designed</td><td>Not a bug</td><td>Triage / developer (with explanation)</td></tr>
+<tr><td>Duplicate</td><td>Same as another ticket; linked</td><td>Triage or you</td></tr>
+<tr><td>Deferred / Postponed</td><td>Real, but fixed later</td><td>Product owner</td></tr>
+<tr><td>Cannot reproduce / Need info</td><td>Developer can't see it; needs more data</td><td>Developer &rarr; back to you</td></tr>
+</table></div>
+
+<h2>After you create a ticket: tracking it</h2>
+<ol>
+  <li><b>Watch</b> the ticket (Jira notifications) and check your filter/dashboard daily.</li>
+  <li>Attend or follow <b>triage</b>: be ready to explain and demonstrate.</li>
+  <li>Answer developer questions <b>fast</b>; add logs if they ask.</li>
+  <li>When it's "Ready for retest": check the <b>fix version</b> and <b>release notes</b> &mdash; is the fix really in your build?</li>
+  <li><b>Retest</b> the exact steps, then test <b>around</b> it (neighbouring cases) and run <b>regression</b> for the affected area.</li>
+  <li>Update the ticket: "Verified in 24.3.2 on bench B-03; TC-03/04 pass; regression of temperature tests pass" &rarr; Close. Or Reopen with new evidence.</li>
+</ol>
+
+<h3>How do you know whom to assign it to?</h3>
+<ul>
+  <li>Use the project's <b>component ownership list</b> (which team owns Media, Bluetooth, Cluster&hellip;) and set the <b>component</b> field.</li>
+  <li>In many projects you don't assign to a person at all: the <b>triage team / proxy team</b> dispatches it.</li>
+  <li>Use evidence: the CAN trace shows whether the input was right. Right input + wrong screen &rarr; HMI team. Wrong value on the bus &rarr; the sending ECU's team or supplier.</li>
+  <li>Never guess a random developer; ask your lead if unsure.</li>
+</ul>
+
+<h2 id="duplicates">Duplicates and many testers</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>If two testers find the same bug, there must be <b>one</b> ticket, not two. Duplicates waste developer time, split the information, and mess up the bug statistics.</p>
+</div>
+<h3>How to check before creating</h3>
+<ol>
+  <li>Search Jira: component + keywords ("snowflake", "ice warning", "5.0"), error messages from the log, open status. Example JQL: <code>project = IVI AND text ~ "snowflake" AND status != Closed</code></li>
+  <li>Check the <b>known issues</b> list in the release notes.</li>
+  <li>Ask in the team chat: "Has anyone seen X on 24.3.1?"</li>
+</ol>
+<h3>If it already exists</h3>
+<ul>
+  <li>Don't create a new one. <b>Add a comment</b> with your new information: another build, another bench, another frequency, extra logs. This makes the existing ticket stronger.</li>
+  <li>If your case differs (other trigger, other screen), create a new ticket and <b>link</b> it as "related".</li>
+</ul>
+<h3>How teams avoid duplicates</h3>
+<ul>
+  <li>Split feature ownership: one tester per area.</li>
+  <li>Daily stand-up: mention new bugs you found.</li>
+  <li>Shared "found today" chat or board.</li>
+  <li>Triage marks duplicates and links them to the original.</li>
+</ul>
+<div class="callout say"><span class="label">Say this: "Two testers find the same bug &mdash; two tickets?"</span>
+<p class="say-quote">"No, one ticket. Before creating a ticket I search Jira and the known-issues list. If it exists, I add my evidence as a comment &mdash; my build, bench and how often I saw it &mdash; which helps the developer. Duplicates waste triage time and split the information."</p>
+</div>
+
+<h2 id="when-not">When NOT to raise a new ticket</h2>
+<p>The interviewer asked: "Even when you're sure you found a bug, are there situations where you shouldn't create a ticket?" Yes. Follow this decision path:</p>
+<figure class="diagram">
+<svg viewBox="0 0 760 500" role="img" aria-label="Decision path before raising a new ticket">
+  <defs><marker id="arrD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-2)"/></marker></defs>
+  <text class="t" x="20" y="28" font-size="15" font-weight="700">Four checks before you raise a new ticket</text>
+  <rect class="box" x="60" y="44" width="340" height="40" rx="8"/><text class="t" x="230" y="69" text-anchor="middle" font-size="13" font-weight="700">You see unexpected behaviour</text>
+  <g font-size="12.5">
+  <rect class="box" x="60" y="112" width="340" height="44" rx="8"/><text class="t" x="230" y="139" text-anchor="middle">1. Is it really against the requirement?</text>
+  <rect class="box" x="60" y="196" width="340" height="44" rx="8"/><text class="t" x="230" y="223" text-anchor="middle">2. Is the bench / environment correct?</text>
+  <rect class="box" x="60" y="280" width="340" height="44" rx="8"/><text class="t" x="230" y="307" text-anchor="middle">3. Can you reproduce it or prove it?</text>
+  <rect class="box" x="60" y="364" width="340" height="44" rx="8"/><text class="t" x="230" y="391" text-anchor="middle">4. Is it new (not in Jira / known issues)?</text>
+  <rect class="box-accent" x="60" y="444" width="340" height="40" rx="8"/><text class="t" x="230" y="469" text-anchor="middle" font-weight="700">Raise a new ticket</text>
+  <rect class="box-warn" x="470" y="108" width="270" height="52" rx="8"/><text class="t" x="484" y="130">Not a bug: ask the requirement</text><text class="t" x="484" y="148">owner; maybe a change request</text>
+  <rect class="box-warn" x="470" y="192" width="270" height="52" rx="8"/><text class="t" x="484" y="214">Fix the environment, re-run;</text><text class="t" x="484" y="232">mark Blocked; log env issue</text>
+  <rect class="box-warn" x="470" y="276" width="270" height="52" rx="8"/><text class="t" x="484" y="298">Don't raise yet: note it, watch</text><text class="t" x="484" y="316">for it, collect logs</text>
+  <rect class="box-warn" x="470" y="360" width="270" height="52" rx="8"/><text class="t" x="484" y="382">Comment on the existing ticket</text><text class="t" x="484" y="400">with your evidence; link it</text>
+  </g>
+  <g class="line"><path d="M230 84V110" marker-end="url(#arrD)"/><path d="M230 156V194" marker-end="url(#arrD)"/><path d="M230 240V278" marker-end="url(#arrD)"/><path d="M230 324V362" marker-end="url(#arrD)"/><path d="M230 408V442" marker-end="url(#arrD)"/>
+  <path d="M400 134H468" marker-end="url(#arrD)"/><path d="M400 218H468" marker-end="url(#arrD)"/><path d="M400 302H468" marker-end="url(#arrD)"/><path d="M400 386H468" marker-end="url(#arrD)"/></g>
+  <g font-size="11.5"><text class="t2" x="238" y="182">yes</text><text class="t2" x="238" y="266">yes</text><text class="t2" x="238" y="350">yes</text><text class="t2" x="238" y="430">yes, new</text>
+  <text class="t2" x="434" y="126" text-anchor="middle">no</text><text class="t2" x="434" y="210" text-anchor="middle">no</text><text class="t2" x="434" y="294" text-anchor="middle">no</text><text class="t2" x="434" y="378" text-anchor="middle">exists</text></g>
+</svg>
+<figcaption>Only when all four checks pass do you create a new ticket.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<tr><th>Situation</th><th>What to do instead</th></tr>
+<tr><td>Already reported (duplicate)</td><td>Comment on the existing ticket with new evidence; link</td></tr>
+<tr><td>Behaviour matches the requirement ("works as designed")</td><td>No defect. If the behaviour is bad for users, ask the requirement owner or raise a change request</td></tr>
+<tr><td>Caused by the test environment / hardware (wrong build flashed, loose cable, wrong CAN config, broken USB hub)</td><td>Fix the environment and re-run; record as environment issue; test = Blocked until fixed</td></tr>
+<tr><td>Known issue listed in the release notes</td><td>Link your test result to it; no new ticket</td></tr>
+<tr><td>Feature not implemented in this build yet</td><td>Check release notes/feature list; mark test "not applicable yet" or blocked</td></tr>
+<tr><td>Seen once, no evidence, can't reproduce</td><td>Note it, watch for it, turn on extra logging; raise when you have data (some projects want a ticket anyway &mdash; follow the process)</td></tr>
+<tr><td>Many tickets in the system, many testers</td><td>Search first; coordinate in the team; one owner per area</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this</span>
+<p class="say-quote">"Yes. I don't raise a new ticket if it's already reported &mdash; then I add my evidence to the existing one; if the behaviour is actually as specified &mdash; then I clarify with the requirement owner; if the test environment caused it &mdash; then I fix the bench and re-run; or if it's a known issue in the release notes. With many testers on the same software, searching first and coordinating avoids duplicates."</p>
+</div>
+
+<h2>Environment problem or product bug?</h2>
+<p>A big part of the job is telling these apart. Checks:</p>
+<ul>
+  <li>Is the <b>right build</b> flashed? (compare version on screen with the planned one)</li>
+  <li>Does it happen on <b>another bench</b> too?</li>
+  <li>Are cables, power supply, USB hub, antenna, phone OK? Is the CAN configuration/DBC the right version?</li>
+  <li>Did it work on the <b>previous build</b> on the same bench? (If yes and nothing changed on the bench, it's probably the software.)</li>
+  <li>Do the logs show hardware errors (e.g. "USB device not found")?</li>
+</ul>
+
+<h2>Intermittent bugs ("sometimes it happens")</h2>
+<ul>
+  <li>Try to find the pattern: after sleep? only the first time? only with a certain phone? only when fast?</li>
+  <li>Run it many times (manually or with automation) and count: "3 out of 20".</li>
+  <li>Keep logging and tracing running all the time, so when it happens you have the data.</li>
+  <li>Report with the rate and all the conditions you know; mark it as intermittent.</li>
+</ul>
+
+<h2>Bug caused by another component or supplier</h2>
+<ol>
+  <li>Collect proof where it comes from (e.g. trace shows the sending ECU transmits the wrong value).</li>
+  <li>Assign/move the ticket to that component, or raise it in that team's/supplier's system as the process says.</li>
+  <li>Link the tickets, inform the proxy team.</li>
+  <li>Mark your test as failed or blocked, with the link.</li>
+</ol>
+
+<h2>When a developer says "not a bug"</h2>
+<ul>
+  <li>Stay calm and factual. Go back to the <b>requirement</b>: quote its ID and exact text.</li>
+  <li>If the requirement is unclear, involve the requirement owner / proxy team to decide.</li>
+  <li>Show evidence (video, trace). Offer to demonstrate on the bench.</li>
+  <li>Accept the decision when it's made and documented; if the requirement is bad, suggest a change request.</li>
+</ul>
+
+<h2>Jira in practice</h2>
+<h3>Issue types and important fields</h3>
+<p><b>Issue types:</b> Bug, Task, Story, Epic (plus test types if Xray is used: Test, Test Set, Test Plan, Test Execution). <b>Fields:</b> Summary, Description, Component, Affects Version, Fix Version, Priority, Severity (custom), Labels, Assignee, Reporter, Attachments, Links.</p>
+<h3>JQL: searching Jira</h3>
+<div class="table-wrap"><table>
+<tr><th>You want</th><th>JQL</th></tr>
+<tr><td>My tickets ready to retest</td><td><code>reporter = currentUser() AND status = "Ready for Test"</code></td></tr>
+<tr><td>Open cluster bugs, most important first</td><td><code>project = IVI AND issuetype = Bug AND component = Cluster AND status != Closed ORDER BY priority DESC</code></td></tr>
+<tr><td>Search for a duplicate</td><td><code>project = IVI AND text ~ "snowflake" AND status != Closed</code></td></tr>
+<tr><td>Critical bugs from the last 7 days</td><td><code>project = IVI AND priority in (Blocker, Critical) AND created &gt;= -7d</code></td></tr>
+<tr><td>Bugs fixed in a build</td><td><code>project = IVI AND fixVersion = "24.3.2" AND status in (Resolved, "Ready for Test")</code></td></tr>
+</table></div>
+<p>Save useful searches as <b>filters</b> and show them on a <b>dashboard</b> (charts of bugs by status/severity).</p>
+<h3>Xray / Zephyr (tests inside Jira)</h3>
+<p>These add-ons store <b>test cases</b> and <b>test executions</b> in Jira. You create a Test Execution for a build, run each test, set PASS/FAIL, attach evidence, and link failed tests to bug tickets. This gives traceability: requirement &harr; test &harr; execution &harr; defect.</p>
+
+<h2>Quick answers for the interview</h2>
+<details class="qa"><summary>How do you track a bug after creating the ticket?</summary><div class="ans"><p>I watch it and use a Jira filter for my open tickets. I follow it through triage, answer questions quickly and add logs if needed. When it's ready for retest, I check the fix is in my build, retest, test around it, run the related regression, and then close it with a comment or reopen it with evidence.</p></div></details>
+<details class="qa"><summary>How do you determine severity and priority?</summary><div class="ans"><p>Severity from the impact: safety or legal relevance, whether a function is lost, if there's a workaround, how often and how visible. I propose the severity; the priority is decided with the project or product owner, based on release plans and customer impact, usually in triage.</p></div></details>
+<details class="qa"><summary>What would you do if the failure is caused by the test environment?</summary><div class="ans"><p>I verify it first: check the flashed build, try another bench, check cables, power and configuration. If it's the environment, I don't raise a software defect. I fix or report the bench problem, mark the affected tests as blocked, and re-run them when the environment is fixed, noting it in the execution report.</p></div></details>
+<details class="qa"><summary>When would you close, reject or link a defect instead of creating a new one?</summary><div class="ans"><p>Close: after a successful retest. Reject: when it works as designed, is caused by the environment, or can't be reproduced after investigation. Link: when it's a duplicate or related to an existing ticket, or its root cause is in another component's ticket.</p></div></details>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

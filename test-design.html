@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test design &amp; BVA · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="test-design.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 5 &middot; Core skill</div>
+<h1>Test design techniques &amp; BVA</h1>
+<p class="lead">How to choose a few smart test cases instead of many random ones. The interviewer asked a boundary value question about a snowflake at 5 &deg;C &mdash; this chapter gives you a perfect, complete answer and lets you play with it.</p>
+<div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 50 min + exercises</span><span class="pill hot">Very important: BVA snowflake</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>Why we need techniques</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>You can't test every value (principle: exhaustive testing is impossible). Temperature can be &minus;40.0, &minus;39.9, &minus;39.8 &hellip; 85.0 &deg;C: that is 1,251 values. Techniques tell you <b>which few values find the most bugs</b>.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Family</th><th>Techniques</th><th>Based on</th></tr>
+<tr><td>Black-box (specification-based)</td><td>Equivalence partitioning, Boundary value analysis, Decision tables, State transition testing</td><td>The requirements (your main tools)</td></tr>
+<tr><td>White-box (structure-based)</td><td>Statement coverage, branch coverage</td><td>The code (mostly developers)</td></tr>
+<tr><td>Experience-based</td><td>Error guessing, Exploratory testing, Checklist-based testing</td><td>Your knowledge and experience</td></tr>
+</table></div>
+
+<h2>Equivalence partitioning (EP)</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Split all possible inputs into <b>groups that the system treats the same way</b> (partitions). If one value from a group works, the others probably work too. So test <b>one value per group</b>, including the invalid groups.</p>
+</div>
+<div class="callout example"><span class="label">Example: volume 0 to 40</span>
+<div class="table-wrap"><table>
+<tr><th>Partition</th><th>Values</th><th>Valid?</th><th>Test value</th></tr>
+<tr><td>Below range</td><td>&lt; 0</td><td>Invalid</td><td>&minus;1 (try turning below 0: must stay 0)</td></tr>
+<tr><td>In range</td><td>0 &hellip; 40</td><td>Valid</td><td>20</td></tr>
+<tr><td>Above range</td><td>&gt; 40</td><td>Invalid</td><td>41 (try turning above 40: must stay 40)</td></tr>
+</table></div>
+<p>3 partitions &rarr; 3 test cases instead of 42.</p>
+</div>
+<p>More car examples: fan speed 1&ndash;7 (valid) vs 0 and 8 (invalid); gear P/R/N/D (each gear is its own partition); phone types iPhone / Android; language groups: left-to-right vs right-to-left scripts.</p>
+
+<h2 id="bva">Boundary value analysis (BVA)</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Bugs love edges. Developers often write <code>&lt;</code> when they meant <code>&le;</code> (or the other way round). So test <b>exactly on the boundary and right next to it</b>. BVA is an extension of EP: you take the edges of each partition.</p>
+</div>
+
+<h3>2-value and 3-value BVA (ISTQB v4.0)</h3>
+<div class="table-wrap"><table>
+<tr><th></th><th>2-value BVA</th><th>3-value BVA</th></tr>
+<tr><td>Values per boundary</td><td>The boundary + its nearest neighbour in the other partition</td><td>The boundary + <b>both</b> neighbours</td></tr>
+<tr><td>Volume max = 40</td><td>40, 41</td><td>39, 40, 41</td></tr>
+<tr><td>Volume min = 0</td><td>&minus;1, 0</td><td>&minus;1, 0, 1</td></tr>
+<tr><td>When to use</td><td>Normal features</td><td>Safety-relevant or tricky features (stronger)</td></tr>
+</table></div>
+
+<h3>The "step size" (resolution) decides the neighbours</h3>
+<p>The neighbour is <b>one step</b> away, and the step is the smallest change the signal can make:</p>
+<ul>
+  <li>Integer values (volume, fan level): step = 1 &rarr; 39, 40, 41.</li>
+  <li>Temperature signal with 0.1 &deg;C resolution: step = 0.1 &rarr; 4.9, 5.0, 5.1.</li>
+  <li>Temperature signal with 0.5 &deg;C resolution (factor 0.5 in the DBC!): step = 0.5 &rarr; 4.5, 5.0, 5.5. You <b>can't</b> even send 4.9!</li>
+</ul>
+<div class="callout warn"><span class="label">Watch out</span>
+<p>Always ask for the signal resolution. Knowing that the DBC factor defines the smallest step impresses interviewers, because it connects test theory with real automotive signals.</p>
+</div>
+
+<h3>"Below 5" vs "5 and below": open and closed boundaries</h3>
+<div class="table-wrap"><table>
+<tr><th>Requirement wording</th><th>Maths</th><th>At exactly 5.0 &deg;C</th><th>Values to test (step 0.1)</th></tr>
+<tr><td>"below 5 &deg;C"</td><td>T &lt; 5</td><td>OFF</td><td>4.9 (ON), 5.0 (OFF), 5.1 (OFF)</td></tr>
+<tr><td>"5 &deg;C and below" / "at or below 5"</td><td>T &le; 5</td><td>ON</td><td>4.9 (ON), 5.0 (ON), 5.1 (OFF)</td></tr>
+<tr><td>"above 4 &deg;C"</td><td>T &gt; 4</td><td>at 4.0: not above</td><td>3.9, 4.0, 4.1</td></tr>
+</table></div>
+<p>Only the value <b>exactly on the boundary</b> changes between the two wordings. That's why 5.0 is the single most important test value.</p>
+
+<h2 id="snowflake">The snowflake question: the full answer</h2>
+<p>This is the exact scenario from your interview:</p>
+<div class="callout example"><span class="label">The requirement</span>
+<ul>
+  <li>The snowflake (ice warning) appears when the outside temperature goes <b>below 5 &deg;C</b>.</li>
+  <li>It stays displayed while the temperature is low.</li>
+  <li>It disappears when the temperature rises <b>above 4 &deg;C</b> (other version: "at 4 &deg;C or above").</li>
+</ul>
+</div>
+
+<h3>Step 1: Spot the problem in the requirement (this impresses!)</h3>
+<p>Look closely: it appears <i>below 5</i> but disappears <i>above 4</i>. What happens at 4.5 &deg;C? Going down, 4.5 is below 5 &rarr; ON. Going up, 4.5 is above 4 &rarr; OFF. <b>The requirement contradicts itself between 4 and 5 &deg;C.</b></p>
+<p>Real cars solve this with <b>hysteresis</b>: two different thresholds, one for switching ON and one for switching OFF, with a zone in the middle where the icon <b>keeps its previous state</b>. It stops the icon from flickering when the temperature hovers around one value (4.9, 5.0, 4.9, 5.0&hellip;).</p>
+<div class="callout say"><span class="label">Say this first</span>
+<p class="say-quote">"Before choosing values, I'd clarify the requirement, because 'appears below 5' and 'disappears above 4' overlap between 4 and 5 degrees. I'd confirm whether it's a hysteresis &mdash; for example ON at 4 &deg;C or below and OFF at 5 &deg;C or above, keeping its state in between &mdash; and I'd ask about the signal resolution, the reaction time, and what happens when the sensor fails."</p>
+</div>
+
+<figure class="diagram">
+<svg viewBox="0 0 760 296" role="img" aria-label="Hysteresis: the snowflake switches at 4 degrees going down but 5 degrees going up">
+  <text class="t" x="24" y="28" font-size="15" font-weight="700">With hysteresis, the switch point depends on the direction</text>
+  <text class="t2" x="24" y="48" font-size="11.5">Example clarified rule: ON at 4.0 &deg;C or below, OFF at 5.0 &deg;C or above, no change in between</text>
+  <rect x="290" y="104" width="220" height="96" style="fill:var(--surface-2)"/>
+  <text class="t2" x="400" y="218" text-anchor="middle" font-size="11.5">hold zone: keeps its last state</text>
+  <g font-size="11.5"><text class="t2" x="180" y="82" text-anchor="middle">3.5 &deg;C</text><text class="t2" x="290" y="82" text-anchor="middle">4.0 &deg;C</text><text class="t2" x="400" y="82" text-anchor="middle">4.5 &deg;C</text><text class="t2" x="510" y="82" text-anchor="middle">5.0 &deg;C</text><text class="t2" x="620" y="82" text-anchor="middle">5.5 &deg;C</text></g>
+  <path class="line" d="M180 92H620"/>
+  <rect class="box-accent" x="180" y="120" width="110" height="24" rx="6"/><text class="t" x="235" y="137" text-anchor="middle" font-weight="700" font-size="12">ON</text>
+  <rect class="box" x="290" y="120" width="330" height="24" rx="6"/><text class="t" x="455" y="137" text-anchor="middle" font-weight="700" font-size="12">OFF</text>
+  <rect class="box-accent" x="180" y="172" width="330" height="24" rx="6"/><text class="t" x="345" y="189" text-anchor="middle" font-weight="700" font-size="12">ON</text>
+  <rect class="box" x="510" y="172" width="110" height="24" rx="6"/><text class="t" x="565" y="189" text-anchor="middle" font-weight="700" font-size="12">OFF</text>
+  <text class="t" x="24" y="130" font-weight="700" font-size="13">Getting colder</text><text class="t2" x="24" y="146" font-size="11.5">6 &rarr; 3 &deg;C</text>
+  <text class="t" x="24" y="182" font-weight="700" font-size="13">Getting warmer</text><text class="t2" x="24" y="198" font-size="11.5">3 &rarr; 6 &deg;C</text>
+  <text class="t2" x="636" y="136" font-size="11.5">ON from 4.0 &deg;C</text><text class="t2" x="636" y="188" font-size="11.5">OFF from 5.0 &deg;C</text>
+  <text class="t" x="24" y="254" font-weight="700" font-size="13">Test values</text>
+  <path class="line" d="M180 250H620"/>
+  <g font-size="11.5"><circle class="fill-accent" cx="268" cy="250" r="5"/><circle class="fill-accent" cx="290" cy="250" r="5"/><circle class="fill-accent" cx="312" cy="250" r="5"/><circle class="fill-accent" cx="488" cy="250" r="5"/><circle class="fill-accent" cx="510" cy="250" r="5"/><circle class="fill-accent" cx="532" cy="250" r="5"/>
+  <text class="t" x="268" y="274" text-anchor="middle">3.9</text><text class="t" x="290" y="274" text-anchor="middle">4.0</text><text class="t" x="312" y="274" text-anchor="middle">4.1</text><text class="t" x="488" y="274" text-anchor="middle">4.9</text><text class="t" x="510" y="274" text-anchor="middle">5.0</text><text class="t" x="532" y="274" text-anchor="middle">5.1</text></g>
+</svg>
+<figcaption>Same temperature (e.g. 4.5 &deg;C) &rarr; different result depending on the direction. So you must test both directions.</figcaption>
+</figure>
+
+<h3>Step 2: Choose the test values</h3>
+<p>Assuming the clarified rule above and a resolution of 0.1 &deg;C (3-value BVA on both boundaries):</p>
+<div class="table-wrap"><table>
+<tr><th>Temperature</th><th>Coming from warm (falling)</th><th>Coming from cold (rising)</th><th>Why this value</th></tr>
+<tr><td>5.1 &deg;C</td><td>OFF</td><td>OFF</td><td>Just above the upper boundary</td></tr>
+<tr><td><b>5.0 &deg;C</b></td><td>OFF</td><td>OFF (switches off here)</td><td>On the upper boundary</td></tr>
+<tr><td>4.9 &deg;C</td><td>OFF (hold)</td><td>ON (hold)</td><td>Just below the upper boundary</td></tr>
+<tr><td>4.1 &deg;C</td><td>OFF (hold)</td><td>ON (hold)</td><td>Just above the lower boundary</td></tr>
+<tr><td><b>4.0 &deg;C</b></td><td>ON (switches on here)</td><td>ON</td><td>On the lower boundary</td></tr>
+<tr><td>3.9 &deg;C</td><td>ON</td><td>ON</td><td>Just below the lower boundary</td></tr>
+</table></div>
+<p>If instead the rule is the simple "ON below 5 &deg;C, OFF at 5 &deg;C or above" (the version in your notes), the core values are <b>4.9 &rarr; ON, 5.0 &rarr; OFF, 5.1 &rarr; OFF</b>. The notes' table (3, 4, 4.9, 5, 5.1, 6 &deg;C) is the same idea: normal values on each side plus the values at and around the boundary.</p>
+<div class="callout warn"><span class="label">Don't do this</span>
+<p>Don't only test "normal" values like 0 &deg;C and 10 &deg;C. Those are equivalence partitioning values. They will pass even if the developer used the wrong comparison. BVA is about the values <b>at and around</b> the boundary.</p>
+</div>
+
+<h3>Step 3: Test both directions and the transitions</h3>
+<ul>
+  <li><b>Falling</b> 6 &rarr; 5.1 &rarr; 5.0 &rarr; 4.9 &rarr; 4.1 &rarr; 4.0 &rarr; 3.9: note exactly when it switches ON.</li>
+  <li><b>Rising</b> 3 &rarr; 3.9 &rarr; 4.0 &rarr; 4.1 &rarr; 4.9 &rarr; 5.0 &rarr; 5.1: note exactly when it switches OFF.</li>
+  <li><b>Oscillation</b>: 4.9 &harr; 5.0 &harr; 4.9 many times &rarr; no flicker.</li>
+  <li><b>Hold time</b>: keep each value for a few seconds (or the time in the spec) before judging; check the reaction time.</li>
+  <li>How: step the signal in CANoe (panel slider or a CAPL script), record the screen and the trace.</li>
+</ul>
+
+<h3>Step 4: Extra cases a strong tester adds</h3>
+<ul>
+  <li>Signal <b>minimum and maximum</b> (e.g. &minus;40 &deg;C and 85 &deg;C).</li>
+  <li><b>Invalid / SNA</b> value and <b>timeout</b> (sensor failure) &rarr; no snowflake, dashes shown (per spec).</li>
+  <li><b>Ignition cycle</b> while the icon is ON &rarr; correct state after restart.</li>
+  <li><b>&deg;F setting</b>: 41 &deg;F = 5 &deg;C, 39.2 &deg;F = 4 &deg;C; the logic must still use the same thresholds.</li>
+  <li><b>Display rounding</b>: signal 4.96 might be displayed as "5.0" &mdash; is the icon logic based on the raw value or the rounded one?</li>
+  <li>Related: an ice warning <b>pop-up/chime</b> may also appear &mdash; test it together.</li>
+</ul>
+
+<div class="tool" id="sim">
+  <h3>Try it: snowflake simulator</h3>
+  <p class="small muted">Choose a rule, then move the temperature. Watch when the icon switches. Use the &plusmn;0.1 buttons to feel how the direction matters with hysteresis.</p>
+  <label for="rule">Rule:</label>
+  <select id="rule">
+    <option value="lt5">A: ON when temperature &lt; 5.0 &deg;C</option>
+    <option value="le5">B: ON when temperature &le; 5.0 &deg;C</option>
+    <option value="hyst" selected>C: Hysteresis &ndash; ON at &le; 4.0, OFF at &ge; 5.0, hold in between</option>
+  </select>
+  <div class="readout">
+    <div class="lamp" id="lamp" aria-label="snowflake icon">&#10052;</div>
+    <div><div class="val" id="tval">6.0 &deg;C</div><div id="tstate" class="muted">Snowflake OFF</div></div>
+  </div>
+  <input type="range" id="temp" min="2" max="7" step="0.1" value="6" aria-label="Temperature">
+  <div class="toolbar">
+    <button class="btn secondary" id="down">&minus;0.1 &deg;C</button>
+    <button class="btn secondary" id="up">+0.1 &deg;C</button>
+    <button class="btn secondary" id="reset">Reset to 6.0 &deg;C</button>
+  </div>
+  <div class="hint" id="thint">Move the temperature down slowly.</div>
+  <p class="small muted" style="margin-bottom:0">History: <span id="hist">&ndash;</span></p>
+</div>
+
+<h3>Step 5: If it fails, report it</h3>
+<p>Interviewer: "The snowflake appears at 5.0 &deg;C, but the requirement says only below 5 &deg;C. What do you do?"</p>
+<ol>
+  <li>Check the CAN trace: was the signal really 5.0 &deg;C (not 4.96 displayed as 5.0)?</li>
+  <li>Repeat 3 times: is it reproducible? Test both directions.</li>
+  <li>Check the requirement version and whether this is already reported (search Jira).</li>
+  <li>Raise the ticket:</li>
+</ol>
+<pre><code>Summary     : [Cluster] Ice warning (snowflake) shown at exactly 5.0 &deg;C; REQ-HMI-TEMP-012 requires &lt; 5.0 &deg;C
+Environment : SW 24.3.1, bench B-03, HW C-sample, variant EU, language EN, units &deg;C
+Precondition: Ignition ON, cluster started, Outside_Temp = 6.0 &deg;C for 3 s
+Steps       : 1. CANoe: set Outside_Temp = 5.0 &deg;C
+              2. Wait 3 s and observe the cluster
+Expected    : No snowflake at 5.0 &deg;C (REQ-HMI-TEMP-012)
+Actual      : Snowflake shown after 0.4 s
+Repro rate  : 3/3 (also when rising from 4.0 &deg;C)
+Evidence    : video, CAN trace (.blf, 10:15:32 = raw 0x5A = 5.0 &deg;C), DLT log
+Analysis    : Correct value on the bus; cluster logic likely uses &lt;= instead of &lt;
+Impact      : False ice warning at exactly 5.0 &deg;C; all variants using this logic
+Severity    : Minor/Major per project definitions   Links: TC-TEMP-003, REQ-HMI-TEMP-012</code></pre>
+
+<h3>Follow-up questions (Q62&ndash;69) with short answers</h3>
+<details class="qa"><summary><span class="qn">Q62</span>Why is BVA useful in automotive testing?</summary><div class="ans"><p>Cars are full of thresholds: speed chimes, low fuel, tyre pressure, temperature warnings, battery levels. Off-by-one mistakes (&lt; vs &le;) at these thresholds are very common, and some are safety-relevant. BVA finds them with very few test cases.</p></div></details>
+<details class="qa"><summary><span class="qn">Q63</span>What is the difference between BVA and equivalence partitioning?</summary><div class="ans"><p>EP divides the inputs into groups that behave the same and tests one representative value per group, for example "cold" and "warm". BVA tests the edges between those groups: the boundary value and its neighbours. They are used together: EP finds the groups, BVA tests their edges.</p></div></details>
+<details class="qa"><summary><span class="qn">Q64</span>How many test cases for one boundary?</summary><div class="ans"><p>Two with 2-value BVA (the boundary and the nearest value on the other side), three with 3-value BVA (the boundary and both neighbours). For safety-related thresholds I use 3-value.</p></div></details>
+<details class="qa"><summary><span class="qn">Q65</span>"Below 5 &deg;C" vs "5 &deg;C and below"?</summary><div class="ans"><p>Only the value 5.0 changes. "Below 5" means 5.0 is OFF; "5 and below" means 5.0 is ON. That's why testing exactly 5.0 is essential, and why I clarify the wording before testing.</p></div></details>
+<details class="qa"><summary><span class="qn">Q66</span>How would you test the transition 4 &rarr; 5 &rarr; 6 &deg;C?</summary><div class="ans"><p>Start clearly cold so the icon is ON, then increase the signal in 0.1 steps through 4.0, 4.1 &hellip; 4.9, 5.0, 5.1, holding each value for a few seconds. I note exactly when the icon switches off, check the reaction time, and record screen and trace.</p></div></details>
+<details class="qa"><summary><span class="qn">Q67</span>And the reverse 6 &rarr; 5 &rarr; 4 &deg;C?</summary><div class="ans"><p>Same, but falling from warm with the icon OFF: 5.1, 5.0, 4.9 &hellip; 4.0, 3.9. With hysteresis the switch point is different from the rising direction, so both directions need their own test cases.</p></div></details>
+<details class="qa"><summary><span class="qn">Q68</span>The snowflake appears at 5.0 &deg;C but should only appear below 5 &deg;C. What do you do?</summary><div class="ans"><p>First I confirm it's real: check the trace that the signal was exactly 5.0, repeat it, and check the requirement version. Then I search Jira for a duplicate. If it's new, I raise a defect with steps, expected vs actual, trace, log and video, and link it to the requirement and test case.</p></div></details>
+<details class="qa"><summary><span class="qn">Q69</span>How would you report it?</summary><div class="ans"><p>With a precise summary like "[Cluster] Snowflake shown at exactly 5.0 &deg;C; REQ requires &lt; 5.0 &deg;C", environment (build, bench, variant), numbered steps with the exact signal values, expected and actual result, reproducibility, evidence (video, trace with timestamp, log), my analysis, impact, severity and links. See the example above.</p></div></details>
+
+<h2>Decision tables</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>When the result depends on a <b>combination</b> of conditions, write all combinations in a table. Each column (rule) becomes a test case. You'll never miss a combination.</p>
+</div>
+<div class="callout example"><span class="label">Example: seatbelt chime</span>
+<p>Requirement: "The chime plays when the seat is occupied AND the belt is not fastened AND speed &gt; 20 km/h."</p>
+<div class="table-wrap"><table>
+<tr><th>Condition / Rule</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>R6</th><th>R7</th><th>R8</th></tr>
+<tr><td>Seat occupied</td><td>Y</td><td>Y</td><td>Y</td><td>Y</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td>Belt unfastened</td><td>Y</td><td>Y</td><td>N</td><td>N</td><td>Y</td><td>Y</td><td>N</td><td>N</td></tr>
+<tr><td>Speed &gt; 20 km/h</td><td>Y</td><td>N</td><td>Y</td><td>N</td><td>Y</td><td>N</td><td>Y</td><td>N</td></tr>
+<tr><td><b>Chime?</b></td><td><b>Yes</b></td><td>No</td><td>No</td><td>No</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+</table></div>
+<p>3 conditions &rarr; 2&sup3; = 8 rules. Then add BVA on the speed (20 and 21 km/h) inside rule R1/R2.</p>
+</div>
+
+<h2>State transition testing</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Many features have <b>states</b> (like "idle", "ringing", "in call") and <b>events</b> that move between them ("incoming call", "accept"). Draw the states and arrows, then test every valid arrow and some invalid ones.</p>
+</div>
+<figure class="diagram">
+<svg viewBox="0 0 760 250" role="img" aria-label="Phone call states: Idle, Ringing, Active, On hold">
+  <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-2)"/></marker></defs>
+  <text class="t" x="20" y="26" font-size="15" font-weight="700">Phone call states and the events that move between them</text>
+  <rect class="box" x="30" y="100" width="130" height="50" rx="25"/><text class="t" x="95" y="130" text-anchor="middle" font-weight="700" font-size="13">Idle</text>
+  <rect class="box" x="230" y="100" width="130" height="50" rx="25"/><text class="t" x="295" y="130" text-anchor="middle" font-weight="700" font-size="13">Ringing</text>
+  <rect class="box-accent" x="430" y="100" width="130" height="50" rx="25"/><text class="t" x="495" y="130" text-anchor="middle" font-weight="700" font-size="13">Active call</text>
+  <rect class="box" x="620" y="100" width="120" height="50" rx="25"/><text class="t" x="680" y="130" text-anchor="middle" font-weight="700" font-size="13">On hold</text>
+  <path class="line" d="M160 118H228" marker-end="url(#arr3)"/><text class="t2" x="194" y="110" text-anchor="middle" font-size="11">incoming</text>
+  <path class="line" d="M360 118H428" marker-end="url(#arr3)"/><text class="t2" x="394" y="110" text-anchor="middle" font-size="11">accept</text>
+  <path class="line" d="M560 118H618" marker-end="url(#arr3)"/><text class="t2" x="589" y="110" text-anchor="middle" font-size="11">hold</text>
+  <path class="line" d="M618 138H562" marker-end="url(#arr3)"/><text class="t2" x="589" y="156" text-anchor="middle" font-size="11">resume</text>
+  <path class="line" d="M295 150V200H95V152" marker-end="url(#arr3)"/><text class="t2" x="195" y="194" text-anchor="middle" font-size="11">reject / caller hangs up</text>
+  <path class="line" d="M495 150V224H80V152" marker-end="url(#arr3)"/><text class="t2" x="300" y="240" text-anchor="middle" font-size="11">end call</text>
+  <path class="line" d="M95 100V70H495V98" marker-end="url(#arr3)"/><text class="t2" x="295" y="64" text-anchor="middle" font-size="11">dial out (answered)</text>
+</svg>
+<figcaption>Test every arrow (valid transitions) plus invalid events, e.g. "hold" while Idle must do nothing.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<tr><th>Test</th><th>Start state</th><th>Event</th><th>Expected end state</th></tr>
+<tr><td>T1</td><td>Idle</td><td>Incoming call</td><td>Ringing (ringtone, caller name shown)</td></tr>
+<tr><td>T2</td><td>Ringing</td><td>Accept (touch / steering wheel)</td><td>Active call, timer starts at 00:00</td></tr>
+<tr><td>T3</td><td>Ringing</td><td>Reject</td><td>Idle, missed call listed</td></tr>
+<tr><td>T4</td><td>Active</td><td>Hold</td><td>On hold, "on hold" shown</td></tr>
+<tr><td>T5</td><td>On hold</td><td>Resume</td><td>Active</td></tr>
+<tr><td>T6</td><td>Active</td><td>End</td><td>Idle, audio returns to music</td></tr>
+<tr><td>T7 (invalid)</td><td>Idle</td><td>Press "hold"</td><td>Nothing happens, no crash</td></tr>
+<tr><td>T8 (interruption)</td><td>Active</td><td>Reverse gear</td><td>Camera shown, call continues</td></tr>
+</table></div>
+
+<h2>Experience-based techniques</h2>
+<h3>Error guessing: 25 things that often break in IVI</h3>
+<div class="grid">
+  <div class="card"><h4>Interruptions</h4><p>Call during navigation voice &middot; reverse gear during a call &middot; USB pulled while playing &middot; ignition off during an update &middot; pop-up during camera view</p></div>
+  <div class="card"><h4>Data extremes</h4><p>Empty lists &middot; 10,000 songs &middot; very long titles &middot; special characters &auml;&ouml;&uuml;&szlig; &middot; emoji in contact names &middot; right-to-left text</p></div>
+  <div class="card"><h4>Timing</h4><p>Pressing buttons very fast &middot; double tap &middot; action during boot &middot; action during screen transition &middot; slow phone</p></div>
+  <div class="card"><h4>States</h4><p>Sleep/wake &middot; ignition cycles &middot; low voltage &middot; language change mid-action &middot; switching units</p></div>
+  <div class="card"><h4>Connections</h4><p>Phone out of range and back &middot; two phones &middot; CarPlay + Bluetooth together &middot; network lost</p></div>
+</div>
+<h3>Exploratory testing</h3>
+<p>Testing freely, but with a goal written as a <b>charter</b>, in a time box (e.g. 45 min), taking notes. Example charter: "Explore the media player with a 10,000-song USB stick to find performance and display problems." At the end, report what you tested, what you found, and ideas for new test cases.</p>
+<h3>Checklist-based testing</h3>
+<p>Use a list of things to check (like the <a href="hmi.html">UI checklist</a> or the 8-point scan in the <a href="eye-tests.html">eye tests</a>).</p>
+
+<h2>Practice exercises (try, then open the answer)</h2>
+<details class="qa"><summary><span class="qn">Ex 1</span>Low fuel warning: ON when fuel &le; 10% (resolution 1%). Which values? (3-value BVA)</summary><div class="ans"><p><b>9% &rarr; ON, 10% &rarr; ON, 11% &rarr; OFF.</b> Plus EP values like 50% (OFF) and 0% (ON), and the invalid/SNA case. Also check both directions if there is hysteresis (refuelling vs using fuel).</p></div></details>
+<details class="qa"><summary><span class="qn">Ex 2</span>Overspeed chime when speed &gt; 120 km/h (resolution 1 km/h).</summary><div class="ans"><p><b>119 &rarr; no chime, 120 &rarr; no chime, 121 &rarr; chime.</b> "Greater than 120" means 120 itself does not trigger. Also: does the chime stop when going back to 120? Test in km/h and in mph setting.</p></div></details>
+<details class="qa"><summary><span class="qn">Ex 3</span>Tyre pressure warning when pressure &lt; 180 kPa (signal resolution 5 kPa).</summary><div class="ans"><p>The step is 5 kPa, so: <b>175 &rarr; warning, 180 &rarr; no warning, 185 &rarr; no warning.</b> You cannot send 179 because the signal can't represent it. Also test each wheel separately and the sensor-fault case.</p></div></details>
+<details class="qa"><summary><span class="qn">Ex 4</span>Climate temperature 16.0&ndash;28.0 &deg;C in 0.5 steps, "LO" below 16 and "HI" above 28. Which values?</summary><div class="ans"><p>Lower edge: <b>LO, 16.0, 16.5</b>. Upper edge: <b>27.5, 28.0, HI</b>. Plus a middle value (22.0), pressing "down" at LO (stays LO), pressing "up" at HI (stays HI), and the &deg;F display of each.</p></div></details>
+<details class="qa"><summary><span class="qn">Ex 5</span>Rear camera shows when gear = R AND speed &lt; 15 km/h. Make a decision table.</summary><div class="ans"><div class="table-wrap"><table><tr><th></th><th>R1</th><th>R2</th><th>R3</th><th>R4</th></tr><tr><td>Gear = R</td><td>Y</td><td>Y</td><td>N</td><td>N</td></tr><tr><td>Speed &lt; 15</td><td>Y</td><td>N</td><td>Y</td><td>N</td></tr><tr><td>Camera</td><td><b>Shown</b></td><td>Not shown</td><td>Not shown</td><td>Not shown</td></tr></table></div><p>Then BVA on speed: 14, 15, 16 km/h in reverse.</p></div></details>
+<details class="qa"><summary><span class="qn">Ex 6</span>Media player states: Stopped, Playing, Paused. List valid transitions to test.</summary><div class="ans"><p>Stopped &rarr; Playing (play) &middot; Playing &rarr; Paused (pause) &middot; Paused &rarr; Playing (play) &middot; Playing &rarr; Stopped (source removed / stop) &middot; Paused &rarr; Stopped (source removed). Invalid: "pause" while Stopped does nothing. Interruptions: incoming call while Playing &rarr; paused/ducked, then resumes after the call.</p></div></details>
+<details class="qa"><summary><span class="qn">Ex 7</span>Write 5 test cases for: "An ice-warning pop-up appears once when the temperature first goes below 4 &deg;C after ignition on."</summary><div class="ans"><ol><li>Ignition on at 6 &deg;C, lower to 3.9 &deg;C &rarr; pop-up appears once.</li><li>Lower to exactly 4.0 &deg;C &rarr; no pop-up ("below 4").</li><li>After the pop-up, go 5 &rarr; 3.9 &deg;C again (same ignition cycle) &rarr; no second pop-up ("once").</li><li>Ignition cycle, then go below 4 again &rarr; pop-up appears again.</li><li>Ignition on while already at 2 &deg;C &rarr; clarify with requirement: pop-up at start-up or not? (a good question to ask!)</li></ol></div></details>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var on = false, hist = [];
+  var boundaries = { '3.9': 1, '4.0': 1, '4.1': 1, '4.9': 1, '5.0': 1, '5.1': 1 };
+  function evalRule(t, prev) {
+    var r = $('rule').value, e = 1e-9;
+    if (r === 'lt5') return t < 5 - e;
+    if (r === 'le5') return t <= 5 + e;
+    if (t <= 4 + e) return true;
+    if (t >= 5 - e) return false;
+    return prev;
+  }
+  function update(fromUser) {
+    var t = Math.round(parseFloat($('temp').value) * 10) / 10;
+    var was = on;
+    on = evalRule(t, on);
+    $('tval').textContent = t.toFixed(1) + ' °C';
+    $('tstate').textContent = 'Snowflake ' + (on ? 'ON' : 'OFF');
+    $('lamp').classList.toggle('on', on);
+    var key = t.toFixed(1), msg = '';
+    if (boundaries[key]) msg = t.toFixed(1) + ' °C is a boundary test value. ';
+    var r = $('rule').value;
+    if (r === 'hyst' && t > 4 && t < 5) msg += 'You are in the hold zone: the icon keeps its previous state (' + (on ? 'ON' : 'OFF') + '). Try reaching this value from the other direction!';
+    else if (r === 'lt5') msg += 'Rule A: exactly 5.0 is OFF because 5.0 is not below 5.';
+    else if (r === 'le5') msg += 'Rule B: exactly 5.0 is ON because 5.0 is "5 or below".';
+    else msg += 'Rule C: at 4.0 or below it switches ON; at 5.0 or above it switches OFF.';
+    $('thint').textContent = msg;
+    if (fromUser && was !== on) {
+      hist.push(t.toFixed(1) + '°C → ' + (on ? 'ON' : 'OFF'));
+      if (hist.length > 8) hist.shift();
+      $('hist').textContent = hist.join('   ·   ');
+    }
+  }
+  function step(d) { var v = Math.round((parseFloat($('temp').value) + d) * 10) / 10; v = Math.min(7, Math.max(2, v)); $('temp').value = v; update(true); }
+  $('temp').addEventListener('input', function () { update(true); });
+  $('down').addEventListener('click', function () { step(-0.1); });
+  $('up').addEventListener('click', function () { step(0.1); });
+  $('reset').addEventListener('click', function () { $('temp').value = 6; on = false; hist = []; $('hist').textContent = '–'; update(false); });
+  $('rule').addEventListener('change', function () { $('temp').value = 6; on = false; hist = []; $('hist').textContent = '–'; update(false); });
+  update(false);
+})();
+</script>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

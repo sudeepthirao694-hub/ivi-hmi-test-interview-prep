@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testing basics (ISTQB) · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="testing-basics.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 4 &middot; Foundations</div>
+<h1>Testing basics (the ISTQB part)</h1>
+<p class="lead">The theory every tester is expected to know. ISTQB is the international testing certificate; the interviewer asked about it first. Everything here is explained with car examples.</p>
+<div class="meta-row"><span class="pill easy">Beginner</span><span class="pill">Reading time: 50 min</span><span class="pill hot">Often asked: ISTQB, STLC, test types, V-model</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>What testing is, and why we do it</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Testing means <b>checking whether software does what it should, and finding problems before customers do</b>. It also gives the team information to decide: "Is this software good enough to release?"</p>
+</div>
+<ul>
+  <li>Testing finds <b>defects</b> so they can be fixed.</li>
+  <li>Testing builds <b>confidence</b> in the quality.</li>
+  <li>Testing gives <b>information</b> for decisions (release or not).</li>
+  <li>Testing <b>prevents</b> defects when done early (reviewing requirements before code exists).</li>
+  <li>In cars, testing also helps meet <b>legal and safety standards</b> (ISO 26262, UN regulations).</li>
+</ul>
+
+<h2>Error, defect, failure, root cause</h2>
+<p>ISTQB uses these four words very precisely. This is a favourite basic question.</p>
+<ol class="steps">
+  <li><strong>Error (mistake)</strong>A <b>human</b> does something wrong. The developer writes "&le; 5" instead of "&lt; 5".</li>
+  <li><strong>Defect (bug, fault)</strong>The mistake stays in the <b>code</b> (or in a document).</li>
+  <li><strong>Failure</strong>When the code runs, you <b>see</b> the wrong behaviour: the snowflake appears at exactly 5.0 &deg;C.</li>
+  <li><strong>Root cause</strong>The deeper reason the error happened: the requirement was ambiguous, or the developer misread it.</li>
+</ol>
+<div class="callout say"><span class="label">Say this</span><p class="say-quote">"A person makes an error, which puts a defect in the code; when that code runs, we observe a failure. Testers observe failures and report them; developers find and fix the defect; and root cause analysis tries to stop the same error happening again."</p></div>
+
+<h2>The 7 testing principles (with car examples)</h2>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Principle</th><th>Simple meaning</th><th>Car example</th></tr>
+<tr><td>1</td><td>Testing shows the presence of defects, not their absence</td><td>Tests can prove bugs exist; they can never prove there are none</td><td>1,000 passed tests don't mean the head unit has zero bugs</td></tr>
+<tr><td>2</td><td>Exhaustive testing is impossible</td><td>You can't test every combination, so you choose smartly</td><td>Every temperature &times; every language &times; every phone = impossible. Use BVA and risk</td></tr>
+<tr><td>3</td><td>Early testing saves time and money</td><td>A bug found in the requirement is cheap; found after SOP it is very expensive</td><td>Asking "is 5.0 &deg;C included?" during review costs 5 minutes</td></tr>
+<tr><td>4</td><td>Defects cluster together</td><td>Most bugs are in a few areas</td><td>If Bluetooth had 40 bugs last release, test it harder in regression</td></tr>
+<tr><td>5</td><td>Tests wear out (pesticide paradox)</td><td>Running the same tests again finds no new bugs; update them</td><td>Add new test data and new scenarios to the regression suite</td></tr>
+<tr><td>6</td><td>Testing is context dependent</td><td>Test differently for different products and risks</td><td>A brake warning is tested far more strictly than a wallpaper setting</td></tr>
+<tr><td>7</td><td>Absence-of-defects fallacy</td><td>Bug-free but useless software is still a failure</td><td>A perfectly working menu that drivers can't find or use while driving</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this: "How did ISTQB help you concretely?"</span>
+<p class="say-quote">"It gave me structure and a common language. For example, I use boundary value analysis to pick a few strong test values instead of many random ones, I use risk and 'defects cluster together' to decide what goes into regression, and when I talk about 'confirmation testing' or 'severity' with colleagues in other countries, we mean exactly the same thing."</p></div>
+
+<h2>Verification vs validation</h2>
+<div class="table-wrap"><table>
+<tr><th></th><th>Verification</th><th>Validation</th></tr>
+<tr><td>Question</td><td>"Did we build the product <b>right</b>?"</td><td>"Did we build the <b>right</b> product?"</td></tr>
+<tr><td>Checks against</td><td>The specification / requirements</td><td>The real user need</td></tr>
+<tr><td>Example</td><td>Snowflake appears below 5 &deg;C exactly as the requirement says</td><td>Drivers actually notice the snowflake and understand it warns of ice</td></tr>
+</table></div>
+
+<h2>How software is developed: V-model and Agile</h2>
+<h3>The V-model (very common in automotive)</h3>
+<figure class="diagram">
+<svg viewBox="0 0 760 350" role="img" aria-label="V-model: each design step is verified by a matching test level">
+  <text class="t" x="20" y="26" font-size="15" font-weight="700">Each design step on the left is checked by a test level on the right</text>
+  <g font-size="12.5">
+  <rect class="box" x="20" y="50" width="170" height="40" rx="8"/><text class="t" x="105" y="75" text-anchor="middle">Customer requirements</text>
+  <rect class="box" x="80" y="110" width="170" height="40" rx="8"/><text class="t" x="165" y="135" text-anchor="middle">System requirements</text>
+  <rect class="box" x="140" y="170" width="170" height="40" rx="8"/><text class="t" x="225" y="195" text-anchor="middle">Architecture design</text>
+  <rect class="box" x="200" y="230" width="170" height="40" rx="8"/><text class="t" x="285" y="255" text-anchor="middle">Detailed design</text>
+  <rect class="box" x="295" y="290" width="170" height="40" rx="8"/><text class="t" x="380" y="315" text-anchor="middle" font-weight="700">Coding</text>
+  <rect class="box" x="390" y="230" width="170" height="40" rx="8"/><text class="t" x="475" y="255" text-anchor="middle">Unit / component test</text>
+  <rect class="box" x="450" y="170" width="170" height="40" rx="8"/><text class="t" x="535" y="195" text-anchor="middle">Integration test</text>
+  <rect class="box-accent" x="510" y="110" width="170" height="40" rx="8"/><text class="t" x="595" y="135" text-anchor="middle" font-weight="700">System test (you!)</text>
+  <rect class="box" x="570" y="50" width="170" height="40" rx="8"/><text class="t" x="655" y="75" text-anchor="middle">Acceptance test</text>
+  </g>
+  <g class="line" stroke-dasharray="5 5"><path d="M190 70H570"/><path d="M250 130H510"/><path d="M310 190H450"/><path d="M370 250H390"/></g>
+  <text class="t2" x="380" y="64" text-anchor="middle" font-size="11.5">checked by</text>
+</svg>
+<figcaption>Left side = building (design). Right side = testing. Your HMI testing against system requirements is mostly "system test".</figcaption>
+</figure>
+<p>Automotive projects also follow <b>ASPICE</b> (Automotive SPICE), a process standard based on this V shape. In simple words, ASPICE demands: every requirement has tests, every test traces back to a requirement, results are recorded, and work products are reviewed.</p>
+
+<h3>Agile and Scrum</h3>
+<p>Many teams now combine the V-model with <b>Agile</b>: small pieces delivered often. The most common Agile method is <b>Scrum</b>:</p>
+<div class="table-wrap"><table>
+<tr><th>Scrum word</th><th>Meaning</th></tr>
+<tr><td>Sprint</td><td>A fixed work cycle, usually 2 weeks</td></tr>
+<tr><td>Product backlog</td><td>The ordered list of all work still to do</td></tr>
+<tr><td>Sprint planning</td><td>Meeting at the start: what will we do this sprint?</td></tr>
+<tr><td>Daily stand-up</td><td>15 minutes each day: yesterday, today, blockers</td></tr>
+<tr><td>Sprint review</td><td>Show what was built at the end of the sprint</td></tr>
+<tr><td>Retrospective</td><td>Discuss how to work better next sprint</td></tr>
+<tr><td>User story</td><td>A small feature: "As a driver, I want &hellip; so that &hellip;", with acceptance criteria</td></tr>
+<tr><td>Definition of Done</td><td>Checklist a story must meet to count as finished (e.g. tested, no open critical bugs)</td></tr>
+</table></div>
+
+<h2>Test levels: who tests what, when</h2>
+<div class="table-wrap"><table>
+<tr><th>Level</th><th>What is tested</th><th>Usually by</th><th>Car example</th></tr>
+<tr><td>Component (unit) testing</td><td>One small piece of code alone</td><td>Developers</td><td>The function that compares temperature with 5 &deg;C</td></tr>
+<tr><td>Component integration testing</td><td>Pieces of code working together</td><td>Developers / integrators</td><td>Temperature module + icon module</td></tr>
+<tr><td>System testing</td><td>The whole system against its requirements</td><td><b>Testers (you)</b></td><td>The complete cluster on a HIL bench</td></tr>
+<tr><td>System integration testing</td><td>The system together with other systems</td><td>Integration testers</td><td>Head unit + cluster + phone + other ECUs</td></tr>
+<tr><td>Acceptance testing</td><td>Is it acceptable for the customer / user?</td><td>Customer, proxy team</td><td>The OEM's acceptance tests before delivery</td></tr>
+</table></div>
+
+<h2>Test types: what kind of testing</h2>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Meaning in one line</th><th>Example</th></tr>
+<tr><td>Functional</td><td>What the system does</td><td>Pressing "next" plays the next song</td></tr>
+<tr><td>Non-functional</td><td>How well it does it (speed, stability, usability, security)</td><td>Boot time &lt; 10 s; no crash in 24 h</td></tr>
+<tr><td>Black-box</td><td>Test from outside, based on requirements, without looking at code</td><td>All your HMI tests</td></tr>
+<tr><td>White-box</td><td>Test based on the code structure</td><td>Developer checks every "if" branch is executed</td></tr>
+<tr><td>Confirmation (retest)</td><td>Check a fixed bug is really fixed</td><td>Rerun TC-03 on the fix build</td></tr>
+<tr><td>Regression</td><td>Check changes didn't break anything else</td><td>Rerun temperature tests after the fix</td></tr>
+<tr><td>Smoke</td><td>Quick check that a new build is testable at all</td><td>Boots, main screens open, no crash</td></tr>
+<tr><td>Sanity</td><td>Quick narrow check of a specific change</td><td>Just the fixed Bluetooth reconnect</td></tr>
+<tr><td>Exploratory</td><td>Learn and test at the same time, guided by experience</td><td>30 min session "break the media player"</td></tr>
+<tr><td>Ad-hoc</td><td>Informal testing without planning</td><td>Random clicking to see what happens</td></tr>
+<tr><td>Positive / negative</td><td>Valid inputs / invalid inputs and error conditions</td><td>Correct PIN / wrong PIN</td></tr>
+<tr><td>End-to-end</td><td>A full user journey across systems</td><td>Get in car &rarr; phone connects &rarr; navigate home with music</td></tr>
+<tr><td>Performance</td><td>Speed and timing</td><td>Camera within 2 s</td></tr>
+<tr><td>Endurance / soak</td><td>Long run to find slow problems</td><td>24 h music playback, memory leak</td></tr>
+<tr><td>Usability</td><td>Easy to understand and use</td><td>Driver finds the setting within 3 taps</td></tr>
+<tr><td>Localisation</td><td>Correct for each language and country</td><td>German texts fit, date formats</td></tr>
+<tr><td>Compatibility</td><td>Works with different external devices</td><td>20 phone models for Bluetooth</td></tr>
+</table></div>
+<div class="callout warn"><span class="label">Smoke vs sanity (commonly confused)</span>
+<p><b>Smoke</b>: wide and shallow &mdash; "is the whole new build basically alive?" Done on every new build before other testing. <b>Sanity</b>: narrow and focused &mdash; "does this particular fix or change work?"</p>
+</div>
+
+<h2>Static vs dynamic testing, and reviews</h2>
+<ul>
+  <li><b>Dynamic testing</b>: running the software and checking the behaviour (most of your work).</li>
+  <li><b>Static testing</b>: checking without running anything &mdash; reviewing requirements, designs, test cases, code. Finds problems earliest and cheapest.</li>
+</ul>
+<p>Review types, from informal to formal: <b>informal review</b> (a colleague has a look) &rarr; <b>walkthrough</b> (the author explains it to others) &rarr; <b>technical review</b> (experts discuss and decide) &rarr; <b>inspection</b> (formal, with roles, checklists and metrics).</p>
+<div class="callout example"><span class="label">Real example: reviewing a requirement</span>
+<p>Requirement: "The snowflake shall appear below 5 &deg;C and disappear above 4 &deg;C." Review findings: (1) contradiction between 4 and 5 &deg;C; (2) no reaction time given; (3) no behaviour defined for a sensor failure; (4) &deg;F not mentioned. You raise these as review comments or questions <b>before</b> testing. This is static testing.</p>
+</div>
+
+<h2>The test life cycle (STLC), step by step</h2>
+<p>This is the answer to "What is your process from requirement to delivery?" Learn the order.</p>
+<div class="table-wrap"><table>
+<tr><th>Phase</th><th>What you do</th><th>Input</th><th>Output</th></tr>
+<tr><td>1. Requirement analysis</td><td>Read and review requirements; ask questions; check testability in your environment</td><td>Requirements, specs</td><td>Questions list, testability notes</td></tr>
+<tr><td>2. Test planning</td><td>Decide scope, approach, resources, benches, schedule, risks, entry/exit criteria</td><td>Requirements, project plan</td><td>Test plan</td></tr>
+<tr><td>3. Test analysis &amp; design</td><td>Decide what to test (test conditions) and design test cases using techniques; link to requirements</td><td>Requirements, test plan</td><td>Test cases, traceability, test data</td></tr>
+<tr><td>4. Test implementation / environment setup</td><td>Prepare bench, flash build, simulation config, test data, automation; smoke test</td><td>Build, test cases</td><td>Ready environment, test suites</td></tr>
+<tr><td>5. Test execution</td><td>Run tests, record results, raise defects, retest, regression</td><td>Everything above</td><td>Results, defect tickets, logs</td></tr>
+<tr><td>6. Test monitoring &amp; reporting</td><td>Track progress and report status regularly</td><td>Results</td><td>Status reports</td></tr>
+<tr><td>7. Test completion (closure)</td><td>Final report, lessons learned, archive</td><td>All results</td><td>Test summary report, release recommendation</td></tr>
+</table></div>
+
+<h2>What goes into a test plan</h2>
+<ul>
+  <li><b>Scope</b>: what will be tested and what will not (e.g. "HUD not in scope").</li>
+  <li><b>Test approach / strategy</b>: manual vs automated, test levels, techniques, risk-based focus.</li>
+  <li><b>Test items</b>: which software versions and hardware samples.</li>
+  <li><b>Environment</b>: benches, tools, phones, licences.</li>
+  <li><b>Schedule and milestones</b>, <b>resources and roles</b>.</li>
+  <li><b>Entry and exit criteria</b>.</li>
+  <li><b>Risks</b> and what to do about them.</li>
+  <li><b>Deliverables</b>: test cases, results, reports.</li>
+  <li><b>Defect management</b>: tools, severity definitions, workflow.</li>
+</ul>
+
+<h2>Entry and exit criteria</h2>
+<div class="grid">
+  <div class="card"><h4>Entry criteria (when can testing start?)</h4><p>Build delivered with release notes &middot; smoke test passed &middot; bench ready and correct build flashed &middot; test cases reviewed &middot; requirements baselined.</p></div>
+  <div class="card"><h4>Exit criteria (when is testing finished?)</h4><p>All planned tests executed &middot; e.g. &ge; 95% pass &middot; no open blocker/critical defects &middot; majors have agreed workarounds &middot; 100% coverage of safety requirements &middot; test report delivered.</p></div>
+</div>
+
+<h2>Writing a good test case</h2>
+<div class="table-wrap"><table>
+<tr><th>Field</th><th>Example</th></tr>
+<tr><td>ID</td><td>TC-TEMP-003</td></tr>
+<tr><td>Title</td><td>Snowflake not shown at exactly 5.0 &deg;C (boundary)</td></tr>
+<tr><td>Requirement</td><td>REQ-HMI-TEMP-012</td></tr>
+<tr><td>Priority</td><td>High</td></tr>
+<tr><td>Preconditions</td><td>Build flashed; ignition ON; units &deg;C; language English; outside temp 6.0 &deg;C for 3 s</td></tr>
+<tr><td>Steps</td><td>1. In CANoe set Outside_Temp = 5.0 &deg;C<br>2. Wait 2 s<br>3. Observe the cluster</td></tr>
+<tr><td>Expected result</td><td>No snowflake shown; temperature shows "5.0 &deg;C"</td></tr>
+<tr><td>Actual result / status</td><td>Filled during execution: Pass / Fail + evidence</td></tr>
+</table></div>
+<div class="grid">
+  <div class="card"><h4>Bad test case</h4><p>"Check the snowflake works." &mdash; No values, no steps, no expected result. Two testers would test different things.</p></div>
+  <div class="card"><h4>Good test case</h4><p>Exact values, exact steps, one clear expected result, linked to a requirement. Anyone gets the same result.</p></div>
+</div>
+<p><b>Tips:</b> one test case = one purpose; expected result must be measurable; write for someone who has never seen the feature; include the requirement ID.</p>
+
+<h2>Traceability (RTM)</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p><b>Traceability</b> = links between requirements, test cases, results and bugs. A <b>Requirements Traceability Matrix (RTM)</b> is a table showing these links. It answers: "Is every requirement tested?" and "Which tests must I rerun if this requirement changes?"</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Requirement</th><th>Test cases</th><th>Last result (build 24.3.1)</th><th>Defects</th></tr>
+<tr><td>REQ-HMI-TEMP-012 (snowflake)</td><td>TC-01, TC-02, TC-03, TC-04, TC-05</td><td>3 pass, 2 fail</td><td>IVI-1433</td></tr>
+<tr><td>REQ-HMI-TEMP-013 (&deg;F display)</td><td>TC-06, TC-07</td><td>2 pass</td><td>&ndash;</td></tr>
+<tr><td>REQ-HMI-TEMP-014 (sensor fault)</td><td>&ndash;</td><td>not covered!</td><td>&ndash;</td></tr>
+</table></div>
+<p>The last row shows a <b>coverage gap</b>: a requirement with no test. Traceability tools (Polarion, DOORS, Jira Xray, Codebeamer) find these automatically.</p>
+
+<h2>Risk-based testing</h2>
+<p>Because you can't test everything (principle 2), you test the <b>riskiest</b> things first and most. Risk = <b>likelihood</b> that it breaks &times; <b>impact</b> if it breaks.</p>
+<div class="table-wrap"><table>
+<tr><th>Feature</th><th>Likelihood</th><th>Impact</th><th>Risk</th><th>Testing effort</th></tr>
+<tr><td>Speed display</td><td>Low</td><td>Very high (legal, safety)</td><td>High</td><td>Always, thoroughly</td></tr>
+<tr><td>Bluetooth reconnect (just rewritten)</td><td>High</td><td>High (customers notice)</td><td>High</td><td>Thoroughly</td></tr>
+<tr><td>Wallpaper selection</td><td>Low</td><td>Low</td><td>Low</td><td>Quick check</td></tr>
+</table></div>
+
+<h2>Test metrics (numbers you report)</h2>
+<ul>
+  <li><b>Execution progress</b>: executed / planned (e.g. 180 / 200 = 90%).</li>
+  <li><b>Pass rate</b>: passed / executed.</li>
+  <li><b>Defects by severity and status</b>: e.g. 0 blocker, 2 critical open.</li>
+  <li><b>Requirement coverage</b>: requirements with at least one test / all requirements.</li>
+  <li><b>Defect density</b>: defects per feature or per size of code.</li>
+  <li><b>Defect leakage</b>: bugs found later (by the customer) that testing missed.</li>
+  <li><b>Blocked tests</b> and their reasons.</li>
+</ul>
+
+<h2>About the ISTQB Foundation certificate</h2>
+<ul>
+  <li>Name: ISTQB Certified Tester Foundation Level (CTFL). Current syllabus: version 4.0 (2023).</li>
+  <li>Exam: 40 multiple-choice questions, 60 minutes, pass mark 65% (26 correct).</li>
+  <li>Topics: fundamentals, testing in the development life cycle, static testing, test techniques, test management, tools.</li>
+  <li>There is also an automotive extension: <b>ISTQB Automotive Software Tester</b> (CTFL-AuT) &mdash; nice to mention if you have or plan it.</li>
+</ul>
+<div class="callout say"><span class="label">If you don't have the certificate yet</span><p class="say-quote">"I haven't taken the exam yet, but I've studied the Foundation syllabus and I apply it: the test process, BVA and equivalence partitioning, risk-based prioritisation. I plan to take the exam by [month]."</p></div>
+
+<h2>Quick answers for the interview</h2>
+<details class="qa"><summary>What is the difference between a test plan and a test strategy?</summary><div class="ans"><p>A test strategy is the general approach for the organisation or project, like "risk-based, 60% automated, these test levels". A test plan is specific: for this project or release, what we test, how, with which people and benches, by when, and with which risks and exit criteria.</p></div></details>
+<details class="qa"><summary>What is the difference between verification and validation?</summary><div class="ans"><p>Verification checks we built the product right, against the specification. Validation checks we built the right product for the user's real need.</p></div></details>
+<details class="qa"><summary>What is the STLC?</summary><div class="ans"><p>The Software Testing Life Cycle: requirement analysis, test planning, test analysis and design, environment setup and implementation, execution with defect reporting, and test closure with the final report. Monitoring and reporting runs throughout.</p></div></details>
+<details class="qa"><summary>What is the difference between smoke and sanity testing?</summary><div class="ans"><p>Smoke testing is a quick, broad check that a new build is stable enough to test at all. Sanity testing is a quick, narrow check that one specific fix or change works.</p></div></details>
+<details class="qa"><summary>What are entry and exit criteria?</summary><div class="ans"><p>Conditions to start and finish a test activity. Entry: e.g. build with release notes delivered, smoke test passed, bench ready. Exit: e.g. all planned tests run, no open critical defects, required coverage reached, report delivered.</p></div></details>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automation execution · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="automation.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 8 &middot; Core skill</div>
+<h1>Test automation execution</h1>
+<p class="lead">The JD says: execute automated tests with customer-provided frameworks, analyse the results, and report failures. You don't need to be a programmer. This chapter teaches you exactly enough Robot Framework and Python to do this job and answer the questions.</p>
+<div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 60 min</span><span class="pill hot">Often asked: Robot Framework, Python, failure analysis</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>What test automation is</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Test automation = a program that does what a manual tester does: sets signals, presses buttons, reads the screen, and compares the result with the expected value. It writes a report at the end. It never gets tired, so it can run hundreds of tests every night.</p>
+</div>
+<p>Words you'll hear:</p>
+<ul>
+  <li><b>Framework</b>: the ready-made structure that runs tests and produces reports (like Robot Framework or pytest).</li>
+  <li><b>Test script / test case</b>: one automated test.</li>
+  <li><b>Test suite</b>: a group of automated tests (often a folder or file).</li>
+  <li><b>Library</b>: a toolbox of reusable functions, e.g. "send CAN signal", "take screenshot".</li>
+  <li><b>Keyword</b>: one step in Robot Framework, like "Set Signal".</li>
+  <li><b>Test run / execution</b>: one run of a suite, producing results.</li>
+  <li><b>CI (Continuous Integration)</b>: a server (e.g. Jenkins) that automatically runs the suites, e.g. every night or for each new build.</li>
+</ul>
+
+<h3>Frameworks you might meet in automotive HMI</h3>
+<div class="table-wrap"><table>
+<tr><th>Framework / tool</th><th>What it is</th></tr>
+<tr><td><b>Robot Framework</b></td><td>Open-source, keyword-driven, tests look like English. Very common. Python underneath.</td></tr>
+<tr><td><b>pytest</b></td><td>Python testing framework; tests are Python functions.</td></tr>
+<tr><td><b>ecu.test</b> (formerly ECU-TEST, tracetronic)</td><td>Popular in German automotive for HIL test automation with graphical test steps.</td></tr>
+<tr><td><b>CANoe test feature set</b></td><td>Tests written in CAPL or .NET inside CANoe; test reports as HTML/XML.</td></tr>
+<tr><td><b>Squish</b> (Qt)</td><td>GUI test tool often used for Qt-based HMIs.</td></tr>
+<tr><td><b>Appium / ADB</b></td><td>For Android Automotive head units.</td></tr>
+<tr><td>Image / OCR checks</td><td>Compare screenshots with reference images, read text from the screen.</td></tr>
+</table></div>
+<div class="callout say"><span class="label">Say this: "Which frameworks have you used?"</span>
+<p class="say-quote">"[Name what you really used, e.g. Robot Framework with Python libraries, and Jenkins for scheduled runs.] In my role I mainly executed the existing suites, analysed the failures and reported them. I can read and adapt test cases and small Python scripts, and I learn new frameworks quickly because the idea is always the same: run, collect results, analyse failures."</p>
+</div>
+
+<h2>Your role: execute, watch, analyse, report</h2>
+<ol class="steps">
+  <li><strong>Prepare</strong>Correct build flashed, bench healthy, correct configuration/variables (bench ID, variant), phones/USB connected.</li>
+  <li><strong>Start the run</strong>From the command line, the test tool or Jenkins. Choose the right suite or tags.</li>
+  <li><strong>Watch the first minutes</strong>Make sure it really runs (bench responding, no immediate mass failures).</li>
+  <li><strong>Collect results</strong>Reports, logs, traces, screenshots, crash dumps.</li>
+  <li><strong>Analyse every failure</strong>Classify: product bug, script problem, environment problem, flaky, known issue.</li>
+  <li><strong>Report</strong>Tickets for product bugs; messages to the automation team for script problems; an execution report for the proxy team.</li>
+</ol>
+
+<h2>Robot Framework from zero</h2>
+<h3>What a test file looks like</h3>
+<p>Robot tests live in <code>.robot</code> files. The file has sections that start with <code>***</code>. Columns are separated by <b>two or more spaces</b>.</p>
+<pre><code>*** Settings ***
+Documentation     Cluster temperature tests (REQ-HMI-TEMP-012)
+Library           CanSimLibrary          # our keywords to send CAN signals
+Library           ClusterScreenLibrary   # our keywords to check the screen
+Suite Setup       Power On Bench         # runs once before all tests
+Test Teardown     Collect Logs On Failure    # runs after each test
+Test Tags         cluster    temperature
+
+*** Variables ***
+${BENCH}          B-03
+${WAIT}           2s
+
+*** Test Cases ***
+TC-02 Snowflake appears below 5 degrees
+    [Documentation]    3-value BVA, just below the boundary
+    [Tags]    smoke    REQ-HMI-TEMP-012
+    Set Signal    Outside_Temp    6.0
+    Sleep    ${WAIT}
+    Set Signal    Outside_Temp    4.9
+    Sleep    ${WAIT}
+    Icon Should Be Visible    snowflake
+
+TC-03 Snowflake not shown at exactly 5 degrees
+    [Tags]    boundary
+    Set Signal    Outside_Temp    5.0
+    Sleep    ${WAIT}
+    Icon Should Not Be Visible    snowflake
+
+*** Keywords ***
+Power On Bench
+    Set Power Supply Voltage    13.5
+    Switch Ignition    ON
+    Wait Until Keyword Succeeds    60s    2s    Screen Should Show    home</code></pre>
+
+<div class="table-wrap"><table>
+<tr><th>Part</th><th>Meaning</th></tr>
+<tr><td><code>*** Settings ***</code></td><td>Which libraries to load, setup/teardown, default tags, documentation</td></tr>
+<tr><td><code>*** Variables ***</code></td><td>Values used in tests. <code>${name}</code> = one value, <code>@{list}</code> = a list, <code>&amp;{dict}</code> = a dictionary</td></tr>
+<tr><td><code>*** Test Cases ***</code></td><td>The tests. The first line (no indent) is the test name; indented lines are the steps</td></tr>
+<tr><td><code>*** Keywords ***</code></td><td>Your own reusable keywords built from other keywords</td></tr>
+<tr><td>Keyword</td><td>One step: <code>Set Signal    Outside_Temp    4.9</code> = keyword + arguments</td></tr>
+<tr><td><code>[Tags]</code></td><td>Labels to select which tests to run</td></tr>
+<tr><td>Setup / Teardown</td><td>Steps before/after a test or suite (power on; collect logs; clear DTCs)</td></tr>
+<tr><td><code>Wait Until Keyword Succeeds</code></td><td>Retry a step until it passes or the timeout ends; good for "wait until screen is ready"</td></tr>
+</table></div>
+
+<h3>Where keywords come from</h3>
+<p>Keywords come from <b>libraries</b>. <code>BuiltIn</code> is always available (Log, Sleep, Should Be Equal, Should Contain&hellip;). Others: <code>OperatingSystem</code>, <code>Collections</code>, <code>String</code>, <code>Process</code>, <code>SSHLibrary</code>, <code>AppiumLibrary</code>. The customer usually has their own libraries written in Python, e.g. a method <code>def set_signal(self, name, value):</code> in Python becomes the keyword <code>Set Signal</code>.</p>
+
+<h3>Running tests: the commands</h3>
+<div class="table-wrap"><table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>robot tests/</code></td><td>Run all tests in the folder</td></tr>
+<tr><td><code>robot --include smoke tests/</code></td><td>Only tests tagged "smoke"</td></tr>
+<tr><td><code>robot --exclude wip tests/</code></td><td>Skip tests tagged "wip" (work in progress)</td></tr>
+<tr><td><code>robot --test "TC-03*" tests/</code></td><td>Run tests by name (wildcards allowed)</td></tr>
+<tr><td><code>robot --variable BENCH:B-05 tests/</code></td><td>Override a variable (e.g. another bench)</td></tr>
+<tr><td><code>robot --outputdir results/24.3.1 tests/</code></td><td>Save results in a chosen folder (e.g. per build)</td></tr>
+<tr><td><code>robot --loglevel DEBUG tests/</code></td><td>More detail in the log</td></tr>
+<tr><td><code>robot --rerunfailed results/output.xml --output rerun.xml tests/</code></td><td>Run only the tests that failed last time</td></tr>
+<tr><td><code>rebot --merge output.xml rerun.xml</code></td><td>Combine the original run and the re-run into one report</td></tr>
+</table></div>
+<p>The <b>exit code</b> of <code>robot</code> is the number of failed tests (0 = all passed). Jenkins uses this to mark a job red or green.</p>
+
+<h3>The three result files</h3>
+<div class="grid">
+  <div class="card"><h4>report.html</h4><p>The summary: total/pass/fail/skip, per suite and per tag, green or red. Share this with the proxy team.</p></div>
+  <div class="card"><h4>log.html</h4><p>Every test, every keyword step, messages, timestamps, screenshots. The failed step is red. <b>You analyse failures here.</b></p></div>
+  <div class="card"><h4>output.xml</h4><p>Raw data. Used by tools (rebot, Jenkins, test management import into Xray).</p></div>
+</div>
+
+<h3>How to read log.html</h3>
+<ol>
+  <li>Open the failed test (red).</li>
+  <li>Expand keywords until you find the <b>red keyword</b>: the step that failed.</li>
+  <li>Read the <b>failure message</b>, e.g. <code>Icon 'snowflake' is visible but should not be</code>.</li>
+  <li>Look at the <b>screenshot</b> and the <b>timestamp</b> (e.g. 20260930 10:15:32.124).</li>
+  <li>Check the steps before it: were the preconditions right (e.g. did "Set Signal" succeed)?</li>
+  <li>Use the timestamp to open the CAN trace and the ECU log at the same moment.</li>
+</ol>
+
+<h3>Statuses</h3>
+<p><b>PASS</b>, <b>FAIL</b>, <b>SKIP</b> (test skipped on purpose, e.g. feature not in this variant). A failure in <b>setup</b> fails all tests in it &mdash; often a sign of an environment problem, not many product bugs.</p>
+
+<h2>Analysing failures (triage)</h2>
+<figure class="diagram">
+<svg viewBox="0 0 760 430" role="img" aria-label="Automation failure triage flow">
+  <defs><marker id="arrT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-2)"/></marker></defs>
+  <text class="t" x="20" y="28" font-size="15" font-weight="700">Every failure ends in exactly one of four boxes</text>
+  <g font-size="12.5">
+  <rect class="box" x="170" y="44" width="420" height="36" rx="8"/><text class="t" x="380" y="67" text-anchor="middle" font-weight="700">A test failed in the automated run</text>
+  <rect class="box" x="170" y="98" width="420" height="36" rx="8"/><text class="t" x="380" y="121" text-anchor="middle">1. Read log.html: which step, which message, screenshot</text>
+  <rect class="box" x="170" y="152" width="420" height="36" rx="8"/><text class="t" x="380" y="175" text-anchor="middle">2. Reproduce by hand on the same bench and build</text>
+  <rect class="box" x="400" y="244" width="340" height="40" rx="8"/><text class="t" x="570" y="269" text-anchor="middle">3. Check bench, cables, build, and the script</text>
+  </g>
+  <g class="line"><path d="M380 80V96" marker-end="url(#arrT)"/><path d="M380 134V150" marker-end="url(#arrT)"/><path d="M380 188V210M110 210H570M110 210V242" marker-end="url(#arrT)"/><path d="M570 210V242" marker-end="url(#arrT)"/><path d="M570 284V304M300 304H660M300 304V328" marker-end="url(#arrT)"/><path d="M480 304V328" marker-end="url(#arrT)"/><path d="M660 304V328" marker-end="url(#arrT)"/></g>
+  <text class="t2" x="118" y="232" font-size="11.5">reproduces</text><text class="t2" x="578" y="232" font-size="11.5">doesn't reproduce</text>
+  <g font-size="11.5">
+  <rect class="box-bad" x="20" y="244" width="190" height="84" rx="8"/><text class="t" x="34" y="266" font-weight="700" font-size="13">Product bug</text><text class="t" x="34" y="284">search Jira first,</text><text class="t" x="34" y="300">then new ticket or</text><text class="t" x="34" y="316">comment on existing</text>
+  <rect class="box-warn" x="215" y="330" width="170" height="80" rx="8"/><text class="t" x="228" y="352" font-weight="700" font-size="13">Environment</text><text class="t" x="228" y="370">fix the bench,</text><text class="t" x="228" y="386">re-run, note it</text>
+  <rect class="box-warn" x="395" y="330" width="170" height="80" rx="8"/><text class="t" x="408" y="352" font-weight="700" font-size="13">Script problem</text><text class="t" x="408" y="370">tell the automation</text><text class="t" x="408" y="386">team, with details</text>
+  <rect class="box-warn" x="575" y="330" width="170" height="80" rx="8"/><text class="t" x="588" y="352" font-weight="700" font-size="13">Flaky</text><text class="t" x="588" y="370">re-run 3&ndash;5 times,</text><text class="t" x="588" y="386">record the fail rate</text>
+  </g>
+</svg>
+<figcaption>Also check first: is it a known issue already in Jira? Then just link the result to that ticket.</figcaption>
+</figure>
+
+<div class="table-wrap"><table>
+<tr><th>Classification</th><th>Signs</th><th>Action</th></tr>
+<tr><td><b>Product bug</b></td><td>Reproducible by hand; screen behaviour is against the requirement; trace shows correct input</td><td>Search Jira &rarr; new ticket or comment; link the automation result</td></tr>
+<tr><td><b>Known issue</b></td><td>Matches an open ticket</td><td>Link the result to that ticket, no new ticket</td></tr>
+<tr><td><b>Environment problem</b></td><td>Setup failed; many tests failed at once; hardware errors in log; works on another bench</td><td>Fix bench (power, cable, flash, config), re-run, record as env issue</td></tr>
+<tr><td><b>Script problem</b></td><td>Screen is correct but the script checks the wrong thing: changed text/icon ID, wrong expected value, too short wait</td><td>Report to automation team with the details; don't raise a product bug</td></tr>
+<tr><td><b>Flaky test</b></td><td>Sometimes passes, sometimes fails, same build</td><td>Re-run several times, record rate; find cause (timing?); still raise a bug if the product is the cause</td></tr>
+</table></div>
+
+<h3>False positives and false negatives</h3>
+<ul>
+  <li><b>False positive</b> (false fail): the test says FAIL, but the product is fine. Example: the screenshot comparison fails because a clock in the corner changed.</li>
+  <li><b>False negative</b> (false pass): the test says PASS, but the product is broken. More dangerous! Example: the script checks only that "an icon" is visible, not which icon.</li>
+</ul>
+
+<div class="callout say"><span class="label">Say this: "How do you analyse automation failures?"</span>
+<p class="say-quote">"For each failure I open the log, find the failing step, the message and the screenshot, and note the timestamp. I check if it's a known issue. Then I reproduce it manually on the same bench and build. If it reproduces and violates the requirement, it's a product bug: I raise a ticket with the logs and traces around that timestamp. If not, I check the environment &mdash; build, cables, bench configuration &mdash; and the script itself, for example a changed text or a too-short wait. Environment issues I fix and re-run; script issues I report to the automation team. If it only fails sometimes, I re-run it several times and report the failure rate. Every failure gets a classification in the execution report."</p>
+</div>
+
+<h2>Reporting automation results</h2>
+<h3>A ticket for an automation-found bug includes</h3>
+<ul>
+  <li>Test name and ID, suite, run/job link, build, bench.</li>
+  <li>The failing step and message from log.html; screenshot.</li>
+  <li>Your manual reproduction result ("Reproduced manually 3/3") and manual steps.</li>
+  <li>Trace and log excerpts around the timestamp.</li>
+  <li>Since which build it fails (compare with previous runs).</li>
+</ul>
+<h3>Execution report example</h3>
+<pre><code>Nightly regression &ndash; build 24.3.1 &ndash; bench B-03 &ndash; 30.09.2026
+Total 412 | Passed 389 | Failed 17 | Skipped 6 | Pass rate 94.4%
+Failures:
+  4 product bugs  -&gt; new: IVI-1432, IVI-1433 | existing: IVI-1301 (x2)
+  7 environment   -&gt; USB hub power loss at 02:14; fixed; re-run: 7/7 pass
+  4 script issues -&gt; icon ID renamed in 24.3.1; reported to automation team (AUT-88)
+  2 flaky         -&gt; TC-MED-221 (3/10 fails), TC-BT-017 (1/10) under analysis
+Not run: none | Blockers: none</code></pre>
+
+<h2>Python basics for testers</h2>
+<div class="callout idea"><span class="label">Why Python</span>
+<p>Python is the most common language for test tools and libraries (Robot Framework libraries, log parsing, CAN tools). For this role you need to <b>read</b> simple Python and maybe write small helper scripts &mdash; not build software.</p>
+</div>
+<h3>The 10 basics you need to recognise</h3>
+<pre><code># 1. Variables
+speed = 50                 # a number
+unit = "km/h"              # text (a string)
+# 2. Printing
+print("Speed:", speed, unit)
+# 3. Lists
+temps = [3.9, 4.0, 4.1, 4.9, 5.0, 5.1]
+# 4. Dictionaries (key -&gt; value)
+expected = {4.9: True, 5.0: False, 5.1: False}
+# 5. if / else
+if speed &gt; 120:
+    print("Overspeed chime!")
+else:
+    print("OK")
+# 6. for loop
+for t in temps:
+    print(t)
+# 7. Functions
+def snowflake_on(temp):
+    return temp &lt; 5.0
+# 8. Using the function
+for t, exp in expected.items():
+    result = snowflake_on(t)
+    print(t, "PASS" if result == exp else "FAIL")
+# 9. Reading a file
+with open("cluster_log.txt", encoding="utf-8") as f:
+    lines = f.readlines()
+# 10. Handling errors
+try:
+    value = float("abc")
+except ValueError:
+    print("Not a number")</code></pre>
+
+<h3>Useful script 1: find errors in a log</h3>
+<pre><code>errors = 0
+with open("cluster_log.txt", encoding="utf-8", errors="replace") as f:
+    for number, line in enumerate(f, start=1):
+        if "error" in line.lower() or "exception" in line.lower():
+            errors += 1
+            print(number, line.strip())
+print("Total error lines:", errors)</code></pre>
+
+<h3>Useful script 2: send and decode CAN signals (python-can + cantools)</h3>
+<pre><code>import can, cantools
+
+db = cantools.database.load_file("car.dbc")          # the DBC dictionary
+msg = db.get_message_by_name("Ambient_Info")
+data = msg.encode({"Outside_Temp": 4.9})             # real value -&gt; raw bytes
+
+bus = can.Bus(interface="vector", channel=0, bitrate=500000)
+bus.send(can.Message(arbitration_id=msg.frame_id, data=data, is_extended_id=False))
+
+reply = bus.recv(timeout=1.0)                        # read one message
+if reply:
+    print(db.decode_message(reply.arbitration_id, reply.data))</code></pre>
+<p class="small muted">Libraries: <code>python-can</code> talks to the CAN interface; <code>cantools</code> reads DBC files and converts values. The details (interface name, channel) depend on your bench.</p>
+
+<h3>Useful script 3: a tiny pytest test</h3>
+<pre><code># file: test_snowflake.py   run with:  pytest -v
+from cluster_logic import snowflake_on
+
+def test_just_below_boundary():
+    assert snowflake_on(4.9) is True
+
+def test_on_boundary():
+    assert snowflake_on(5.0) is False</code></pre>
+
+<div class="callout say"><span class="label">Say this: "How have you used Python in testing?"</span>
+<p class="say-quote">"[Be honest.] Mainly small scripts: parsing logs for errors and timestamps, comparing expected and actual values, and helper scripts to send CAN signals with python-can. I can read the Python libraries behind our Robot keywords to understand what a failing keyword actually checks."</p>
+</div>
+
+<h2>CI and Jenkins</h2>
+<ul>
+  <li><b>Jenkins</b> is a server that runs <b>jobs</b>: e.g. "every night at 01:00: flash the latest build on bench B-03, run smoke, then regression, then publish the results".</li>
+  <li>A job has <b>stages</b> (flash &rarr; smoke &rarr; regression &rarr; report) and <b>artifacts</b> (report.html, log.html, traces).</li>
+  <li>Red job = something failed; open the <b>console output</b> first to see whether the tests ran at all (e.g. flashing failed = environment).</li>
+  <li>Your daily routine: check the nightly jobs each morning, download the logs, triage the failures, send the status.</li>
+</ul>
+
+<h2>Keeping automation trustworthy</h2>
+<ul>
+  <li>Track flaky tests and get them fixed; a suite nobody trusts is worthless.</li>
+  <li>Keep benches identical and documented.</li>
+  <li>Update scripts when the HMI changes on purpose (new text, new layout).</li>
+  <li>Review false negatives: if a bug escaped the automated test, improve the test.</li>
+</ul>
+
+<h2>Quick answers for the interview</h2>
+<details class="qa"><summary>What experience do you have with Robot Framework?</summary><div class="ans"><p>Answer honestly with your level. Model: "I've executed Robot suites, selected tests with tags, passed bench variables on the command line, and analysed log.html and report.html. I understand the file structure &mdash; settings, variables, test cases and keywords &mdash; and I can adapt existing test cases or add a simple keyword."</p></div></details>
+<details class="qa"><summary>How are test results generated in Robot Framework?</summary><div class="ans"><p>Every run creates output.xml with all raw results. From it, Robot generates log.html with every keyword step, messages, timestamps and screenshots, and report.html with the summary per suite and tag. Several runs, like a re-run of failures, can be merged with rebot. The exit code is the number of failed tests, which CI uses to mark the job.</p></div></details>
+<details class="qa"><summary>What test artifacts do you collect after execution?</summary><div class="ans"><p>The Robot reports and logs, screenshots and videos, CAN traces, ECU logs such as DLT or logcat, crash dumps if any, the software version and bench configuration. Everything is stored per build and run so failures can be compared.</p></div></details>
+<details class="qa"><summary>What is a flaky test and how do you deal with it?</summary><div class="ans"><p>A test that sometimes passes and sometimes fails without any change. I re-run it several times to measure the failure rate, check the logs for timing or environment causes, and report it to the automation team. If the product itself behaves inconsistently, that's a real bug and I raise it with the rate.</p></div></details>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final prep &amp; self-intro · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="final-prep.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 13 &middot; Practice</div>
+<h1>Final prep: self-intro, stories and interview day</h1>
+<p class="lead">Knowledge is half of the interview. The other half is <b>how you speak</b>: calm, structured, honest. This page gives you ready-made templates to fill in with your real details and practise out loud.</p>
+<div class="meta-row"><span class="pill hot">Practise out loud</span><span class="pill">~45 min</span></div>
+<div id="toc" class="toc"></div>
+
+<h2 id="intro">Your self-introduction (60&ndash;90 seconds)</h2>
+<div class="callout idea"><span class="label">The 4-part formula</span>
+<ol>
+<li><b>Who you are</b> &mdash; role, years, domain.</li>
+<li><b>What you do daily</b> &mdash; the tasks that match the job description.</li>
+<li><b>One proof</b> &mdash; a small achievement or a good bug you found.</li>
+<li><b>Why this job</b> &mdash; one sentence connecting you to automotive HMI.</li>
+</ol>
+</div>
+
+<h3>Template A &mdash; you already tested automotive / embedded</h3>
+<div class="callout say"><span class="label">Say it like this (fill the brackets)</span>
+<p class="say-quote">"Hello, I'm [name]. I'm a test engineer with [1.5] years of experience in automotive [infotainment / cluster] testing at [company], for [OEM or project type].</p>
+<p class="say-quote">Day to day, I analyse requirements, write test cases using techniques like boundary value analysis, and run manual functional and regression tests on the test bench with [CANoe, DLT Viewer / ADB]. I report defects in Jira with logs and traces, retest fixes, and I support our automation by running Robot Framework suites and analysing the failures.</p>
+<p class="say-quote">One example: I found [a bug where the rear camera froze after an incoming call], which we added to the regression suite. I'm ISTQB Foundation certified.</p>
+<p class="say-quote">I'm interested in this role because HMI is where the driver meets the software, and I want to grow in HMI testing and automation."</p>
+</div>
+
+<h3>Template B &mdash; your testing experience is from web/mobile/other software</h3>
+<div class="callout say"><span class="label">Say it like this</span>
+<p class="say-quote">"Hello, I'm [name]. I have [1.5] years of experience as a software tester at [company], testing [mobile / web / desktop] applications.</p>
+<p class="say-quote">I do manual functional, UI and regression testing: I write test cases from requirements, execute them, report defects in Jira with clear steps and evidence, and verify fixes. I've also [run automated tests / written simple Python or Robot Framework scripts].</p>
+<p class="say-quote">UI testing trained my eye for details &mdash; wrong texts, layout issues, inconsistent states &mdash; which is exactly what HMI testing needs. I'm ISTQB Foundation certified, and I've been studying automotive topics like CAN signals, telltales and test benches.</p>
+<p class="say-quote">I'd like to move into automotive because the quality of the HMI directly affects the driver, and I'm ready to learn the tools quickly."</p>
+</div>
+
+<h3>Template C &mdash; short version (30 seconds)</h3>
+<div class="callout say"><span class="label">When they say "briefly"</span>
+<p class="say-quote">"I'm [name], a test engineer with [1.5] years of experience in [domain]. I write and execute test cases, report and track defects in Jira, do regression testing and support automation with [Python / Robot Framework]. I'm ISTQB certified and very detail-oriented, which is why I'm excited about HMI testing."</p>
+</div>
+
+<div class="callout warn"><span class="label">Don't</span>
+<ul>
+<li>Don't tell your life story (school, hobbies) unless asked.</li>
+<li>Don't list 20 tools. Name the 4&ndash;5 that match the JD.</li>
+<li>Don't claim experience you don't have: the next question will expose it.</li>
+</ul>
+</div>
+
+<h2 id="project">"Walk me through your current project"</h2>
+<p>Almost every interviewer asks this after the intro. Answer in this order:</p>
+<ol class="steps">
+<li><strong>Product</strong> &mdash; "It's a [head unit / cluster / app] for [customer type]."</li>
+<li><strong>Team</strong> &mdash; "We're [N] testers and [M] developers in Scrum with 2-week sprints."</li>
+<li><strong>My part</strong> &mdash; "I'm responsible for testing [media and Bluetooth / warnings]."</li>
+<li><strong>Process</strong> &mdash; "Requirements come in [Jira / Polarion]; I write test cases, test on the bench, raise bugs, retest, and run regression before each release."</li>
+<li><strong>Tools</strong> &mdash; "Jira and Xray, CANoe, DLT Viewer, Robot Framework, Jenkins" (only what you really used).</li>
+<li><strong>Result</strong> &mdash; "We deliver a release every [4 weeks]; I raised about [N] defects last quarter."</li>
+</ol>
+
+<h2 id="star">STAR stories: prepare 5</h2>
+<div class="callout idea"><span class="label">STAR = Situation, Task, Action, Result</span>
+<p>For "Tell me about a time when&hellip;" questions. Keep each story under 2 minutes. <b>Action</b> is the longest part and uses "I", not "we". Use real stories from your job &mdash; these are structures, not scripts.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Story</th><th>Question it answers</th><th>Structure</th></tr>
+<tr><td><b>1. The tricky bug</b></td><td>"Your best bug?" &middot; "A difficult defect?"</td><td>S: release testing of [feature]. T: verify [X]. A: noticed it only after [condition]; kept logging, repeated 20&times;, found the pattern, attached trace + video. R: developer fixed the root cause; test added to regression.</td></tr>
+<tr><td><b>2. Disagreement with a developer</b></td><td>"Conflict?" &middot; "Developer says not a bug?"</td><td>S: developer rejected my bug. T: decide if it's valid. A: checked the requirement, showed the video, asked the requirement owner to clarify. R: requirement clarified, bug fixed (or I accepted and updated my test) &mdash; good relationship kept.</td></tr>
+<tr><td><b>3. Tight deadline</b></td><td>"Pressure?" &middot; "Not enough time?"</td><td>S: build came 2 days late, release fixed. T: regression in 1 day. A: impact analysis, picked safety + changed areas + top flows, ran automation overnight, reported the untested risk. R: released on time with known risks documented; no critical escape.</td></tr>
+<tr><td><b>4. A mistake you made</b></td><td>"A failure?" &middot; "Weakness example?"</td><td>S: I reported a bug that was really a wrong bench configuration. T: fix it. A: apologised, closed it, added a "check software version &amp; config" step to my checklist. R: no repeat; shared the checklist with the team.</td></tr>
+<tr><td><b>5. Learning fast</b></td><td>"New tool?" &middot; "How do you learn?"</td><td>S: project started using [Robot Framework / CANoe]. T: be productive quickly. A: official docs, small examples, asked a senior, practised on the bench after hours. R: in [2 weeks] I was running and analysing suites alone.</td></tr>
+</table></div>
+
+<h2 id="idk">When you don't know the answer</h2>
+<p>You <b>will</b> get at least one question you can't answer. That's normal. What matters is how you handle it.</p>
+<div class="callout say"><span class="label">Use one of these</span>
+<ul>
+<li><i>"I haven't worked with that directly. From what I understand, it's &hellip; &mdash; is that how you use it here?"</i></li>
+<li><i>"I'm not sure about the exact details, but here's how I would find out / approach it: &hellip;"</i></li>
+<li><i>"I haven't used [tool], but I used [similar tool] for the same purpose, so I'm confident I can learn it quickly."</i></li>
+<li><i>"Could you give me an example? Then I can answer more precisely."</i> (for unclear questions)</li>
+</ul>
+</div>
+<div class="callout bad"><span class="label">Never</span>
+<p>Never invent an answer or pretend to know a tool. Interviewers ask follow-ups exactly to catch this.</p>
+</div>
+
+<h2 id="phrases">Useful English phrases</h2>
+<div class="table-wrap"><table>
+<tr><th>Situation</th><th>Phrase</th></tr>
+<tr><td>Buy thinking time</td><td>"That's a good question &mdash; let me think for a second."</td></tr>
+<tr><td>Check you understood</td><td>"Just to make sure I understand: you mean &hellip;?"</td></tr>
+<tr><td>Structure the answer</td><td>"I'd do this in three steps. First &hellip;, then &hellip;, and finally &hellip;"</td></tr>
+<tr><td>Give an example</td><td>"For example, in my last project &hellip;"</td></tr>
+<tr><td>Show you think about risk</td><td>"The first thing I'd check is the safety impact."</td></tr>
+<tr><td>Ask for clarification of a requirement</td><td>"Before testing, I would clarify whether 5.0 &deg;C itself is included."</td></tr>
+<tr><td>Finish an answer</td><td>"&hellip; so in short: retest, regression, then close the ticket."</td></tr>
+<tr><td>Didn't hear (online)</td><td>"Sorry, the connection broke up. Could you repeat the last part?"</td></tr>
+</table></div>
+
+<h2 id="ask">Questions to ask the interviewer</h2>
+<p>Always ask 2&ndash;3. It shows interest. Pick from:</p>
+<ol>
+<li>"What would a typical day or week look like in this role?"</li>
+<li>"Which part would I start with &mdash; cluster, infotainment, or both?"</li>
+<li>"How is the test team organised, and how are manual and automated testing split?"</li>
+<li>"What tools and benches do you use &mdash; for example CANoe, HIL, remote benches?"</li>
+<li>"What are the biggest challenges for the test team right now?"</li>
+<li>"How do you measure success for this role in the first 6 months?"</li>
+<li>"Is there a chance to grow into automation over time?"</li>
+</ol>
+<p class="small muted">Avoid asking about salary, holidays or home office in a technical round unless they bring it up.</p>
+
+<h2 id="mistakes">12 common interview mistakes (and the fix)</h2>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Mistake</th><th>Do this instead</th></tr>
+<tr><td>1</td><td>Answering before understanding the question</td><td>Repeat or clarify it first</td></tr>
+<tr><td>2</td><td>Very long answers without structure</td><td>Short answer first, then "Do you want more detail?"</td></tr>
+<tr><td>3</td><td>Only theory, no example</td><td>Always add "For example&hellip;"</td></tr>
+<tr><td>4</td><td>Saying "we" for everything</td><td>Say what <b>you</b> did</td></tr>
+<tr><td>5</td><td>BVA answer with only 0 &deg;C and 10 &deg;C</td><td>Test at and next to the boundary: 4.9, 5.0, 5.1</td></tr>
+<tr><td>6</td><td>Not questioning an unclear requirement</td><td>"First I'd clarify&hellip;" &mdash; this impresses</td></tr>
+<tr><td>7</td><td>"Every bug goes into regression"</td><td>Risk-based: add severe/safety ones, not trivial ones</td></tr>
+<tr><td>8</td><td>"I'd always create a ticket"</td><td>Check duplicates, environment and requirement first</td></tr>
+<tr><td>9</td><td>Mixing up severity and priority</td><td>Severity = impact; priority = urgency</td></tr>
+<tr><td>10</td><td>Mixing up retest and regression</td><td>Retest = this bug fixed; regression = nothing else broken</td></tr>
+<tr><td>11</td><td>Blaming developers</td><td>Talk about facts and the requirement</td></tr>
+<tr><td>12</td><td>No questions at the end</td><td>Ask 2&ndash;3 from the list above</td></tr>
+</table></div>
+
+<h2 id="mock">Mock interview: 15 questions in order</h2>
+<p>Ask a friend to read these to you, or record yourself on your phone. Answer each in 1&ndash;2 minutes. Then compare with the model answers.</p>
+<ol>
+<li>Tell me about yourself. &rarr; <a href="#intro">templates</a></li>
+<li>When did you get ISTQB, and how did you use it? &rarr; <a href="questions.html#q-istqb-when">Q2</a></li>
+<li>What HMI have you tested? Who was in your team? &rarr; <a href="questions.html#g-b">B</a></li>
+<li>Was your hardware on a bench or remote? &rarr; <a href="questions.html#g-b">Q12</a></li>
+<li>A customer wants a new feature. What's your process? &rarr; <a href="questions.html#q-process">Q23</a></li>
+<li>How do you document results? Which tools? &rarr; <a href="questions.html#g-c">Q27&ndash;29</a></li>
+<li>What makes a good bug report? &rarr; <a href="questions.html#q-bugreport">Q53</a></li>
+<li>How do you track it, and whom do you assign it to? &rarr; <a href="questions.html#g-e">Q55&ndash;57</a></li>
+<li>What do you do after the fix? &rarr; <a href="questions.html#q-afterfix">Q59</a></li>
+<li>What is your regression strategy? &rarr; <a href="questions.html#q-regression">Q71</a></li>
+<li>Would you add every fixed bug to regression? One yes and one no example. &rarr; <a href="questions.html#g-f">Q73&ndash;75</a></li>
+<li>Thousands of tests, little time: how do you choose? What about bug criticality? &rarr; <a href="questions.html#g-f">Q72</a></li>
+<li>Sure it's a bug &mdash; any reason not to create a ticket? &rarr; <a href="questions.html#q-whennot">Q89</a></li>
+<li>Apply BVA to the snowflake requirement. &rarr; <a href="questions.html#q-snowflake">Q99</a></li>
+<li>Do you have questions for us? &rarr; <a href="#ask">list</a></li>
+</ol>
+
+<h2 id="checklists">Checklists</h2>
+<div class="grid">
+  <div class="card"><h4>The day before</h4><p>&#9744; Re-read the JD and the top-10 questions<br>&#9744; Practise your intro out loud 3 times<br>&#9744; Do the quiz (aim 80%+)<br>&#9744; Do 2 spot-the-defect drills with the timer<br>&#9744; Prepare 3 questions to ask<br>&#9744; Sleep well</p></div>
+  <div class="card"><h4>Online interview setup</h4><p>&#9744; Test camera, microphone and internet<br>&#9744; Quiet room, plain background, good light<br>&#9744; Laptop charged, phone silent<br>&#9744; Paper and pen for the snowflake/BVA table<br>&#9744; Join 5 minutes early</p></div>
+  <div class="card"><h4>During the interview</h4><p>&#9744; Smile and say thank you at the start<br>&#9744; Short answer first, then details<br>&#9744; Give examples<br>&#9744; Clarify unclear requirements<br>&#9744; Be honest about gaps<br>&#9744; Ask your questions at the end</p></div>
+  <div class="card"><h4>Last hour: remember these 10 lines</h4><p>1. Process: analyse &rarr; plan &rarr; design &rarr; setup &rarr; execute &rarr; report.<br>2. Bug = summary, env, steps, expected/actual, evidence, severity.<br>3. After fix: check build &rarr; retest &rarr; regression &rarr; close.<br>4. Regression = risk-based layers.<br>5. Add severe bugs, not trivial ones.<br>6. One problem = one ticket.<br>7. No ticket for: duplicate, expected, environment.<br>8. BVA: 4.9 / 5.0 / 5.1.<br>9. Clarify "below" vs "at or below".<br>10. Test both directions (hysteresis).</p></div>
+</div>
+
+<div class="callout say"><span class="label">You can do this</span>
+<p>You don't need to know everything. You need to show that you <b>think like a tester</b>: clear process, risk-based choices, precise bug reports, honest communication. If you've gone through this site, you already know more than most candidates with 1&ndash;2 years' experience.</p>
+</div>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

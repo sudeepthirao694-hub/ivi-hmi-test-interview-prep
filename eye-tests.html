@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spot-the-defect drills · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="eye-tests.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Chapter 10 &middot; Practice</div>
+<h1>Spot-the-defect drills (eye tests)</h1>
+<p class="lead">The client tests whether you can find defects on an HMI screen. Here are 7 screens: your 2 interview screenshots and 5 new designs. Start the timer, write your list, then press "Show answers" to see red numbered markers exactly where each defect is.</p>
+<div class="meta-row"><span class="pill easy">Practice</span><span class="pill">7 drills &middot; 72 defects</span><span class="pill hot">Asked in this interview</span></div>
+<div id="toc" class="toc"></div>
+
+<h2>The method: the 8-point scan</h2>
+<div class="callout idea"><span class="label">Simple idea</span>
+<p>Beginners look randomly and miss half of the defects. Experts scan the screen <b>area by area</b> (top to bottom, left to right) and, in each area, ask the same 8 questions.</p>
+</div>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Check</th><th>Ask yourself</th><th>Typical defects</th></tr>
+<tr><td>1</td><td><b>Text</b></td><td>Is every word spelled right, in the right language, complete?</td><td>Typos, mixed languages, cut-off text, placeholder text like "Hello" or "STR_ID_12"</td></tr>
+<tr><td>2</td><td><b>Units</b></td><td>Are units consistent and correct?</td><td>km/h next to MPH, &deg;C next to &deg;F, kPa next to bar, kHz on FM</td></tr>
+<tr><td>3</td><td><b>Numbers &amp; formats</b></td><td>Can this value exist? Is the format consistent?</td><td>30 February, 25:10, 00:75, 21:30 AM, comma vs dot, value above max</td></tr>
+<tr><td>4</td><td><b>Consistency</b></td><td>Is the same information shown the same way everywhere?</td><td>Needle 80 but digital 100; bar 35% but text 82%; two different temperatures</td></tr>
+<tr><td>5</td><td><b>Icons &amp; colours</b></td><td>Does the icon match its label? Is the colour's meaning right?</td><td>Fuel icon with "Hello"; warning in green; red value that is normal</td></tr>
+<tr><td>6</td><td><b>Layout</b></td><td>Anything overlapping, cut off, misaligned, tilted, missing?</td><td>Needle covers a number; missing "6" on a scale; image tilted; text overflowing</td></tr>
+<tr><td>7</td><td><b>State</b></td><td>Does the highlighted/active state match what is happening?</td><td>Wrong tab highlighted; "Accept" during an active call; Play icon while playing</td></tr>
+<tr><td>8</td><td><b>Logic &amp; safety</b></td><td>Is this situation possible? Is a warning missing or wrong?</td><td>Snowflake at 13 &deg;C; charging while driving; ETA in the past; no ice warning at &minus;3 &deg;C</td></tr>
+</table></div>
+
+<h3>How to say each defect in the interview</h3>
+<div class="callout say"><span class="label">Answer pattern: where &rarr; what &rarr; why &rarr; severity</span>
+<p class="say-quote">"In the <b>top bar</b>, the date shows <b>30 February 2021</b>. That date doesn't exist, so the date logic or formatting is wrong. I'd rate it Major because every driver sees it. Before raising it, I'd check the date signal and the requirement for the date format."</p>
+</div>
+<div class="callout warn"><span class="label">Also mention the non-defects</span>
+<p>Saying "this looks strange but is actually correct" shows maturity. Example: a song and its album having the same name is not a bug.</p>
+</div>
+
+<h2>Drill 1: instrument cluster (your interview screenshot)</h2>
+<div class="drill" id="d1">
+  <h3>Find 17 defects</h3>
+  <div class="toolbar"><button class="btn secondary" data-timer="300" data-timer-out="#t1">Start timer</button><span class="timer" id="t1">5:00</span><button class="btn" data-toggle-answers="#d1">Show answers</button></div>
+  <div class="shot">
+    <img src="images/cluster-practice.jpg" alt="Instrument cluster practice screenshot with speedometer, tachometer and tyre pressure page">
+    <span class="m" style="left:28.3%;top:30.8%">1</span>
+    <span class="m" style="left:85.9%;top:68.3%">2</span>
+    <span class="m" style="left:77.2%;top:74.5%">3</span>
+    <span class="m" style="left:72.5%;top:19.7%">4</span>
+    <span class="m" style="left:24.7%;top:55%">5</span>
+    <span class="m" style="left:48%;top:91.3%">6</span>
+    <span class="m" style="left:63.9%;top:43%">7</span>
+    <span class="m" style="left:50%;top:38.7%">8</span>
+    <span class="m" style="left:36.6%;top:42.8%">9</span>
+    <span class="m" style="left:39.3%;top:65.2%">10</span>
+    <span class="m" style="left:52.2%;top:95.5%">11</span>
+    <span class="m" style="left:63.75%;top:85.3%">12</span>
+    <span class="m" style="left:40.6%;top:9.7%">13</span>
+    <span class="m" style="left:56.9%;top:32.8%">14</span>
+    <span class="m" style="left:85%;top:61.3%">15</span>
+    <span class="m" style="left:84%;top:90%">16</span>
+    <span class="m" style="left:35%;top:96.5%">17</span>
+  </div>
+  <div class="answer-block">
+  <div class="table-wrap"><table>
+  <tr><th>#</th><th>Where</th><th>Defect</th><th>Why it's wrong</th><th>Severity</th></tr>
+  <tr><td>1</td><td>Tachometer scale</td><td>Numbers 1, 2, 3, 4, 5, <b>7</b>, 8 &mdash; the "6" is missing</td><td>The scale must be complete</td><td>Major</td></tr>
+  <tr><td>2</td><td>Speed</td><td>Needle &asymp; 80, digital <b>100 MPH</b>, bottom <b>63 km/h</b></td><td>Three different speeds for one car</td><td>Critical (UN R39)</td></tr>
+  <tr><td>3</td><td>Speed unit</td><td>MPH on the speedometer, km everywhere else</td><td>Mixed unit system</td><td>Major</td></tr>
+  <tr><td>4</td><td>Speedometer needle</td><td>Needle covers the "80" label</td><td>Overlap, label unreadable</td><td>Minor</td></tr>
+  <tr><td>5</td><td>Date</td><td>30.02.2021</td><td>February has at most 29 days</td><td>Major</td></tr>
+  <tr><td>6</td><td>Clock</td><td>21:30 <b>AM</b></td><td>24-hour value with AM/PM</td><td>Major</td></tr>
+  <tr><td>7</td><td>Tyre pressure, front right</td><td>"444 <b>bar</b>" while the others use kPa</td><td>Mixed units</td><td>Major</td></tr>
+  <tr><td>8</td><td>Tyre pressure, all wheels</td><td>444 on all four; normal is about 200&ndash;300 kPa; 444 bar is impossible</td><td>Implausible, looks hard-coded</td><td>Major</td></tr>
+  <tr><td>9</td><td>Tyre pressure, front left</td><td>Shown in red, but the value equals the others</td><td>Warning colour without reason</td><td>Major</td></tr>
+  <tr><td>10</td><td>Tyre temperatures</td><td>44.4 &deg;C vs 44 &deg;C, different spacing</td><td>Inconsistent precision/format</td><td>Minor</td></tr>
+  <tr><td>11</td><td>Outside temperature</td><td><b>Snowflake at 13.0 &deg;C</b></td><td>Ice warning is for about 4 &deg;C and below (links to the BVA question)</td><td>Major</td></tr>
+  <tr><td>12</td><td>Trip distance</td><td>"1009,0 km" (comma) vs "13.0 &deg;C" (dot)</td><td>Inconsistent decimal separator</td><td>Minor</td></tr>
+  <tr><td>13</td><td>Top bar</td><td>Fuel icon + "Hello"; music icon + "450 km"</td><td>Icon/label mismatch, placeholder text</td><td>Major</td></tr>
+  <tr><td>14</td><td>Language</td><td>German (Reifendruck, Datum, Zur&uuml;cksetzen mit OK) + English (Hello, MPH, PERFORMANCE)</td><td>Language mix</td><td>Major</td></tr>
+  <tr><td>15</td><td>Navigation</td><td>Map arrow turns left; lane guidance highlights a right-turn lane</td><td>Contradicting guidance</td><td>Critical/Major</td></tr>
+  <tr><td>16</td><td>Speed limiter</td><td>"LIM" active with 63 km/h while speed is 100 MPH</td><td>Limiter state and speed implausible together</td><td>Major</td></tr>
+  <tr><td>17</td><td>Telltale row</td><td>Red seatbelt icon touches the clock digits</td><td>Overlap</td><td>Minor</td></tr>
+  </table></div>
+  <p><b>Not a defect:</b> the 80 speed-limit sign with "!" while driving faster is a correct overspeed warning (but its unit is unclear because the speedometer is in MPH). German words themselves are fine if the language is set to German &mdash; the problem is the <i>mix</i>.</p>
+  </div>
+</div>
+
+<h2>Drill 2: media player (your interview screenshot)</h2>
+<div class="drill" id="d2">
+  <h3>Find 5 defects</h3>
+  <div class="toolbar"><button class="btn secondary" data-timer="120" data-timer-out="#t2">Start timer</button><span class="timer" id="t2">2:00</span><button class="btn" data-toggle-answers="#d2">Show answers</button></div>
+  <div class="shot">
+    <img src="images/media-practice.jpg" alt="Media player practice screenshot playing a USB song">
+    <span class="m" style="left:52.7%;top:22.9%">1</span>
+    <span class="m" style="left:22.1%;top:92.4%">1</span>
+    <span class="m" style="left:18.5%;top:74.3%">2</span>
+    <span class="m" style="left:77.6%;top:32.6%">3</span>
+    <span class="m" style="left:90.9%;top:5.1%">4</span>
+    <span class="m" style="left:9.7%;top:9.7%">5</span>
+  </div>
+  <div class="answer-block">
+  <div class="table-wrap"><table>
+  <tr><th>#</th><th>Where</th><th>Defect</th><th>Why it's wrong</th><th>Severity</th></tr>
+  <tr><td>1</td><td>Header and bottom bar</td><td>"Wiedergabe" (German), "&#1057;&#1087;&#1080;&#1089;&#1086;&#1082;" (Russian), "Source", "More" (English)</td><td>Three languages on one screen</td><td>Major</td></tr>
+  <tr><td>2</td><td>Progress bar</td><td>Bar at about 5%, time shows 1:06 of 3:09 (about 35%)</td><td>Progress doesn't match elapsed time</td><td>Major</td></tr>
+  <tr><td>3</td><td>Album art</td><td>Tilted and cut off at the right edge</td><td>Image not fitted to its frame</td><td>Minor</td></tr>
+  <tr><td>4</td><td>Status bar clock</td><td>"0:31"</td><td>Check the format spec; usually "00:31"</td><td>Minor (verify)</td></tr>
+  <tr><td>5</td><td>Left menu</td><td>Menu tiles don't line up with the content header</td><td>Alignment</td><td>Trivial (verify)</td></tr>
+  </table></div>
+  <p><b>Not defects:</b> song and album are both "A Beautiful Lie" (true for this album); "newstick" is the USB stick's name; white shuffle = off, orange repeat = on. (Repeat-one vs repeat-all isn't shown: a usability question, not a bug.)</p>
+  </div>
+</div>
+
+<h2>Drill 3: phone call</h2>
+<div class="drill" id="d3">
+  <h3>Find 10 defects</h3>
+  <div class="toolbar"><button class="btn secondary" data-timer="180" data-timer-out="#t3">Start timer</button><span class="timer" id="t3">3:00</span><button class="btn" data-toggle-answers="#d3">Show answers</button></div>
+  <figure class="diagram"><svg viewBox="0 36 760 372" role="img" aria-label="Practice screen: phone call">
+    <defs><clipPath id="clipA"><rect x="245" y="104" width="270" height="40" rx="8"/></clipPath></defs>
+    <rect class="screen" x="24" y="44" width="712" height="352" rx="12"/><path d="M24 84H736" style="stroke:var(--screen-line)"/>
+    <text class="t" x="44" y="70" font-size="13">25:10</text>
+    <text class="t2" x="380" y="70" text-anchor="middle" font-size="13">No phone connected</text>
+    <text class="t" x="716" y="70" text-anchor="end" font-size="13">Battery 120%</text>
+    <rect x="245" y="104" width="270" height="40" rx="8" style="fill:none;stroke:var(--screen-line)"/>
+    <text class="t" x="261" y="131" font-size="20" font-weight="700" clip-path="url(#clipA)">Alexandra Schmidt-Hoffmann</text>
+    <text class="t" x="380" y="172" text-anchor="middle" font-size="15">+49 170 12A4567</text>
+    <text class="t2" x="380" y="198" text-anchor="middle" font-size="13">Call duration 00:75</text>
+    <rect class="box-accent" x="110" y="224" width="160" height="52" rx="8"/><text class="t" x="190" y="247" text-anchor="middle" font-weight="700" font-size="13">Mute</text><text class="t" x="190" y="266" text-anchor="middle" font-size="11.5">Mic on</text>
+    <rect class="box" x="300" y="224" width="160" height="52" rx="8"/><text class="t" x="380" y="255" text-anchor="middle" font-size="13">Keypad</text>
+    <rect class="box" x="490" y="224" width="160" height="52" rx="8"/><text class="t" x="570" y="255" text-anchor="middle" font-size="13">Speaker</text>
+    <rect class="box-good" x="160" y="304" width="200" height="56" rx="8"/><text class="t" x="260" y="337" text-anchor="middle" font-weight="700" font-size="13">Accept</text>
+    <rect class="box-good" x="400" y="304" width="200" height="56" rx="8"/><text class="t" x="500" y="337" text-anchor="middle" font-weight="700" font-size="13">Anruf beenden</text>
+    <text class="t2" x="380" y="386" text-anchor="middle" font-size="11.5">Context: a call is already active &middot; UI language English</text>
+    <g class="answers">
+      <circle class="mk" cx="98" cy="66" r="11"/><text class="mk-t" x="98" y="70" text-anchor="middle">1</text>
+      <circle class="mk" cx="458" cy="66" r="11"/><text class="mk-t" x="458" y="70" text-anchor="middle">2</text>
+      <circle class="mk" cx="624" cy="66" r="11"/><text class="mk-t" x="624" y="70" text-anchor="middle">3</text>
+      <circle class="mk" cx="530" cy="124" r="11"/><text class="mk-t" x="530" y="128" text-anchor="middle">4</text>
+      <circle class="mk" cx="460" cy="168" r="11"/><text class="mk-t" x="460" y="172" text-anchor="middle">5</text>
+      <circle class="mk" cx="462" cy="194" r="11"/><text class="mk-t" x="462" y="198" text-anchor="middle">6</text>
+      <circle class="mk" cx="284" cy="250" r="11"/><text class="mk-t" x="284" y="254" text-anchor="middle">7</text>
+      <circle class="mk" cx="146" cy="332" r="11"/><text class="mk-t" x="146" y="336" text-anchor="middle">8</text>
+      <circle class="mk" cx="614" cy="318" r="11"/><text class="mk-t" x="614" y="322" text-anchor="middle">9</text>
+      <circle class="mk" cx="614" cy="346" r="11"/><text class="mk-t" x="614" y="350" text-anchor="middle">10</text>
+    </g>
+  </svg></figure>
+  <div class="answer-block"><ol>
+    <li>Clock "25:10" is not a valid time.</li>
+    <li>"No phone connected" while a call is active.</li>
+    <li>Battery 120% is impossible.</li>
+    <li>Caller name cut off with no "&hellip;".</li>
+    <li>Letter "A" inside the phone number.</li>
+    <li>Call duration 00:75: seconds can't exceed 59.</li>
+    <li>Mute is highlighted (active) but the label says "Mic on".</li>
+    <li>"Accept" button shown during an already active call.</li>
+    <li>End-call button is green; it should be red.</li>
+    <li>German "Anruf beenden" in an English UI.</li>
+  </ol></div>
+</div>
+
+<h2>Drill 4: climate control</h2>
+<div class="drill" id="d4">
+  <h3>Find 9 defects</h3>
+  <p class="small muted">Spec given by the interviewer: 16&ndash;28 &deg;C in 0.5 steps &middot; fan levels 1&ndash;7 &middot; seat heat 3 levels &middot; ice warning at 4 &deg;C or below.</p>
+  <div class="toolbar"><button class="btn secondary" data-timer="180" data-timer-out="#t4">Start timer</button><span class="timer" id="t4">3:00</span><button class="btn" data-toggle-answers="#d4">Show answers</button></div>
+  <figure class="diagram"><svg viewBox="0 36 760 372" role="img" aria-label="Practice screen: climate control">
+    <rect class="screen" x="24" y="44" width="712" height="356" rx="12"/><path d="M24 84H736" style="stroke:var(--screen-line)"/>
+    <text class="t" x="44" y="70" font-size="13">Outside -3 &deg;C</text><text class="t" x="716" y="70" text-anchor="end" font-size="13">14:05</text>
+    <rect class="box" x="64" y="104" width="200" height="96" rx="8"/><text class="t2" x="164" y="130" text-anchor="middle" font-size="13">Driver</text><text class="t" x="164" y="178" text-anchor="middle" font-size="30" font-weight="700">31.5 &deg;C</text>
+    <rect class="box-accent" x="300" y="128" width="160" height="48" rx="8"/><text class="t" x="380" y="157" text-anchor="middle" font-weight="700" font-size="13">SYNC ON</text>
+    <rect class="box" x="496" y="104" width="200" height="96" rx="8"/><text class="t2" x="596" y="130" text-anchor="middle" font-size="13">Passenger</text><text class="t" x="596" y="178" text-anchor="middle" font-size="30" font-weight="700">72 &deg;F</text>
+    <text class="t" x="64" y="236" font-weight="700" font-size="13">Fan 3</text>
+    <rect class="fill-accent" x="140" y="222" width="60" height="18" rx="4"/><rect class="fill-accent" x="208" y="222" width="60" height="18" rx="4"/><rect class="fill-accent" x="276" y="222" width="60" height="18" rx="4"/><rect class="fill-accent" x="344" y="222" width="60" height="18" rx="4"/><rect class="fill-accent" x="412" y="222" width="60" height="18" rx="4"/><rect class="box" x="480" y="222" width="60" height="18" rx="4"/><rect class="box" x="548" y="222" width="60" height="18" rx="4"/>
+    <rect class="box-accent" x="64" y="272" width="140" height="48" rx="8"/><text class="t" x="134" y="301" text-anchor="middle" font-weight="700" font-size="13">A/C</text><text class="t2" x="134" y="340" text-anchor="middle" font-size="11.5">A/C OFF</text>
+    <rect class="box-accent" x="220" y="272" width="140" height="48" rx="8"/><text class="t" x="290" y="301" text-anchor="middle" font-weight="700" font-size="13">AUTO</text>
+    <rect class="box-accent" x="376" y="272" width="160" height="48" rx="8"/><text class="t" x="456" y="301" text-anchor="middle" font-weight="700" font-size="13">MAX DEFROST</text>
+    <rect class="box" x="552" y="272" width="144" height="48" rx="8"/><text class="t" x="624" y="301" text-anchor="middle" font-size="13">Recirculaton</text>
+    <text class="t" x="64" y="376" font-weight="700" font-size="13">Seat heat</text>
+    <rect class="fill-accent" x="150" y="358" width="14" height="24" rx="3"/><rect class="fill-accent" x="172" y="358" width="14" height="24" rx="3"/><rect class="fill-accent" x="194" y="358" width="14" height="24" rx="3"/><rect class="fill-accent" x="216" y="358" width="14" height="24" rx="3"/>
+    <g class="answers">
+      <circle class="mk" cx="150" cy="66" r="11"/><text class="mk-t" x="150" y="70" text-anchor="middle">1</text>
+      <circle class="mk" cx="682" cy="118" r="11"/><text class="mk-t" x="682" y="122" text-anchor="middle">2</text>
+      <circle class="mk" cx="460" cy="128" r="11"/><text class="mk-t" x="460" y="132" text-anchor="middle">3</text>
+      <circle class="mk" cx="250" cy="118" r="11"/><text class="mk-t" x="250" y="122" text-anchor="middle">4</text>
+      <circle class="mk" cx="626" cy="231" r="11"/><text class="mk-t" x="626" y="235" text-anchor="middle">5</text>
+      <circle class="mk" cx="192" cy="336" r="11"/><text class="mk-t" x="192" y="340" text-anchor="middle">6</text>
+      <circle class="mk" cx="536" cy="272" r="11"/><text class="mk-t" x="536" y="276" text-anchor="middle">7</text>
+      <circle class="mk" cx="248" cy="370" r="11"/><text class="mk-t" x="248" y="374" text-anchor="middle">8</text>
+      <circle class="mk" cx="696" cy="272" r="11"/><text class="mk-t" x="696" y="276" text-anchor="middle">9</text>
+    </g>
+  </svg></figure>
+  <div class="answer-block"><ol>
+    <li>&minus;3 &deg;C outside but no ice warning (spec: at 4 &deg;C or below).</li>
+    <li>Driver in &deg;C, passenger in &deg;F.</li>
+    <li>SYNC ON, but the two sides show different temperatures.</li>
+    <li>31.5 &deg;C is outside the 16&ndash;28 &deg;C range.</li>
+    <li>Fan bar shows 5 of 7 segments; label says "Fan 3".</li>
+    <li>A/C button is lit, status text says "A/C OFF".</li>
+    <li>AUTO and MAX DEFROST both active (MAX defrost normally cancels AUTO &mdash; check spec).</li>
+    <li>4 seat-heat bars for a 3-level system.</li>
+    <li>Typo: "Recirculaton".</li>
+  </ol></div>
+</div>
+
+<h2>Drill 5: FM radio</h2>
+<div class="drill" id="d5">
+  <h3>Find 8 defects</h3>
+  <p class="small muted">Spec: FM band 87.5&ndash;108.0 MHz &middot; volume 0&ndash;40 &middot; UI language English (RDS text comes from the station).</p>
+  <div class="toolbar"><button class="btn secondary" data-timer="180" data-timer-out="#t5">Start timer</button><span class="timer" id="t5">3:00</span><button class="btn" data-toggle-answers="#d5">Show answers</button></div>
+  <figure class="diagram"><svg viewBox="0 36 760 356" role="img" aria-label="Practice screen: FM radio">
+    <rect class="screen" x="24" y="44" width="712" height="340" rx="12"/><path d="M24 84H736" style="stroke:var(--screen-line)"/>
+    <text class="t" x="44" y="70" font-weight="700" font-size="13">FM</text><text class="t" x="716" y="70" text-anchor="end" font-size="13">Vol 42/40</text>
+    <text class="t" x="64" y="136" font-size="26" font-weight="700">Bayern 3</text><text class="t" x="696" y="136" text-anchor="end" font-size="26">108.30 MHz</text>
+    <rect x="64" y="160" width="400" height="36" rx="6" style="fill:none;stroke:var(--screen-line)"/><text class="t2" x="80" y="183" font-size="13">Heute Abend: Verkehrsmeldungen f&uuml;r ganz Bayern und Baden-W&uuml;rttemberg</text>
+    <rect class="box" x="64" y="224" width="150" height="64" rx="8"/><text class="t" x="80" y="250" font-weight="700" font-size="13">1</text><text class="t" x="80" y="274" font-size="13">Antenne 94.3</text>
+    <rect class="box-accent" x="226" y="224" width="150" height="64" rx="8"/><text class="t" x="242" y="250" font-weight="700" font-size="13">2</text><text class="t" x="242" y="274" font-size="13">Bayern 3 99.6</text>
+    <rect class="box" x="388" y="224" width="150" height="64" rx="8"/><text class="t" x="404" y="250" font-weight="700" font-size="13">2</text><text class="t" x="404" y="274" font-size="13">FFH 105,9</text>
+    <rect class="box" x="550" y="224" width="150" height="64" rx="8"/><text class="t" x="566" y="250" font-weight="700" font-size="13">4</text><text class="t" x="566" y="274" font-size="13">SWR3 1,002 kHz</text>
+    <rect class="box" x="64" y="316" width="150" height="48" rx="8"/><text class="t" x="139" y="345" text-anchor="middle" font-size="13">Scna</text>
+    <rect class="box" x="226" y="316" width="150" height="48" rx="8"/><text class="t" x="301" y="345" text-anchor="middle" font-size="13">Seek &#9664;</text>
+    <rect class="box" x="388" y="316" width="150" height="48" rx="8"/><text class="t" x="463" y="345" text-anchor="middle" font-size="13">Seek &#9654;</text>
+    <g class="answers">
+      <circle class="mk" cx="540" cy="126" r="11"/><text class="mk-t" x="540" y="130" text-anchor="middle">1</text>
+      <circle class="mk" cx="376" cy="224" r="11"/><text class="mk-t" x="376" y="228" text-anchor="middle">2</text>
+      <circle class="mk" cx="430" cy="245" r="11"/><text class="mk-t" x="430" y="249" text-anchor="middle">3</text>
+      <circle class="mk" cx="488" cy="270" r="11"/><text class="mk-t" x="488" y="274" text-anchor="middle">4</text>
+      <circle class="mk" cx="688" cy="248" r="11"/><text class="mk-t" x="688" y="252" text-anchor="middle">5</text>
+      <circle class="mk" cx="640" cy="66" r="11"/><text class="mk-t" x="640" y="70" text-anchor="middle">6</text>
+      <circle class="mk" cx="464" cy="152" r="11"/><text class="mk-t" x="464" y="156" text-anchor="middle">7</text>
+      <circle class="mk" cx="176" cy="340" r="11"/><text class="mk-t" x="176" y="344" text-anchor="middle">8</text>
+    </g>
+  </svg></figure>
+  <div class="answer-block"><ol>
+    <li>108.30 MHz is outside the FM band (87.5&ndash;108.0 MHz).</li>
+    <li>The playing frequency (108.30) doesn't match its highlighted preset (99.6).</li>
+    <li>Preset numbers 1, 2, 2, 4 &mdash; duplicate "2", missing "3".</li>
+    <li>"105,9" uses a comma; the others use dots.</li>
+    <li>SWR3 shown in kHz on the FM band.</li>
+    <li>Volume 42/40 is above the maximum.</li>
+    <li>RDS text runs outside its box.</li>
+    <li>Typo: "Scna" instead of "Scan".</li>
+  </ol></div>
+</div>
+
+<h2>Drill 6: navigation</h2>
+<div class="drill" id="d6">
+  <h3>Find 5 defects</h3>
+  <p class="small muted">Spec: the route turns right in 300 m &middot; the lane to use is highlighted &middot; units: metric.</p>
+  <div class="toolbar"><button class="btn secondary" data-timer="120" data-timer-out="#t6">Start timer</button><span class="timer" id="t6">2:00</span><button class="btn" data-toggle-answers="#d6">Show answers</button></div>
+  <figure class="diagram"><svg viewBox="0 36 760 320" role="img" aria-label="Practice screen: navigation">
+    <defs><clipPath id="clipD"><rect x="64" y="104" width="356" height="120" rx="8"/></clipPath><marker id="navArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text)"/></marker></defs>
+    <rect class="screen" x="24" y="44" width="712" height="304" rx="12"/><path d="M24 84H736" style="stroke:var(--screen-line)"/>
+    <text class="t" x="44" y="70" font-size="13">14:20</text><text class="t2" x="380" y="70" text-anchor="middle" font-size="13">Navigation</text>
+    <rect class="box" x="64" y="104" width="356" height="120" rx="8"/>
+    <path d="M104 204V148H146" style="fill:none;stroke:var(--text);stroke-width:6" marker-end="url(#navArr)"/>
+    <text class="t" x="170" y="150" font-size="15" font-weight="700" clip-path="url(#clipD)">Turn left onto Friedrich-Ebert-Stra&szlig;e</text>
+    <text class="t" x="170" y="184" font-size="20">in 300 m</text>
+    <rect class="box" x="508" y="104" width="188" height="120" rx="8"/>
+    <text class="t" x="522" y="136" font-size="12.5">Remaining: 12 km | 7.5 mi</text><text class="t" x="522" y="166" font-size="12.5">Time left: 25 min</text><text class="t" x="522" y="196" font-size="12.5">Arrival: 13:55</text>
+    <rect class="box" x="64" y="248" width="632" height="72" rx="8"/><text class="t" x="80" y="289" font-weight="700" font-size="13">Lanes</text>
+    <path d="M320 258V310M440 258V310" style="stroke:var(--screen-line);stroke-dasharray:4 4"/>
+    <text class="t2" x="260" y="295" text-anchor="middle" font-size="28">&#8624;</text><text class="t2" x="380" y="295" text-anchor="middle" font-size="28">&#8593;</text><text class="t2" x="500" y="295" text-anchor="middle" font-size="28">&#8625;</text>
+    <g class="answers">
+      <circle class="mk" cx="84" cy="150" r="11"/><text class="mk-t" x="84" y="154" text-anchor="middle">1</text>
+      <circle class="mk" cx="438" cy="146" r="11"/><text class="mk-t" x="438" y="150" text-anchor="middle">2</text>
+      <circle class="mk" cx="700" cy="132" r="11"/><text class="mk-t" x="700" y="136" text-anchor="middle">3</text>
+      <circle class="mk" cx="626" cy="192" r="11"/><text class="mk-t" x="626" y="196" text-anchor="middle">4</text>
+      <circle class="mk" cx="600" cy="284" r="11"/><text class="mk-t" x="600" y="288" text-anchor="middle">5</text>
+    </g>
+  </svg></figure>
+  <div class="answer-block"><ol>
+    <li>The arrow turns right, the text says "Turn left".</li>
+    <li>Street name cut off with no "&hellip;".</li>
+    <li>km and miles shown together although units are metric.</li>
+    <li>Arrival 13:55 is before the current time 14:20 (should be 14:45).</li>
+    <li>No lane is highlighted in the lane guidance.</li>
+  </ol></div>
+</div>
+
+<h2>Drill 7: electric-car home screen (hardest)</h2>
+<div class="drill" id="d7">
+  <h3>Find 18 defects</h3>
+  <p class="small muted">Context: the Home screen is open &middot; UI language English &middot; the car is being driven. Scan area by area: status bar &rarr; Vehicle &rarr; Navigation &rarr; Now playing &rarr; climate strip &rarr; bottom menu &rarr; pop-up.</p>
+  <div class="toolbar"><button class="btn secondary" data-timer="300" data-timer-out="#t7">Start timer</button><span class="timer" id="t7">5:00</span><button class="btn" data-toggle-answers="#d7">Show answers</button></div>
+  <figure class="diagram"><svg viewBox="0 36 760 452" role="img" aria-label="Practice screen: electric car home screen">
+    <rect class="screen" x="24" y="48" width="712" height="428" rx="14"/><path d="M24 92H736" style="stroke:var(--screen-line)"/>
+    <text class="t" x="44" y="76" font-weight="700" font-size="13">22:42</text>
+    <text class="t2" x="100" y="76" font-size="13">Outside 28 &deg;C</text>
+    <text class="t" x="380" y="76" text-anchor="middle" font-size="13">Monday, 31 June 2026</text>
+    <text class="t2" x="644" y="76" text-anchor="end" font-size="13">No SIM</text>
+    <rect class="fill-text" x="652" y="72" width="5" height="6"/><rect class="fill-text" x="660" y="68" width="5" height="10"/><rect class="fill-text" x="668" y="64" width="5" height="14"/><rect class="fill-text" x="676" y="60" width="5" height="18"/>
+    <text class="t" x="716" y="76" text-anchor="end" font-weight="700" font-size="13">5G</text>
+    <rect class="box" x="44" y="108" width="208" height="200" rx="10"/>
+    <text class="t" x="60" y="132" font-weight="700" font-size="13">Vehicle</text>
+    <text class="t" x="60" y="170" font-size="28" font-weight="700">82%</text>
+    <rect x="60" y="180" width="150" height="12" rx="6" style="fill:none;stroke:var(--screen-line)"/><rect class="fill-good" x="60" y="180" width="52" height="12" rx="6"/>
+    <text class="t" x="60" y="218" font-size="13">Range 410 km</text>
+    <text class="t" x="60" y="242" font-size="13">Charging 11 kW</text>
+    <text class="t" x="60" y="264" font-size="13">Gear D &middot; 72 km/h</text>
+    <text class="t" x="60" y="290" font-size="13">Full in 1 h 75 min</text>
+    <rect class="box" x="268" y="108" width="224" height="200" rx="10"/>
+    <text class="t" x="284" y="132" font-weight="700" font-size="13">Navigation</text>
+    <rect x="284" y="144" width="192" height="84" rx="6" style="fill:var(--surface-2);stroke:var(--screen-line)"/>
+    <path class="line-accent" d="M300 216L340 190L390 196L430 164L462 156"/><circle class="fill-accent" cx="300" cy="216" r="5"/><circle cx="462" cy="156" r="5" style="fill:none;stroke:var(--accent);stroke-width:2"/>
+    <text class="t" x="284" y="254" font-size="13">Charging stop in 45 km</text>
+    <text class="t" x="284" y="274" font-size="13">Remaining 12 km</text>
+    <text class="t" x="284" y="294" font-size="13">Arrival 18:30</text>
+    <rect class="box" x="508" y="108" width="208" height="200" rx="10"/>
+    <text class="t" x="524" y="132" font-weight="700" font-size="13">Now playing</text>
+    <rect x="524" y="144" width="56" height="56" rx="6" style="fill:var(--accent-soft)"/>
+    <text class="t2" x="592" y="166" font-size="12">Source: USB</text>
+    <text class="t2" x="592" y="186" font-size="12">Pixel 8 via BT</text>
+    <text class="t" x="524" y="226" font-size="12.5">Episode 12: Electric Future Talk, Part 2</text>
+    <rect x="524" y="240" width="176" height="4" rx="2" style="fill:var(--surface-2)"/><rect class="fill-accent" x="524" y="240" width="158" height="4" rx="2"/><circle class="fill-accent" cx="682" cy="242" r="6"/>
+    <text class="t2" x="524" y="266" font-size="12">0:45 / 38:20</text>
+    <text class="t" x="560" y="296" text-anchor="middle" font-size="16" font-weight="700">|&#9664;</text><text class="t" x="612" y="296" text-anchor="middle" font-size="18">&#9654;</text><text class="t" x="664" y="296" text-anchor="middle" font-size="16" font-weight="700">&#9654;|</text>
+    <rect class="box" x="44" y="320" width="672" height="48" rx="10"/>
+    <text class="t" x="60" y="349" font-size="13">Driver 21.0 &deg;C</text><text class="t" x="220" y="349" font-size="13">Fan 9/7</text><text class="t" x="330" y="349" font-size="13">Passenger 21 &deg;C</text><text class="t" x="560" y="349" font-size="13">Outside -2 &deg;C</text>
+    <rect class="box" x="44" y="392" width="104" height="64" rx="10"/><rect class="box-accent" x="156" y="392" width="104" height="64" rx="10"/><rect class="box" x="268" y="392" width="104" height="64" rx="10"/><rect class="box" x="380" y="392" width="104" height="64" rx="10"/><rect class="box" x="492" y="392" width="104" height="64" rx="10"/><rect class="box" x="604" y="392" width="104" height="64" rx="10"/>
+    <g font-size="13"><text class="t" x="96" y="429" text-anchor="middle">Home</text><text class="t" x="208" y="429" text-anchor="middle" font-weight="700">Media</text><text class="t" x="320" y="429" text-anchor="middle">Phone</text><text class="t" x="432" y="429" text-anchor="middle">Navigatoin</text><text class="t" x="544" y="429" text-anchor="middle">Climate</text><text class="t" x="656" y="429" text-anchor="middle">Einstellungen</text></g>
+    <rect x="452" y="356" width="264" height="44" rx="10" style="fill:#2fa84f"/>
+    <text x="468" y="383" font-size="12.5" font-weight="700" style="fill:#fff">Tyre pressure low: front left</text><text x="702" y="383" text-anchor="end" font-weight="700" font-size="13" style="fill:#fff">OK</text>
+    <g class="answers">
+      <circle class="mk" cx="464" cy="72" r="11"/><text class="mk-t" x="464" y="76" text-anchor="middle">1</text>
+      <circle class="mk" cx="584" cy="72" r="11"/><text class="mk-t" x="584" y="76" text-anchor="middle">2</text>
+      <circle class="mk" cx="202" cy="72" r="11"/><text class="mk-t" x="202" y="76" text-anchor="middle">3</text>
+      <circle class="mk" cx="662" cy="345" r="11"/><text class="mk-t" x="662" y="349" text-anchor="middle">3</text>
+      <circle class="mk" cx="228" cy="186" r="11"/><text class="mk-t" x="228" y="190" text-anchor="middle">4</text>
+      <circle class="mk" cx="176" cy="253" r="11"/><text class="mk-t" x="176" y="257" text-anchor="middle">5</text>
+      <circle class="mk" cx="182" cy="286" r="11"/><text class="mk-t" x="182" y="290" text-anchor="middle">6</text>
+      <circle class="mk" cx="432" cy="264" r="11"/><text class="mk-t" x="432" y="268" text-anchor="middle">7</text>
+      <circle class="mk" cx="378" cy="290" r="11"/><text class="mk-t" x="378" y="294" text-anchor="middle">8</text>
+      <circle class="mk" cx="694" cy="176" r="11"/><text class="mk-t" x="694" y="180" text-anchor="middle">9</text>
+      <circle class="mk" cx="730" cy="206" r="11"/><text class="mk-t" x="730" y="210" text-anchor="middle">10</text>
+      <circle class="mk" cx="606" cy="262" r="11"/><text class="mk-t" x="606" y="266" text-anchor="middle">11</text>
+      <circle class="mk" cx="636" cy="290" r="11"/><text class="mk-t" x="636" y="294" text-anchor="middle">12</text>
+      <circle class="mk" cx="276" cy="345" r="11"/><text class="mk-t" x="276" y="349" text-anchor="middle">13</text>
+      <circle class="mk" cx="446" cy="345" r="11"/><text class="mk-t" x="446" y="349" text-anchor="middle">14</text>
+      <circle class="mk" cx="440" cy="378" r="11"/><text class="mk-t" x="440" y="382" text-anchor="middle">15</text>
+      <circle class="mk" cx="432" cy="446" r="11"/><text class="mk-t" x="432" y="450" text-anchor="middle">16</text>
+      <circle class="mk" cx="656" cy="446" r="11"/><text class="mk-t" x="656" y="450" text-anchor="middle">17</text>
+      <circle class="mk" cx="208" cy="446" r="11"/><text class="mk-t" x="208" y="450" text-anchor="middle">18</text>
+    </g>
+  </svg></figure>
+  <div class="answer-block">
+  <div class="table-wrap"><table>
+  <tr><th>#</th><th>Location</th><th>What is wrong</th><th>Why (what it should be)</th><th>Severity</th></tr>
+  <tr><td>1</td><td>Status bar, centre</td><td>"Monday, 31 June 2026"</td><td>June has only 30 days</td><td>Major</td></tr>
+  <tr><td>2</td><td>Status bar, right</td><td>"No SIM" but full signal bars and "5G"</td><td>No SIM = no mobile signal</td><td>Minor</td></tr>
+  <tr><td>3</td><td>Status bar left + climate strip right</td><td>Outside 28 &deg;C at the top, &minus;2 &deg;C at the bottom</td><td>One sensor, two values</td><td>Major</td></tr>
+  <tr><td>4</td><td>Vehicle card, battery bar</td><td>Bar about one-third full, text says 82%</td><td>Bar must match the number</td><td>Major</td></tr>
+  <tr><td>5</td><td>Vehicle card, middle</td><td>"Charging 11 kW" while "Gear D &middot; 72 km/h"</td><td>Can't charge from a charger while driving</td><td>Critical</td></tr>
+  <tr><td>6</td><td>Vehicle card, last line</td><td>"Full in 1 h 75 min"</td><td>Minutes must be 0&ndash;59 (2 h 15 min)</td><td>Major</td></tr>
+  <tr><td>7</td><td>Navigation card</td><td>"Charging stop in 45 km" but "Remaining 12 km"</td><td>Stop can't be beyond the destination</td><td>Major</td></tr>
+  <tr><td>8</td><td>Navigation card</td><td>"Arrival 18:30" while the clock shows 22:42</td><td>Arrival can't be in the past</td><td>Major</td></tr>
+  <tr><td>9</td><td>Now playing, top right</td><td>"Source: USB" and "Pixel 8 via BT"</td><td>Only one source can play</td><td>Minor</td></tr>
+  <tr><td>10</td><td>Now playing, title</td><td>Title runs past the card and screen border</td><td>Shorten with "&hellip;" or scroll</td><td>Minor</td></tr>
+  <tr><td>11</td><td>Now playing, progress</td><td>Bar about 90% full, time 0:45 of 38:20 (2%)</td><td>Bar must match time</td><td>Major</td></tr>
+  <tr><td>12</td><td>Now playing, middle button</td><td>Play icon while "Now playing"</td><td>Should show Pause while playing</td><td>Minor (check spec)</td></tr>
+  <tr><td>13</td><td>Climate strip, fan</td><td>"Fan 9/7"</td><td>Above the maximum level</td><td>Major</td></tr>
+  <tr><td>14</td><td>Climate strip</td><td>"21.0 &deg;C" vs "21 &deg;C"</td><td>Same kind of value, two formats</td><td>Minor</td></tr>
+  <tr><td>15</td><td>Pop-up, lower right</td><td>Tyre warning in green, covering the climate strip and menu buttons</td><td>Warnings are amber; pop-up hides controls</td><td>Major</td></tr>
+  <tr><td>16</td><td>Bottom menu, 4th button</td><td>"Navigatoin"</td><td>Spelling ("Navigation")</td><td>Minor</td></tr>
+  <tr><td>17</td><td>Bottom menu, 6th button</td><td>"Einstellungen"</td><td>German in an English UI ("Settings")</td><td>Major</td></tr>
+  <tr><td>18</td><td>Bottom menu, 2nd button</td><td>"Media" highlighted on the Home screen</td><td>Highlight must show the current screen</td><td>Minor</td></tr>
+  </table></div>
+  <p><b>Traps (not defects):</b> 410 km range at 82% is realistic; a simple mini-map is fine; charging stops on long routes are normal &mdash; only the distance is wrong.</p>
+  </div>
+</div>
+
+<h2>50 common HMI defects to look for (your mental checklist)</h2>
+<div class="grid">
+  <div class="card"><h4>Text (10)</h4><p>Typos &middot; mixed languages &middot; missing translation key (TXT_MEDIA_02) &middot; placeholder text &middot; cut-off text without "&hellip;" &middot; text overflowing its box &middot; wrong capitalisation &middot; untranslated units &middot; right-to-left not mirrored &middot; wrong font or size</p></div>
+  <div class="card"><h4>Numbers &amp; units (10)</h4><p>Impossible date/time &middot; AM/PM with 24 h &middot; seconds/minutes &gt; 59 &middot; value above max / below min &middot; km with mph &middot; &deg;C with &deg;F &middot; kPa with bar &middot; comma vs dot &middot; different precision (21.0 vs 21) &middot; negative range/time</p></div>
+  <div class="card"><h4>Consistency (8)</h4><p>Needle vs digital &middot; cluster vs HUD &middot; bar vs percentage &middot; progress vs time &middot; two temperatures &middot; source label vs icon &middot; map arrow vs text vs lane &middot; status bar vs content</p></div>
+  <div class="card"><h4>Icons &amp; colours (7)</h4><p>Icon doesn't match label &middot; warning in green &middot; normal value in red &middot; wrong telltale colour &middot; old and new icon styles mixed &middot; missing icon &middot; blurry/pixelated icon</p></div>
+  <div class="card"><h4>Layout (8)</h4><p>Overlap &middot; missing scale number &middot; misalignment &middot; tilted/stretched image &middot; element outside the screen &middot; uneven spacing &middot; pop-up covering controls &middot; scroll bar with nothing to scroll</p></div>
+  <div class="card"><h4>State &amp; logic (7)</h4><p>Wrong tab highlighted &middot; button for impossible action &middot; play/pause icon wrong &middot; active mode shown as off &middot; conflicting modes both on &middot; warning with no reason &middot; missing warning</p></div>
+</div>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>

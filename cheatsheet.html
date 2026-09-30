@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheat sheet · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<style>
+  .cs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .cs .card p, .cs .card li { color: var(--text); font-size: .9rem; }
+  .cs .card ul, .cs .card ol { margin: 4px 0 0; padding-left: 18px; }
+  .cs .card li { margin: 2px 0; }
+  .cs .card h4 { color: var(--accent); }
+  @media print { .cs { grid-template-columns: 1fr 1fr; } .cs .card { break-inside: avoid; } }
+</style>
+</head>
+<body data-page="cheatsheet.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content">
+
+<div class="page-kicker">Reference</div>
+<h1>One-page cheat sheet</h1>
+<p class="lead">Everything important on one page. Read it in the last hour before the interview. You can also print it (Ctrl + P).</p>
+<div class="toolbar"><button class="btn secondary" onclick="window.print()">Print this page</button></div>
+
+<div class="grid cs">
+
+  <div class="card"><h4>1. Process (feature &rarr; delivery)</h4><ol>
+    <li><b>Analyse</b> requirement: clear? testable? ask questions</li>
+    <li><b>Plan</b>: scope, bench, effort, risks, entry/exit</li>
+    <li><b>Design</b> test cases (EP, BVA&hellip;) + link to REQ</li>
+    <li><b>Set up</b>: flash SW, CANoe config, smoke</li>
+    <li><b>Execute</b>, collect evidence, raise bugs</li>
+    <li><b>Retest + regression</b></li>
+    <li><b>Report</b> + release recommendation</li></ol></div>
+
+  <div class="card"><h4>2. Good bug report (12 fields)</h4><ul>
+    <li>Summary: <i>[Component] what &ndash; where/when</i></li>
+    <li>Environment: SW version, HW sample, bench, variant</li>
+    <li>Preconditions &middot; numbered steps</li>
+    <li>Expected (with REQ ID) &middot; Actual</li>
+    <li>Reproducibility (3/3)</li>
+    <li>Evidence: video/photo, CAN trace, log + <b>timestamp</b></li>
+    <li>Severity &middot; priority &middot; component &middot; links</li></ul></div>
+
+  <div class="card"><h4>3. After the fix</h4><ol>
+    <li>Check the build has the fix (fix version)</li>
+    <li><b>Retest</b> original steps (+ variations)</li>
+    <li><b>Regression</b> around the change (impact analysis)</li>
+    <li>Close with evidence &mdash; or <b>Reopen</b></li>
+    <li>Add to regression suite if severe</li></ol></div>
+
+  <div class="card"><h4>4. Regression strategy</h4><ul>
+    <li>Layers: <b>smoke</b> (each build) &rarr; <b>targeted</b> (each fix) &rarr; <b>core P1</b> (each sprint/RC) &rarr; <b>full</b> (release)</li>
+    <li>Choose by risk: <b>safety</b>, <b>changed areas</b>, <b>most-used</b>, <b>bug history</b>, fixed critical bugs, legal</li>
+    <li>Priorities P1 always / P2 if time / P3 full cycle</li>
+    <li>Automate stable repeated tests; run nightly</li></ul></div>
+
+  <div class="card"><h4>5. Fixed bug &rarr; regression?</h4><ul>
+    <li><b>Yes</b>: severe, safety, customer-visible, often-changed code, came back before. <i>Ex: rear camera freezes after a call.</i></li>
+    <li><b>No</b>: trivial cosmetic, one-off env issue, already covered, feature removed. <i>Ex: typo in the engineering menu.</i></li></ul></div>
+
+  <div class="card"><h4>6. Don't create a new ticket when&hellip;</h4><ul>
+    <li><b>Duplicate</b> &rarr; comment on the existing one (search first!)</li>
+    <li><b>Expected</b> per requirement &rarr; improvement request</li>
+    <li><b>Environment</b> (bench, old SW, config) &rarr; fix setup, rerun</li>
+    <li>Not implemented yet / known issue</li>
+    <li>Rule: <b>one problem = one ticket</b></li></ul></div>
+
+  <div class="card"><h4>7. BVA + snowflake</h4><ul>
+    <li>Test <b>at and next to</b> the boundary, not 0 &amp; 10 &deg;C</li>
+    <li>3-value: <b>4.9 / 5.0 / 5.1</b> (resolution 0.1)</li>
+    <li>"Below 5" &rarr; 5.0 OFF &middot; "5 and below" &rarr; 5.0 ON</li>
+    <li>Spec overlaps 4&ndash;5 &deg;C &rarr; <b>clarify</b>; likely <b>hysteresis</b>: ON &le; 4.0, OFF &ge; 5.0</li>
+    <li>Test <b>both directions</b>, flicker, SNA/timeout, &deg;F, restart</li></ul></div>
+
+  <div class="card"><h4>8. Severity vs priority</h4><ul>
+    <li><b>Severity</b> = impact (tester): Blocker, Critical, Major, Minor, Trivial</li>
+    <li><b>Priority</b> = urgency (business): P1&ndash;P4</li>
+    <li>High sev / low prio: crash in rare engineering menu</li>
+    <li>Low sev / high prio: wrong logo before a car show</li>
+    <li>Safety (speed, warnings, camera) = at least Critical</li></ul></div>
+
+  <div class="card"><h4>9. Retest vs regression &middot; smoke vs sanity</h4><ul>
+    <li><b>Retest</b>: is <i>this</i> bug fixed?</li>
+    <li><b>Regression</b>: did the change break <i>anything else</i>?</li>
+    <li><b>Smoke</b>: wide + shallow, every build</li>
+    <li><b>Sanity</b>: narrow + deeper, after small change</li>
+    <li>Error (human) &rarr; defect (code) &rarr; failure (seen)</li></ul></div>
+
+  <div class="card"><h4>10. Car basics</h4><ul>
+    <li><b>ECU</b> = small computer; <b>CAN</b> = network between them</li>
+    <li><b>DBC</b>: real = raw &times; factor + offset</li>
+    <li>0xFF = 255 = often <b>SNA</b>; timeout &rarr; "---" + DTC</li>
+    <li><b>KL30</b> battery &middot; <b>KL15</b> ignition &middot; <b>KL31</b> ground</li>
+    <li>SIL (PC) &rarr; HIL (real ECU + simulator) &rarr; vehicle</li>
+    <li>UDS 0x19 read DTC &middot; 0x14 clear &middot; 0x22 read data</li></ul></div>
+
+  <div class="card"><h4>11. HMI rules &amp; numbers</h4><ul>
+    <li>Telltales: <b>red</b> danger &middot; <b>amber</b> warning &middot; <b>green</b> on &middot; <b>blue</b> high beam</li>
+    <li>Speedometer never under-reads (<b>UN R39</b>)</li>
+    <li>Indicators <b>90 &plusmn; 30</b>/min (<b>UN R48</b>)</li>
+    <li>Rear camera &le; <b>2 s</b> (<b>FMVSS 111</b>)</li>
+    <li>Bulb check at start-up &middot; driver-distraction lock above ~8 km/h</li>
+    <li>BT: HFP calls &middot; A2DP music &middot; AVRCP controls &middot; PBAP contacts</li></ul></div>
+
+  <div class="card"><h4>12. Tools</h4><ul>
+    <li><b>CANoe</b> simulate + trace (CAPL) &middot; CANalyzer analyse</li>
+    <li><b>DLT Viewer</b> / <b>adb logcat</b> ECU logs</li>
+    <li><b>Jira</b> bugs (JQL) &middot; <b>Xray/Polarion</b> test cases &amp; traceability</li>
+    <li><b>vFlash</b> flashing &middot; <b>Jenkins</b> nightly runs</li>
+    <li>Log analysis: time of bug &rarr; CAN input right? &rarr; ECU log errors?</li></ul></div>
+
+  <div class="card"><h4>13. Robot Framework</h4><ul>
+    <li>Keyword-driven, Python-based; sections: Settings, Variables, Test Cases, Keywords</li>
+    <li><code>robot --include smoke tests/</code></li>
+    <li>Output: <b>output.xml</b>, <b>log.html</b>, <b>report.html</b></li>
+    <li><code>rebot --merge a.xml b.xml</code></li>
+    <li>Failure triage: product bug / script / environment / flaky</li></ul></div>
+
+  <div class="card"><h4>14. Spot-the-defect: 8-point scan</h4><ol>
+    <li>Text (typos, language mix, cut-off)</li>
+    <li>Units (km/h vs mph, &deg;C vs &deg;F)</li>
+    <li>Numbers (30 Feb, 25:10, 00:75, 21:30 AM)</li>
+    <li>Consistency (needle vs digital, bar vs %)</li>
+    <li>Icons &amp; colours</li>
+    <li>Layout (overlap, missing, tilted)</li>
+    <li>State (wrong highlight, play/pause)</li>
+    <li>Logic &amp; safety (snowflake at 13 &deg;C)</li></ol></div>
+
+  <div class="card"><h4>15. ISTQB quick facts</h4><ul>
+    <li>7 principles: presence of defects &middot; exhaustive impossible &middot; early testing &middot; clustering &middot; tests wear out &middot; context &middot; absence-of-errors fallacy</li>
+    <li>Levels: component, integration, system, acceptance</li>
+    <li>CTFL v4.0: 40 Q &middot; 60 min &middot; 65%</li>
+    <li>Verification = built right &middot; Validation = right thing</li></ul></div>
+
+  <div class="card"><h4>16. How to answer</h4><ul>
+    <li><b>Short answer first</b> (20 s), then detail</li>
+    <li>Always give an <b>example</b></li>
+    <li>Clarify unclear requirements</li>
+    <li>Say "I", be honest about gaps</li>
+    <li>STAR for "tell me about a time&hellip;"</li>
+    <li>Ask 2&ndash;3 questions at the end</li></ul></div>
+
+</div>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+</body>
+</html>
