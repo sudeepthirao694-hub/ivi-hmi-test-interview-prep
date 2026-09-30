@@ -18,6 +18,16 @@
 <h1>Tools, traces &amp; logs</h1>
 <p class="lead">The JD mentions "simulation tools for vehicle signals", "logs, traces and evidence" and "trace/log analysis". This chapter explains each tool in plain words and teaches you to read traces and logs, with exercises.</p>
 <div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 55 min + exercises</span><span class="pill hot">Often asked: log analysis, CANoe, tools used</span></div>
+<div class="callout simple"><span class="label">In very simple words</span>
+<ul>
+<li><b>CANoe</b> sends fake car signals and records everything on the network (the <b>trace</b>).</li>
+<li><b>DLT Viewer</b> / <b>ADB logcat</b> show what the ECU software writes in its log.</li>
+<li>To find a bug's cause, look at the <b>same time</b> in both: was the input right? was the output wrong?</li>
+</ul>
+<p class="like"><b>Think of it like</b> <b>CCTV footage</b>. You rewind to the exact second something happened and look at every camera.</p>
+<p class="pics">See it as a picture: <a href="visual.html#pic-logs">Log analysis timeline</a> &middot; <a href="canoe-lab.html"><b>Practise in the mock CANoe lab</b></a></p>
+</div>
+
 <div id="toc" class="toc"></div>
 
 <h2>Your toolbox at a glance</h2>

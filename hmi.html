@@ -18,6 +18,17 @@
 <h1>HMI &amp; IVI features</h1>
 <p class="lead">What every car screen and feature does, how to test it, and which bugs are typical. When the interviewer asks "How would you test X?", the answer is in this chapter.</p>
 <div class="meta-row"><span class="pill easy">Beginner</span><span class="pill">Reading time: 45 min</span><span class="pill hot">Often asked: telltales, warnings, "how would you test&hellip;"</span></div>
+<div class="callout simple"><span class="label">In very simple words</span>
+<ul>
+<li><b>HMI</b> = everything the driver sees, hears and touches.</li>
+<li><b>Cluster</b> = the display behind the steering wheel (speed, warnings). <b>Head unit</b> = the centre screen (music, phone, maps).</li>
+<li>Warning light colours: <b>red</b> = danger, <b>amber</b> = warning, <b>green</b> = something is on.</li>
+<li>For every feature, test 3 things: <b>does it work?</b> <b>does it look right?</b> <b>does it survive problems</b> (a call, a restart, a lost signal)?</li>
+</ul>
+<p class="like"><b>Think of it like</b> testing a <b>mobile phone app</b>, but in a moving car. A mistake can distract or even endanger the driver, so the rules are stricter.</p>
+<p class="pics">See it as a picture: <a href="eye-tests.html">Spot-the-defect screens</a></p>
+</div>
+
 <div id="toc" class="toc"></div>
 
 <h2>What HMI and IVI mean</h2>

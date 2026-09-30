@@ -18,6 +18,17 @@
 <h1>Retest &amp; regression testing</h1>
 <p class="lead">The interviewer spent many questions on regression: strategy, which fixed bugs to add, and how to cut thousands of tests down to what fits in the time. This chapter gives you clear, structured answers.</p>
 <div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 35 min</span><span class="pill hot">Very important area</span></div>
+<div class="callout simple"><span class="label">In very simple words</span>
+<ul>
+<li><b>Retest</b> = check that the fixed bug is really fixed.</li>
+<li><b>Regression</b> = check that the fix did not break other things.</li>
+<li>You can't run 3,000 tests every day, so choose by <b>risk</b>: safety, what changed, what is used most, where bugs were before.</li>
+<li>Add <b>serious</b> fixed bugs to the regression suite, not tiny ones.</li>
+</ul>
+<p class="like"><b>Think of it like</b> a <b>plumber</b> fixes one leaking pipe. You check that pipe (retest) and then open all the other taps in the house (regression).</p>
+<p class="pics">See it as a picture: <a href="visual.html#pic-pipes">Plumber story</a> &middot; <a href="visual.html#pic-funnel">Regression funnel</a></p>
+</div>
+
 <div id="toc" class="toc"></div>
 
 <h2>Retest vs regression, in plain words</h2>

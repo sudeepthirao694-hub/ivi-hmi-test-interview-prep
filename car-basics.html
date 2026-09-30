@@ -18,6 +18,18 @@
 <h1>Car electronics basics</h1>
 <p class="lead">You test screens, but the screens only show what the rest of the car tells them. This chapter explains how a car's computers talk to each other, in the simplest possible way.</p>
 <div class="meta-row"><span class="pill easy">Beginner &rarr; Intermediate</span><span class="pill">Reading time: 40 min</span><span class="pill hot">Often asked: CAN, ECU, HIL, signals</span></div>
+<div class="callout simple"><span class="label">In very simple words</span>
+<ul>
+<li>A car has many small computers called <b>ECUs</b>.</li>
+<li>They talk to each other on a shared line called <b>CAN</b>.</li>
+<li>The screen shows only what it <b>hears</b> on CAN (speed, temperature, warnings).</li>
+<li>The <b>DBC file</b> is the dictionary that explains every message.</li>
+<li>On a <b>test bench</b>, a PC with CANoe pretends to be the rest of the car.</li>
+</ul>
+<p class="like"><b>Think of it like</b> a <b>WhatsApp group</b>. Every ECU posts messages in the group. The cluster reads the messages it needs and ignores the rest.</p>
+<p class="pics">See it as a picture: <a href="visual.html#pic-speed">Speed path</a> &middot; <a href="visual.html#pic-can">CAN group</a> &middot; <a href="visual.html#pic-dbc">DBC formula</a> &middot; <a href="visual.html#pic-bench">Test bench</a> &middot; <a href="canoe-lab.html">Try the CANoe lab</a></p>
+</div>
+
 <div id="toc" class="toc"></div>
 
 <h2>ECU: the small computers inside a car</h2>

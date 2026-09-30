@@ -44,6 +44,7 @@
 </div>
 
 </article></main></div>
+<script src="assets/words.js"></script>
 <script src="assets/glossary.js"></script>
 <script src="assets/quiz.js"></script>
 <script src="assets/app.js"></script>
@@ -88,6 +89,7 @@
         '</div><div class="why"><b>Why:</b> ' + q.w + '</div></div>';
     }).join('');
     updateScore();
+    if (window.siteWordHelp) window.siteWordHelp(list);
   }
   list.addEventListener('click', function (e) {
     var b = e.target.closest('button.opt'); if (!b) return;
@@ -115,7 +117,7 @@
   var cats = ['All'];
   G.forEach(function (g) { if (cats.indexOf(g[1]) < 0) cats.push(g[1]); });
   var sel = document.getElementById('fCat');
-  sel.innerHTML = cats.map(function (c) { return '<option value="' + c + '">' + (c === 'All' ? 'All words' : c) + '</option>'; }).join('');
+  sel.innerHTML = cats.map(function (c) { return '<option value="' + c + '">' + (c === 'All' ? 'All words' : c === 'English' ? 'Everyday English' : c) + '</option>'; }).join('');
   var deck = [], pos = 0, flipped = false;
   var card = document.getElementById('fCard'), posEl = document.getElementById('fPos');
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }

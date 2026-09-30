@@ -18,6 +18,17 @@
 <h1>Test design techniques &amp; BVA</h1>
 <p class="lead">How to choose a few smart test cases instead of many random ones. The interviewer asked a boundary value question about a snowflake at 5 &deg;C &mdash; this chapter gives you a perfect, complete answer and lets you play with it.</p>
 <div class="meta-row"><span class="pill mid">Intermediate</span><span class="pill">Reading time: 50 min + exercises</span><span class="pill hot">Very important: BVA snowflake</span></div>
+<div class="callout simple"><span class="label">In very simple words</span>
+<ul>
+<li>Don't test random values. Test <b>smart</b> values.</li>
+<li><b>EP</b>: split values into groups (cold / warm) and test one value from each group.</li>
+<li><b>BVA</b>: bugs hide at the edges, so test the edge and its neighbours: <b>4.9, 5.0, 5.1</b>.</li>
+<li>For the snowflake: first <b>ask</b> what happens at exactly 5.0 °C, then test <b>both directions</b> (colder and warmer).</li>
+</ul>
+<p class="like"><b>Think of it like</b> a <b>lift</b> for max 8 people. You don't test it with 2 people. You test it with <b>7, 8 and 9</b> people, because that is where it can go wrong.</p>
+<p class="pics">See it as a picture: <a href="visual.html#pic-bva">BVA on a number line</a> &middot; <a href="visual.html#pic-hyst">Hysteresis</a></p>
+</div>
+
 <div id="toc" class="toc"></div>
 
 <h2>Why we need techniques</h2>

@@ -16,7 +16,7 @@
 
 <div class="page-kicker">Reference</div>
 <h1>Dictionary A&ndash;Z</h1>
-<p class="lead">Every word from the job description, the interview and this site, explained in plain English with an example. Type in the box to search, or tap a category.</p>
+<p class="lead">Every word from the job description, the interview and this site, explained in plain English with an example. Type in the box to search, or tap a category. Tap <b>Everyday English</b> for normal English words (like <i>reproduce</i>, <i>impact</i>, <i>clarify</i>) that are used a lot in interviews.</p>
 <div class="meta-row"><span class="pill easy">Use any time</span><span class="pill" id="gCount">&hellip; words</span></div>
 
 <input class="search" id="gSearch" type="search" placeholder="Search, e.g. DBC, severity, KL15, hysteresis&hellip;" aria-label="Search the dictionary">
@@ -28,6 +28,7 @@
 </div>
 
 </article></main></div>
+<script src="assets/words.js"></script>
 <script src="assets/glossary.js"></script>
 <script src="assets/app.js"></script>
 <script>
@@ -35,7 +36,7 @@
   var data = (window.GLOSSARY || []).slice().sort(function (a, b) { return a[0].toLowerCase().localeCompare(b[0].toLowerCase()); });
   var cats = ['All'];
   data.forEach(function (g) { if (cats.indexOf(g[1]) < 0) cats.push(g[1]); });
-  var names = { Car: 'Car & networks', HMI: 'HMI & infotainment', Testing: 'Testing (ISTQB)', Defects: 'Bugs & defects', Process: 'Process & Agile', Automation: 'Automation', Tools: 'Tools', Standards: 'Standards & safety' };
+  var names = { Car: 'Car & networks', HMI: 'HMI & infotainment', Testing: 'Testing (ISTQB)', Defects: 'Bugs & defects', Process: 'Process & Agile', Automation: 'Automation', Tools: 'Tools', Standards: 'Standards & safety', English: 'Everyday English' };
   var current = 'All';
   var chips = document.getElementById('gChips');
   var list = document.getElementById('gList');

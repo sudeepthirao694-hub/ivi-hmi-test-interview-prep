@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CANoe &amp; CAPL lab · IVI Test Interview Prep</title>
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body data-page="canoe-lab.html">
+<header class="topbar"><button id="menuBtn" class="icon-btn" aria-label="Open menu">&#9776;</button><a class="brand" href="index.html">IVI <span>Test Engineer</span> Interview Prep</a><div class="spacer"></div><button id="themeBtn" class="icon-btn" aria-label="Change theme">Theme</button></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Chapters"></nav>
+<main><article class="content wide">
+
+<div class="page-kicker">Core skills</div>
+<h1>CANoe &amp; CAPL lab (mock)</h1>
+<p class="lead">No licence needed. This is a <b>pretend version</b> of Vector CANoe and CANalyzer that runs in your browser. It works like the real tool in a simplified way, so you can learn how it works by doing: start a measurement, read the trace, change signals, write CAPL scripts and run an automated test.</p>
+<div class="meta-row"><span class="pill easy">Hands-on</span><span class="pill">12 guided lessons</span><span class="pill">Works on phone and PC</span></div>
+
+<div class="callout simple"><span class="label">In very simple words</span>
+<ul>
+<li><b>CANalyzer</b> = a tool to <b>watch</b> the car network: every message, live.</li>
+<li><b>CANoe</b> = CANalyzer + it can <b>pretend to be ECUs</b> (send fake speed, temperature&hellip;) + run <b>automatic tests</b>.</li>
+<li><b>CAPL</b> = the small programming language inside CANoe. You write "when X happens, do Y".</li>
+</ul>
+<p class="like"><b>Think of it like</b> a <b>flight simulator</b>. The cockpit (the cluster) is real, but the sky, the engines and the weather are simulated by the computer, so you can test every situation safely.</p>
+</div>
+
+<div class="callout warn"><span class="label">Be honest in the interview</span>
+<p>This lab teaches you the <b>ideas</b> and the <b>words</b>. It is not the real tool. If you have not used CANoe in a project, say: <i>"I haven't used a licensed CANoe in a project yet, but I have practised the concepts: trace analysis, the Interactive Generator, panels, CAPL event procedures and test modules, so I can become productive quickly."</i></p>
+</div>
+
+<div id="toc" class="toc"></div>
+
+<!-- ======================================================= -->
+<h2 id="lab-what">CANalyzer vs CANoe in one picture</h2>
+<div class="pic">
+<svg viewBox="0 0 480 250" role="img" aria-label="CANalyzer watches and sends by hand; CANoe adds simulation, panels and test modules">
+  <rect class="box" x="6" y="10" width="196" height="232" rx="12"/>
+  <text class="t b" x="104" y="38" text-anchor="middle" font-size="17">CANalyzer</text>
+  <text class="t2" x="104" y="56" text-anchor="middle" font-size="12">"the watcher"</text>
+  <g font-size="13">
+    <text class="t" x="22" y="88">&#10003; Trace (see messages)</text>
+    <text class="t" x="22" y="114">&#10003; Graphics (plot signals)</text>
+    <text class="t" x="22" y="140">&#10003; Logging (save to file)</text>
+    <text class="t" x="22" y="166">&#10003; Send frames by hand</text>
+    <text class="t2" x="38" y="182" font-size="11.5">(Interactive Generator)</text>
+    <text class="t" x="22" y="208">&#10003; Small CAPL helpers</text>
+  </g>
+  <rect class="box-accent" x="218" y="10" width="256" height="232" rx="12"/>
+  <text class="t b" x="346" y="38" text-anchor="middle" font-size="17">CANoe</text>
+  <text class="t" x="346" y="56" text-anchor="middle" font-size="12">"the watcher + the actor"</text>
+  <rect class="fill-surface2" x="232" y="70" width="228" height="34" rx="8"/>
+  <text class="t b" x="346" y="92" text-anchor="middle" font-size="13">Everything CANalyzer does, plus:</text>
+  <g font-size="13">
+    <text class="t" x="236" y="128">&#10003; Simulate missing ECUs</text>
+    <text class="t2" x="252" y="144" font-size="11.5">(rest-bus simulation)</text>
+    <text class="t" x="236" y="170">&#10003; Panels: buttons &amp; sliders</text>
+    <text class="t" x="236" y="196">&#10003; Test modules + reports</text>
+    <text class="t" x="236" y="222">&#10003; Full CAPL programs</text>
+  </g>
+</svg>
+<ul>
+<li>In a <b>real car</b>, all ECUs are there, so you only need to <b>watch</b>: CANalyzer is enough.</li>
+<li>On a <b>test bench</b>, only one real ECU is there (the cluster). CANoe <b>pretends to be all the others</b>. That is why HMI test benches use CANoe.</li>
+</ul>
+<p class="say-line"><b>Say:</b> "CANalyzer is mainly for analysis: trace, graphics, logging and sending frames. CANoe adds simulation of the other ECUs, panels, and test modules for automated testing."</p>
+</div>
+
+<h2 id="lab-setup">How our mock bench is connected</h2>
+<div class="pic">
+<svg viewBox="0 0 480 270" role="img" aria-label="CANoe on the PC simulates BCM, ABS, sensor and engine ECUs; the real cluster is the device under test">
+  <defs><marker id="la1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="fill-text"/></marker></defs>
+  <rect class="box-accent" x="6" y="6" width="300" height="130" rx="12"/>
+  <text class="t b" x="20" y="28" font-size="14">PC with CANoe</text>
+  <text class="t2" x="300" y="28" text-anchor="end" font-size="11.5">dashed = simulated</text>
+  <g font-size="13" font-weight="700" text-anchor="middle">
+    <rect class="box dash" x="18" y="42" width="64" height="36" rx="6" style="stroke-dasharray:5 4"/><text class="t" x="50" y="65">BCM</text>
+    <rect class="box dash" x="90" y="42" width="64" height="36" rx="6" style="stroke-dasharray:5 4"/><text class="t" x="122" y="65">ABS</text>
+    <rect class="box dash" x="162" y="42" width="64" height="36" rx="6" style="stroke-dasharray:5 4"/><text class="t" x="194" y="65">Sensor</text>
+    <rect class="box dash" x="234" y="42" width="64" height="36" rx="6" style="stroke-dasharray:5 4"/><text class="t" x="266" y="65">Engine</text>
+  </g>
+  <rect class="box-good" x="18" y="88" width="136" height="36" rx="6"/>
+  <text class="t b" x="86" y="111" text-anchor="middle" font-size="13">Your CAPL code</text>
+  <rect class="box" x="162" y="88" width="136" height="36" rx="6"/>
+  <text class="t b" x="230" y="111" text-anchor="middle" font-size="13">Trace + Graphics</text>
+  <path class="line-accent" d="M10 170H470M10 178H470" style="stroke-width:3.5"/>
+  <text class="t-accent b" x="470" y="200" text-anchor="end" font-size="13">CAN bus</text>
+  <path class="line" d="M50 78V170M122 78V170M194 78V170M266 78V170M86 124V170M230 124V170M390 178V214"/>
+  <rect class="box" x="330" y="214" width="120" height="48" rx="8" style="stroke-width:2.5"/>
+  <text class="t b" x="390" y="236" text-anchor="middle" font-size="14">Cluster</text>
+  <text class="t2" x="390" y="253" text-anchor="middle" font-size="11.5">REAL device (DUT)</text>
+  <text class="t2" x="12" y="210" font-size="12">Simulated ECUs send: Ignition, VehicleSpeed,</text>
+  <text class="t2" x="12" y="226" font-size="12">OutsideTemp, BodyStatus, FuelLevel.</text>
+  <text class="t2" x="12" y="250" font-size="12">The cluster answers with: ClusterStatus.</text>
+</svg>
+<ul>
+<li>The <b>dashed</b> ECUs do not exist on the bench. CANoe <b>pretends</b> to be them (this is called <b>rest-bus simulation</b>).</li>
+<li>The <b>cluster</b> is the real device you test. It reads the messages and shows speed, temperature and warnings.</li>
+<li>The cluster also sends a <b>ClusterStatus</b> message (which warnings are on). Automatic tests read it to decide pass or fail.</li>
+</ul>
+</div>
+
+<h2 id="lab-windows">The windows you will use (same names as in real CANoe)</h2>
+<div class="table-wrap"><table>
+<tr><th>Window</th><th>What it does (simple)</th><th>In the real tool</th></tr>
+<tr><td><b>Start / Stop</b> (⚡)</td><td>Starts the "measurement": the bus comes alive and everything records.</td><td>Lightning button or <b>F9</b></td></tr>
+<tr><td><b>Trace</b></td><td>A live list of every CAN message: time, ID, name, data bytes. Click a line to see the signals inside.</td><td>Most-used window for testers</td></tr>
+<tr><td><b>Panel</b></td><td>Buttons and sliders to change signals: ignition, speed, temperature, doors.</td><td>CANoe only (Panel Designer)</td></tr>
+<tr><td><b>Graphics</b></td><td>Draws a signal over time, like a heart monitor.</td><td>Very useful to see jumps and flicker</td></tr>
+<tr><td><b>Write</b></td><td>Text output: messages from the tool and from your CAPL <code>write()</code>.</td><td>For debugging your scripts</td></tr>
+<tr><td><b>Interactive Generator (IG)</b></td><td>Type an ID and bytes by hand, press Send.</td><td>CANalyzer and CANoe</td></tr>
+<tr><td><b>Database (DBC)</b></td><td>The dictionary: which message has which signals, factor, offset, unit.</td><td>CANdb++ Editor</td></tr>
+<tr><td><b>CAPL Browser</b></td><td>The code editor for CAPL. Compile, then start the measurement.</td><td>Separate editor window</td></tr>
+<tr><td><b>Test module + report</b></td><td>Runs automatic test cases and shows pass / fail per step.</td><td>CANoe only (Test Setup)</td></tr>
+</table></div>
+
+<h2 id="lab-capl-intro">CAPL in 5 minutes</h2>
+<div class="pic">
+<h3>CAPL is "event-driven": your code waits for something to happen</h3>
+<svg viewBox="0 0 480 250" role="img" aria-label="Events like start, message, timer and key trigger your code, which can write, output, set signals and start timers">
+  <defs><marker id="la2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="fill-text"/></marker></defs>
+  <text class="t2 b" x="80" y="18" text-anchor="middle" font-size="12">WHEN THIS HAPPENS&hellip;</text>
+  <text class="t2 b" x="400" y="18" text-anchor="middle" font-size="12">&hellip;YOUR CODE CAN DO</text>
+  <g font-size="12.5">
+    <rect class="box" x="6" y="28" width="150" height="40" rx="8"/><text class="t-mono b" x="16" y="53">on start</text>
+    <rect class="box" x="6" y="78" width="150" height="40" rx="8"/><text class="t-mono b" x="16" y="103">on message X</text>
+    <rect class="box" x="6" y="128" width="150" height="40" rx="8"/><text class="t-mono b" x="16" y="153">on timer T</text>
+    <rect class="box" x="6" y="178" width="150" height="40" rx="8"/><text class="t-mono b" x="16" y="203">on key 'a'</text>
+  </g>
+  <path class="arrow" d="M157 48L192 118M157 98L192 122M157 148L192 128M157 198L192 132" marker-end="url(#la2)"/>
+  <rect class="box-accent" x="196" y="96" width="112" height="60" rx="10"/>
+  <text class="t b" x="252" y="122" text-anchor="middle" font-size="13">your code</text>
+  <text class="t b" x="252" y="140" text-anchor="middle" font-size="13">{ ... }</text>
+  <path class="arrow" d="M309 126L330 126" marker-end="url(#la2)"/>
+  <g font-size="12.5">
+    <rect class="box-good" x="334" y="28" width="140" height="40" rx="8"/><text class="t-mono" x="344" y="53">write("...")</text>
+    <rect class="box-good" x="334" y="78" width="140" height="40" rx="8"/><text class="t-mono" x="344" y="103">output(msg)</text>
+    <rect class="box-good" x="334" y="128" width="140" height="40" rx="8"/><text class="t-mono" x="344" y="153">$Speed = 50</text>
+    <rect class="box-good" x="334" y="178" width="140" height="40" rx="8"/><text class="t-mono" x="344" y="203">setTimer(t, 1000)</text>
+  </g>
+  <text class="t2" x="240" y="242" text-anchor="middle" font-size="12">No "main loop". The tool calls your block when the event happens.</text>
+</svg>
+</div>
+
+<div class="table-wrap"><table>
+<tr><th>CAPL code</th><th>Meaning in simple words</th></tr>
+<tr><td><code>variables { int count = 0; }</code></td><td>Global variables: memory that all blocks share.</td></tr>
+<tr><td><code>on start { ... }</code></td><td>Runs once when you press Start.</td></tr>
+<tr><td><code>on message VehicleSpeed { ... }</code></td><td>Runs every time this message arrives. <code>this</code> = the message that arrived.</td></tr>
+<tr><td><code>this.VehicleSpeed</code></td><td>The <b>raw</b> value of the signal (e.g. 10000).</td></tr>
+<tr><td><code>this.VehicleSpeed.phys</code></td><td>The <b>physical</b> value (e.g. 100.00 km/h), raw &times; factor + offset.</td></tr>
+<tr><td><code>$OutsideTemp</code></td><td>Read the latest physical value of a signal. In CANoe you can also set it: <code>$OutsideTemp = 4.9;</code></td></tr>
+<tr><td><code>msTimer t; setTimer(t, 500);</code> + <code>on timer t { ... }</code></td><td>Start a timer; after 500 ms the <code>on timer</code> block runs.</td></tr>
+<tr><td><code>message 0x123 m; m.byte(0) = 0xAB; output(m);</code></td><td>Build a message by hand and send it on the bus.</td></tr>
+<tr><td><code>write("Speed %.1f", x);</code></td><td>Print text in the Write window (<code>%d</code> whole number, <code>%.1f</code> 1 decimal, <code>%X</code> hex, <code>%s</code> text).</td></tr>
+<tr><td><code>testcase TC_1() { ... }</code> + <code>void MainTest() { TC_1(); }</code></td><td>Automatic test cases in a test module. MainTest decides the order.</td></tr>
+<tr><td><code>testStepPass("1", "...");</code> / <code>testStepFail(...)</code></td><td>Write a passed / failed step into the test report.</td></tr>
+<tr><td><code>TestWaitForTimeout(1000);</code></td><td>In a test: wait 1 second (let the ECU react).</td></tr>
+</table></div>
+<p class="small muted">CAPL looks like the C language: <code>if</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>;</code> at the end of lines, <code>{ }</code> around blocks. This mock understands a useful subset of CAPL, enough to learn.</p>
+
+<!-- ======================================================= -->
+<h2 id="lab">The lab</h2>
+<p>Follow the lessons in the blue box. Each lesson tells you what to click. It turns green by itself when you have done it.</p>
+
+<div class="lab no-wordhelp" id="labRoot">
+
+  <!-- Lessons -->
+  <section class="win full lesson-win" aria-label="Lessons">
+    <div class="win-t"><span>Lessons</span><span class="lesson-count" id="lsCount">0 / 12 done</span></div>
+    <div class="win-b">
+      <div class="ls-dots" id="lsDots"></div>
+      <div class="ls-title" id="lsTitle"></div>
+      <div class="ls-body" id="lsBody"></div>
+      <div class="ls-real" id="lsReal"></div>
+      <div class="ls-foot">
+        <button class="btn secondary" id="lsPrev">&larr; Back</button>
+        <span class="ls-status" id="lsStatus"></span>
+        <button class="btn" id="lsNext">Next &rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolbar -->
+  <section class="win full" aria-label="Measurement toolbar">
+    <div class="win-b toolbar-row">
+      <button class="btn lab-start" id="btnStart">&#9889; Start</button>
+      <button class="btn secondary" id="btnStop" disabled>&#9632; Stop</button>
+      <span class="lab-time" id="labTime">t = 0.000 s</span>
+      <span class="lab-state" id="labState">Measurement stopped</span>
+      <span class="spacer"></span>
+      <span class="seg" role="group" aria-label="Tool mode">
+        <button id="modeCanoe" class="on">CANoe</button><button id="modeCanalyzer">CANalyzer</button>
+      </span>
+      <span class="lab-load" id="labLoad">Bus load 0%</span>
+    </div>
+  </section>
+
+  <!-- Panel -->
+  <section class="win" id="winPanel" aria-label="Panel">
+    <div class="win-t"><span>Panel (simulated ECUs)</span><span class="win-hint">CANoe only</span></div>
+    <div class="win-b panel">
+      <div class="p-row"><label>Ignition (KL15)</label>
+        <span class="seg" id="pKL15"><button data-v="0">OFF</button><button data-v="1">ACC</button><button data-v="2" class="on">ON</button></span></div>
+      <div class="p-row"><label for="pSpeed">Vehicle speed <b id="pSpeedV">0</b> km/h</label>
+        <input type="range" id="pSpeed" min="0" max="200" step="1" value="0"></div>
+      <div class="p-row"><label for="pTemp">Outside temp <b id="pTempV">12.0</b> °C</label>
+        <input type="range" id="pTemp" min="-20" max="30" step="0.1" value="12">
+        <span class="p-steps"><button class="btn secondary" id="pTempDn">&minus;0.1</button><button class="btn secondary" id="pTempUp">+0.1</button>
+        <input type="number" id="pTempN" step="0.1" min="-40" max="85" value="12.0" aria-label="Outside temperature exact value"></span></div>
+      <div class="p-row p-checks">
+        <label><input type="checkbox" id="pDoorD"> Driver door open</label>
+        <label><input type="checkbox" id="pDoorP"> Passenger door open</label>
+        <label><input type="checkbox" id="pBelt" checked> Seatbelt buckled</label>
+      </div>
+      <div class="p-row"><label for="pFuel">Fuel level <b id="pFuelV">60</b> %</label>
+        <input type="range" id="pFuel" min="0" max="100" step="0.5" value="60"></div>
+      <details class="p-rest"><summary>Rest-bus: turn messages on/off (simulate a broken ECU)</summary>
+        <div id="pSend"></div>
+        <label><input type="checkbox" id="pSna"> OutsideTemp sends <b>SNA</b> (0xFFFF = sensor error)</label>
+      </details>
+      <div class="p-lock" id="pLock">CANalyzer can only <b>watch</b>. Here you are connected to a real car that drives by itself. Switch to <b>CANoe</b> to control the signals.</div>
+    </div>
+  </section>
+
+  <!-- DUT -->
+  <section class="win" aria-label="Cluster (device under test)">
+    <div class="win-t"><span>Cluster (the real ECU you test)</span><span class="win-hint">DUT</span></div>
+    <div class="win-b">
+      <svg id="dut" viewBox="0 0 360 200" role="img" aria-label="Mock instrument cluster display">
+        <rect x="0" y="0" width="360" height="200" rx="18" fill="#0b0f14"/>
+        <g id="dutOn">
+          <g id="dTicks"></g>
+          <line id="dNeedle" x1="110" y1="108" x2="110" y2="40" stroke="#ff5a4f" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="110" cy="108" r="6" fill="#ff5a4f"/>
+          <text id="dSpeed" x="110" y="148" text-anchor="middle" font-size="28" font-weight="700" fill="#ffffff">0</text>
+          <text x="110" y="165" text-anchor="middle" font-size="11" fill="#8b98a8">km/h</text>
+          <text x="226" y="40" font-size="11" fill="#8b98a8">OUTSIDE</text>
+          <text id="dTemp" x="226" y="66" font-size="22" font-weight="700" fill="#ffffff">--.- °C</text>
+          <text id="dSnow" x="334" y="67" text-anchor="middle" font-size="24" fill="#7cc4ff">&#10052;</text>
+          <g id="dPop"><rect x="214" y="84" width="132" height="34" rx="8" fill="#3a1b1b" stroke="#ff6b6b"/><text x="280" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#ffb3b3">Door open!</text></g>
+          <g font-size="11" font-weight="700" text-anchor="middle">
+            <rect id="ttBelt" x="214" y="140" width="40" height="26" rx="6"/><text id="ttBeltT" x="234" y="157">BELT</text>
+            <rect id="ttDoor" x="260" y="140" width="40" height="26" rx="6"/><text id="ttDoorT" x="280" y="157">DOOR</text>
+            <rect id="ttFuel" x="306" y="140" width="40" height="26" rx="6"/><text id="ttFuelT" x="326" y="157">FUEL</text>
+          </g>
+        </g>
+        <text id="dutOff" x="180" y="104" text-anchor="middle" font-size="14" fill="#56606d">Ignition off: screen is dark</text>
+      </svg>
+      <div class="bug-box">
+        <label for="bugSel"><b>Practice:</b> put a bug into the cluster</label>
+        <select id="bugSel">
+          <option value="none">No bug (works as specified)</option>
+          <option value="snow">Snowflake turns ON at 5.0 °C (spec: 4.0 °C)</option>
+          <option value="speed">Shown speed is 3 km/h too low</option>
+          <option value="timeout">Temperature freezes when the sensor message stops</option>
+          <option value="belt">Seatbelt lamp never flashes above 25 km/h</option>
+          <option value="mystery">Mystery bug (hidden, find it!)</option>
+        </select>
+        <div id="guessBox" class="guess" hidden>
+          <label for="guessSel">Your answer:</label>
+          <select id="guessSel">
+            <option value="">Which bug is it?</option>
+            <option value="snow">Snowflake switches on too early</option>
+            <option value="speed">Speed shown too low</option>
+            <option value="timeout">Temperature freezes on sensor failure</option>
+            <option value="belt">Seatbelt lamp does not flash</option>
+          </select>
+          <button class="btn secondary" id="guessBtn">Check</button>
+          <span id="guessRes"></span>
+        </div>
+        <details class="spec"><summary>Requirements of this cluster (read them!)</summary>
+          <ol>
+            <li><b>REQ-SPD-01</b>: Show the vehicle speed, rounded to whole km/h. If no speed message for 500 ms, show "---".</li>
+            <li><b>REQ-TMP-01</b>: Show outside temperature with 1 decimal. If no message for 1.5 s or value SNA (0xFFFF), show "--.- °C" and no snowflake.</li>
+            <li><b>REQ-TMP-02</b>: Snowflake ON at 4.0 °C or below, OFF at 5.0 °C or above, no change in between (hysteresis).</li>
+            <li><b>REQ-BLT-01</b>: Seatbelt lamp ON when the driver is not buckled; FLASHING when speed is above 25 km/h.</li>
+            <li><b>REQ-DOR-01</b>: "Door open!" pop-up and DOOR lamp when a door is open.</li>
+            <li><b>REQ-FUL-01</b>: FUEL lamp when fuel is below 10 %.</li>
+            <li>Everything is off when ignition (KL15) is not ON.</li>
+          </ol>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trace -->
+  <section class="win full" aria-label="Trace window">
+    <div class="win-t"><span>Trace</span>
+      <span class="win-tools">
+        <input type="search" id="trFilter" placeholder="Filter: name or ID" aria-label="Filter trace">
+        <span class="seg"><button id="trFixed" class="on" title="One line per message, updated live">Fixed</button><button id="trScroll" title="Every message in time order">Scroll</button></span>
+        <button class="mini" id="trPause">Pause</button><button class="mini" id="trClear">Clear</button>
+      </span>
+    </div>
+    <div class="win-b trace-wrap" id="trWrap">
+      <table class="trace"><thead><tr><th>Time (s)</th><th>Chn</th><th>ID</th><th>Name</th><th>Dir</th><th>DLC</th><th>Data (hex bytes)</th></tr></thead>
+      <tbody id="trBody"><tr class="tr-empty"><td colspan="7">Press &#9889; Start to see the messages on the bus.</td></tr></tbody></table>
+    </div>
+    <div class="win-foot">Tip: <b>click a line</b> to open it and see the signals inside. Yellow bytes just changed. <b>Tx</b> = sent by CANoe &middot; <b>Rx</b> = received from a real ECU.</div>
+  </section>
+
+  <!-- Graphics -->
+  <section class="win" aria-label="Graphics window">
+    <div class="win-t"><span>Graphics</span>
+      <span class="win-tools"><select id="grSig" aria-label="Signal to plot"></select></span></div>
+    <div class="win-b"><canvas id="grCanvas" height="200" aria-label="Signal over the last 30 seconds"></canvas>
+      <div class="gr-val" id="grVal"></div></div>
+  </section>
+
+  <!-- Write -->
+  <section class="win" aria-label="Write window">
+    <div class="win-t"><span>Write</span><span class="win-tools"><button class="mini" id="wrClear">Clear</button></span></div>
+    <div class="win-b write" id="wrBody"></div>
+  </section>
+
+  <!-- IG -->
+  <section class="win" aria-label="Interactive Generator">
+    <div class="win-t"><span>Interactive Generator (send by hand)</span></div>
+    <div class="win-b ig">
+      <label for="igPreset">Example frames</label>
+      <select id="igPreset"></select>
+      <div class="ig-row">
+        <label>ID <input id="igId" value="1A0" size="5" aria-label="Message ID in hex"></label>
+        <label>DLC <input id="igDlc" type="number" min="0" max="8" value="8" aria-label="Data length"></label>
+      </div>
+      <div class="ig-bytes" id="igBytes"></div>
+      <div class="ig-dec" id="igDec"></div>
+      <div class="ig-row"><button class="btn" id="igSend">Send once</button>
+        <label><input type="checkbox" id="igCyc"> Send every 100 ms</label></div>
+    </div>
+  </section>
+
+  <!-- DB -->
+  <section class="win" aria-label="Database">
+    <div class="win-t"><span>Database (DBC)</span></div>
+    <div class="win-b db" id="dbBody"></div>
+  </section>
+
+  <!-- CAPL -->
+  <section class="win full" id="lab-capl" aria-label="CAPL editor">
+    <div class="win-t"><span>CAPL Browser (editor)</span><span class="win-hint" id="caplState">not compiled</span></div>
+    <div class="win-b">
+      <div class="capl-bar">
+        <label for="caplEx">Load example:</label>
+        <select id="caplEx"></select>
+        <button class="btn" id="caplCompile">Compile</button>
+        <button class="btn secondary" id="caplTest">&#9654; Run test module</button>
+      </div>
+      <div class="editor"><pre class="gutter" id="caplGutter" aria-hidden="true">1</pre><textarea id="caplSrc" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="CAPL code"></textarea></div>
+      <div class="capl-help" id="caplHelp"></div>
+    </div>
+  </section>
+
+  <!-- Report -->
+  <section class="win full" id="winReport" hidden aria-label="Test report">
+    <div class="win-t"><span>Test report</span><span class="win-hint" id="repVerdict"></span></div>
+    <div class="win-b" id="repBody"></div>
+  </section>
+</div>
+
+<!-- ======================================================= -->
+<h2 id="lab-qa">Interview questions about CANoe and CAPL</h2>
+
+<details class="qa"><summary><span class="qn">Q1</span>What is the difference between CANoe and CANalyzer?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "CANalyzer is for analysis: trace, graphics, logging, and sending frames with the Interactive Generator. CANoe can do all of that and also simulate ECUs that are missing (rest-bus simulation), has panels, and runs test modules for automated testing."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q2</span>What is rest-bus simulation, and why do we need it on an HMI bench?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "On the bench, only the cluster or head unit is real. Rest-bus simulation means CANoe sends all the messages the other ECUs would send &mdash; ignition, speed, temperature &mdash; with the right cycle times, so the device behaves as if it were in a car."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q3</span>What do you see in the trace window?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Every message on the bus with its time stamp, channel, ID, name, direction (Tx/Rx), DLC and data bytes. When I expand a message, the DBC decodes the bytes into signals with physical values and units."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q4</span>How would you simulate a sensor failure in CANoe?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "Three ways: stop sending the message (timeout), send the SNA or invalid value (like 0xFFFF), or send out-of-range values. Then I check the display shows the defined fallback, like '--.-', and recovers when the signal comes back."</p>
+<p>Try it in the lab: lesson 6.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q5</span>What is CAPL? Which event procedures do you know?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "CAPL is Vector's C-like, event-driven language in CANoe and CANalyzer. Main events: <code>on start</code>, <code>on message</code>, <code>on timer</code>, <code>on key</code>, <code>on signal</code>, and <code>on stopMeasurement</code>. Common functions: <code>write</code>, <code>output</code>, <code>setTimer</code>, and <code>$Signal</code> access."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q6</span>What is the difference between raw and physical values in CAPL?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "<code>this.Speed</code> gives the raw value from the bytes. <code>this.Speed.phys</code> gives the physical value using the DBC factor and offset: raw &times; factor + offset. <code>$Speed</code> also gives the physical value."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q7</span>How do you automate a test in CANoe?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "With a test module: I write test cases in CAPL (<code>testcase</code>), set input signals, wait with <code>TestWaitForTimeout</code> or wait for a message, check the ECU's response and report <code>testStepPass</code> or <code>testStepFail</code>. <code>MainTest</code> runs the test cases, and CANoe creates a test report with the verdict."</p>
+<p>Try it in the lab: lesson 11.</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q8</span>What is the Interactive Generator used for?</summary><div class="ans">
+<p class="short"><b>Short answer:</b> "To send CAN frames by hand: I set the ID, DLC and data bytes and send once or cyclically. It's useful for quick checks, like sending one specific value or an invalid frame without writing a script."</p>
+</div></details>
+
+<details class="qa"><summary><span class="qn">Q9</span>Have you used CANoe? (if you only practised)</summary><div class="ans">
+<p class="short"><b>Honest answer:</b> "I haven't used a licensed CANoe in a project yet. I've practised the concepts with a simulator &mdash; trace analysis, decoding signals with the DBC, the Interactive Generator, panels, CAPL on message and on timer handlers, and a small test module with a BVA test. I understand the workflow and can pick up the real tool quickly."</p>
+</div></details>
+
+<h2 id="lab-next">Free ways to practise with real tools later</h2>
+<ul>
+<li><b>python-can</b> (free Python library) has a <b>virtual bus</b>: you can send and receive CAN messages on your PC without hardware. Together with <b>cantools</b> you can load a DBC file. See the <a href="automation.html">Automation</a> page for example scripts.</li>
+<li><b>BUSMASTER</b> is a free, open-source CAN tool that looks similar to CANalyzer (trace, sending messages, simple scripting).</li>
+<li>On a Linux PC, <b>SocketCAN</b> with a virtual <code>vcan0</code> interface and the <code>candump</code> / <code>cansend</code> commands lets you practise traces for free.</li>
+</ul>
+
+</article></main></div>
+<script src="assets/app.js"></script>
+<script src="assets/canoe-lab.js"></script>
+</body>
+</html>

@@ -260,3 +260,8 @@ window.GLOSSARY = [
   ['GDPR', 'Standards', 'EU data protection law; affects phone contacts and personal data in the car.', ''],
   ['Cybersecurity (ISO 21434 / UN R155)', 'Standards', 'Standards and rules for car cybersecurity.', '']
 ];
+
+/* Everyday English words from words.js (loaded before this file on the dictionary and quiz pages). */
+(window.WORDS || []).forEach(function (w) {
+  window.GLOSSARY.push([w[0].charAt(0).toUpperCase() + w[0].slice(1), 'English', w[1].charAt(0).toUpperCase() + w[1].slice(1) + '.', w[2]]);
+});
